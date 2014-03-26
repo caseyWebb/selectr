@@ -3,12 +3,18 @@ do ($) ->
   class AbstractSelectr
 
     Init: (args, element, opts) ->
-      container = @CreateContainer()
+    
+      # build container
+      @container = @CreateContainer()
       @opts = @PrepareOpts(opts)
-
-      $('.selectr-list-group', container).append(@opts)
+      $('.selectr-list-group', @container).append(@opts)
         
-      container.insertAfter(element)
+      # install bindings
+      @InstallBindings()
+      @MonitorSource(element)
+        
+      # add selectr to DOM and hide element
+      @container.insertAfter(element)
     
     CreateContainer: ->
       $(document.createElement 'div').attr({
@@ -33,15 +39,22 @@ do ($) ->
 
     PrepareOpts: (opts) ->
       for opt in opts
-        node = $(document.createElement 'li').attr({
-                'class': "selectr-list-group-item list-group-item #{if opt.selected then 'list-group-item-success'}"
-              }).text($(opt).text())
+        $(document.createElement 'li').attr({
+          'class': "selectr-list-group-item list-group-item #{if opt.selected then 'list-group-item-success'}"
+        }).text($(opt).text())
+        
+    TriggerChange: -> #TODO
+      console.log 'change'
+
+    InstallBindings: -> # TODO
+      console.log @container
+
+    MonitorSource: (source) -> # TODO
+      console.log source
 
   class SingleSelectr extends AbstractSelectr
 
   class MultiSelectr extends AbstractSelectr
-
-    
 
   $.fn.selectr = (args) ->
     `var selectr, element, opts`
