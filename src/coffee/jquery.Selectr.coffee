@@ -3,6 +3,7 @@ do ($) ->
   class AbstractSelectr
 
     Init: (args, element, opts) ->
+      @args = args
     
       # build container
       @container = @CreateContainer()
@@ -22,17 +23,17 @@ do ($) ->
       }).html("""
           <div class='selectr-panel-heading panel-heading'>
             <h4 class='selectr-panel-title panel-title'>
-              // TODO
+              #{@args.title}
             </h4>
           </div>
           <div class='selectr-panel-body panel-body'>
-            <input class='selectr-form-control form-control' placeholder='// TODO'>
+            <input class='selectr-form-control form-control' placeholder='#{@args.searchPlaceholder}'>
           </div>
           <ul class='selectr-list-group list-group'>
           </ul>
           <div class='selectr-panel-footer panel-footer'>
             <button class='selectr-reset btn btn-sm btn-default'>
-              Reset Filter
+              #{@args.resetButtonText}
             </button>
           </div>
           """)
@@ -59,6 +60,12 @@ do ($) ->
   $.fn.selectr = (args) ->
     `var selectr, element, opts`
 
+    args = $.extend {
+      'title':              '',
+      'searchPlaceholder':  'Search',
+      'resetButtonText':    'Clear All'
+    }, args
+
     @each () ->
 
       element = $(this)
@@ -70,4 +77,4 @@ do ($) ->
 
     return this
 
-$('select').selectr()
+$('select').selectr({ title: 'Filter by Foo', searchPlaceholder: 'Search foos', resetButtonText: 'Clear those foos'})
