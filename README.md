@@ -14,7 +14,7 @@ your existing stylesheets.
 
 To use selectr, simply fire it using jQuery
 
-`$('select').selectr();
+`$('select').selectr();`
 
 #### Options and defaults
 
@@ -26,11 +26,11 @@ To use selectr, simply fire it using jQuery
 
 To use options, pass them as an object.
 
-`$('select').selectr({
-  title: 'Select things here',
-  placeholder: 'Search in options',
-  ...
-});
+    $('select').selectr({
+      title: 'Select things here',
+      placeholder: 'Search in options',
+      ...
+    });
 
 
 ### Bugs
