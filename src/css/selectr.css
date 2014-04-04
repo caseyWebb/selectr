@@ -1,0 +1,35 @@
+.selectr .list-group-item.selectr-selected {
+  background-color: #4679bd;
+  color: white;
+}
+.selectr .list-group-item.selectr-selected .selectr-add-remove {
+  -webkit-transform: rotate(0deg);
+}
+.selectr .selectr-panel-heading.no-title {
+  padding: 0;
+  border-bottom: none;
+}
+.selectr .selectr-add-remove {
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+  transition: transform 0.2s linear;
+  -webkit-transition: -webkit-transform 0.2s linear;
+  opacity: 0.5;
+  display: none;
+  cursor: pointer;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 900;
+  position: absolute;
+  right: 10px;
+  top: 4px;
+}
+.selectr .selectr-add-remove:hover {
+  opacity: 0.8;
+}
+.selectr .selectr-list-group {
+  overflow-y: scroll;
+}
+.selectr .selectr-list-group-item:hover .selectr-add-remove {
+  display: block;
+}
