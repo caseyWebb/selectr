@@ -20,21 +20,6 @@
             overflow: hidden;
             cursor: pointer;
 
-            &:hover {
-                .option-name {
-                    margin-right: 50px;
-                }
-                .add-remove {
-                    border-left: 1px solid #ddd;
-                    display: block;
-                }
-                .selected {
-                    .add-remove {
-                        border-left: 1px solid white;
-                    }  
-                }
-            }
-
             &.selected {
                 background-color: #4679bd;
                 color: white;
@@ -42,6 +27,23 @@
                 .add-remove {
                     transform: rotate(0deg);
                 }
+            }
+        }
+    }
+
+    &.multi {
+        .list-group-item:hover {
+            .option-name {
+                    margin-right: 50px;
+                    border-right: 1px solid #ddd;
+            }
+            .selected {
+                .option-name {
+                    border-right: 1px solid white;
+                }  
+            }
+            .add-remove {
+                display: block;
             }
         }
     }

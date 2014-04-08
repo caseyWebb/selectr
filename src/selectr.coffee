@@ -33,7 +33,7 @@ do ($, window) ->
         
     CreateContainer: ->
       $(document.createElement 'div').attr({
-        'class': 'selectr panel panel-default',
+        'class': "selectr panel panel-default #{if @$el.prop 'multiple' then 'multi'}",
         'style': "width: #{@args.width};"
       }).html("""
         <div class='panel-heading #{if @args.title is "" then "no-title"}'>
@@ -46,7 +46,7 @@ do ($, window) ->
         </div>
         <ul class='list-group' style='max-height: #{@args.maxListHeight}'>
         </ul>
-        <div class='panel-footer'>
+        <div class='panel-footer #{'hidden' if not @$el.prop 'multiple'}'>
           <button class='reset btn btn-sm btn-default'>
             #{@args.resetText}
           </button>
@@ -187,3 +187,5 @@ do ($, window) ->
         $this.data 'selectr', (data = new Selectr(this, args))
 
     Selectr.InstallBindings()
+    
+$('select').selectr()
