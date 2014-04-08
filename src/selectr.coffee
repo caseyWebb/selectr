@@ -24,7 +24,7 @@ do ($, window) ->
       selectedCount = 0
       for opt in @opts
         selectedCount++ if opt.hasClass 'selected'
-      $('.current-selection', @container).text(selectedCount)
+      $('.current-selection', @container).text(selectedCount if selectedCount > 0)
         
       @MonitorSource()
       
