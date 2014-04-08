@@ -1,0 +1,85 @@
+// selectr was built using Bootstrap components, so the css required is
+// very lean. If your project is not using Bootstrap, include the selectrPolyfill
+// css rather than this one
+
+.selectr {
+
+    .panel-heading.no-title {
+        padding: 0;
+        border-bottom: none;
+    }
+    
+    .list-group {
+        overflow-y: scroll;
+        overflow-x: hidden;
+
+        .list-group-item {
+            padding: 0 !important;
+
+            &:hover {
+                .option-name {
+                    border-right: 1px solid #ddd;
+                }
+                .selected {
+                    .option-name {
+                        border-right: 1px solid white;
+                    }  
+                }
+                .add-remove {
+                    display: block;
+                }
+            }
+
+            &.selected {
+                background-color: #4679bd;
+                color: white;
+                font-weight: 700;
+                .add-remove {
+                    transform: rotate(0deg);
+                }
+            }
+        }
+    }
+    
+    .option-name {
+        height: 100%;
+        margin-right: 50px;
+        padding: 10px 15px;
+    }
+        
+    .color-code {
+        width: 20px;
+        height: 20px;
+        margin: 10px;
+        float: left;
+        border-radius: 5px;
+    }
+
+    .add-remove {
+        transform: rotate(45deg);
+        transition: transform 0.2s linear;
+        opacity: 0.5;
+        display: none;
+        cursor: pointer;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 24px;
+        font-weight: 900;
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        width: 50px;
+        padding: 8px;
+        line-height: 24px;
+        text-align: center;
+        vertical-align: middle;
+    }
+        
+    .ctrl-key .add-remove, .add-remove:hover {
+        opacity: 0.8;
+    }
+
+    .current-selection {
+        float: right;
+        margin-top: 5px;
+    }
+}

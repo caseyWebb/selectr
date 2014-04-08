@@ -6,9 +6,7 @@ Demo coming soon; in the meantime, here's a [fiddle](http://jsfiddle.net/CaseyWe
 
 It is built using Bootstrap components, and is written in CoffeeScript and SCSS.
 
-If your project does not use Bootstrap, include the selectrPolyfill.css or selectrPolyfill.min.css.
-All the ruls in the polyfill file are scoped to selectr, so you don't have to worry about it affecting
-your existing stylesheets.
+Polyfill coming soon for projects not using Bootstrap.
 
 ### Usage
 
