@@ -187,5 +187,3 @@ do ($, window) ->
         $this.data 'selectr', (data = new Selectr(this, args))
 
     Selectr.InstallBindings()
-    
-$('select').selectr()
