@@ -6,11 +6,12 @@ do ($, window) ->
         
     defaults:
       Selectr: this
-      title:          'Select Options',
-      placeholder:    'Search',
-      resetText:      'Clear All'
-      width:          '300px'
-      maxListHeight:  '250px'
+      title:              'Select Options'
+      placeholder:        'Search'
+      resetText:          'Clear All'
+      width:              '300px'
+      maxListHeight:      '250px'
+      tooltipBreakpoint:  '25'
 
     constructor: (@el, @args) ->
       @args = $.extend @defaults, @args
@@ -56,14 +57,14 @@ do ($, window) ->
     PrepareOpts: (opts) ->
       for opt in opts
         $(document.createElement 'li').attr({
-          'class': "list-group-item #{if opt.selected then 'selected' else ''}"              
+          'class': "list-group-item #{if opt.selected then 'selected' else ''}"           
         }).data('val', $(opt).val())
         .append($(document.createElement 'div')
-                .attr({ 'class': 'color-code'})
+                .attr({ 'class': "color-code #{'no-color' if not $(opt).data 'selectr-color'}" })
                 .css('background-color', $(opt).data 'selectr-color'))
         .append($(document.createElement 'div')
                 .text($(opt).text())
-                .attr({ 'class': 'option-name' }))
+                .attr({ 'class': 'option-name', 'title': if $(opt).text().length > @args.tooltipBreakpoint then $(opt).text() }))
         .append($(document.createElement 'div')
                 .html('&times')
                 .attr({ 'class': "add-remove #{if not @$el.prop 'multiple' then 'hidden'}"}))
@@ -103,7 +104,7 @@ do ($, window) ->
       currentSelectionCount = $('option:selected', el).length
       $('.current-selection', $(opt).parents('.selectr')).text(if currentSelectionCount > 0 then currentSelectionCount else '')
             
-      @TriggerChange($(opt).parents('.selectr').prev())
+      @TriggerChange(el)
             
     @DeselectOption: (opt) ->
       el = $(opt).parents('.selectr').prev()
@@ -113,7 +114,13 @@ do ($, window) ->
       currentSelectionCount = $('option:selected', el).length
       $('.current-selection', $(opt).parents('.selectr')).text(if currentSelectionCount > 0 then currentSelectionCount else '')
 
+      @TriggerChange(el)
+
+    @bindingsInitialized: false
+
     @InstallBindings: ->
+
+      return if Selectr.bindingsInitialized
 
       # Click option
       $(document).on 'click', '.selectr .list-group-item', (e) ->
@@ -146,7 +153,7 @@ do ($, window) ->
         e.preventDefault()
         
       # Type in search
-      $(document).on 'change keyup', '.selectr .form-control', (e) ->
+      $(document).on 'click change keyup', '.selectr .form-control', (e) ->
         regex = new RegExp($(this).val().replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i')
         $(this).parents('.selectr').find('ul > li').each (index, option) ->
           unless $(option).text().match(regex)
@@ -168,6 +175,8 @@ do ($, window) ->
 
         e.stopPropagation();
         e.preventDefault();
+
+      Selectr.bindingsInitialized = true
 
   $.fn.extend selectr: (args) ->
     @each ->

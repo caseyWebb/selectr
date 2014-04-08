@@ -4,6 +4,8 @@
 
 .selectr {
 
+    margin: 0;
+
     .panel-heading.no-title {
         padding: 0;
         border-bottom: none;
@@ -15,9 +17,12 @@
 
         .list-group-item {
             padding: 0 !important;
+            overflow: hidden;
+            cursor: pointer;
 
             &:hover {
                 .option-name {
+                    margin-right: 50px;
                     border-right: 1px solid #ddd;
                 }
                 .selected {
@@ -43,8 +48,10 @@
     
     .option-name {
         height: 100%;
-        margin-right: 50px;
         padding: 10px 15px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
     }
         
     .color-code {
@@ -53,6 +60,11 @@
         margin: 10px;
         float: left;
         border-radius: 5px;
+        &.no-color {
+            width: 0;
+            height: 0;
+            margin: 0;
+        }
     }
 
     .add-remove {
