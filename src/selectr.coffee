@@ -1,5 +1,3 @@
-#TODO shift+click
-
 do ($, window) ->
 
   class Selectr
@@ -117,7 +115,6 @@ do ($, window) ->
       @TriggerChange(el)
 
     @bindingsInitialized: false
-
     @InstallBindings: ->
 
       return if Selectr.bindingsInitialized
@@ -126,7 +123,7 @@ do ($, window) ->
       $(document).on 'click', '.selectr .list-group-item', (e) ->
         modifyCurrentSelection = (e.ctrlKey || e.metaKey) and $(this).parents('.selectr').prev().prop 'multiple'
         
-        if $(this).hasClass('selected') and (modifyCurrentSelection or $(this).siblings('.selected').length is 0)
+        if $(this).hasClass('selected') and (modifyCurrentSelection or $(this).siblings('.selected').length is 0) and $(this).prop 'multiple'
           Selectr.DeselectOption this
         else
           Selectr.SelectOption modifyCurrentSelection, this
