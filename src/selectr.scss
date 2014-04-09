@@ -4,11 +4,29 @@
 
 .selectr {
 
-    margin: 0;
+    margin: 0;   
 
     .panel-heading.no-title {
         padding: 0;
         border-bottom: none;
+    }
+    
+    .panel-body {
+        position: relative;
+    }
+    
+    .clear-search {
+        position: absolute;
+        right: 25px;
+        top: 12px;
+        font-size: 28px;
+        font-weight: bold;
+        color: #333;
+        opacity: 0.8;
+        cursor: pointer;
+        &:hover {
+            opacity: 1;
+        }
     }
     
     .list-group {

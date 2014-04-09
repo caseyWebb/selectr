@@ -41,6 +41,7 @@ do ($, window) ->
         </div>
         <div class='panel-body'>
           <input class='form-control' placeholder='#{@args.placeholder}'>
+          <span class='clear-search hidden'>&times;</span>
         </div>
         <ul class='list-group' style='max-height: #{@args.maxListHeight}'>
         </ul>
@@ -151,15 +152,26 @@ do ($, window) ->
         
       # Type in search
       $(document).on 'click change keyup', '.selectr .form-control', (e) ->
+        selectr = $(this).parents('.selectr')
         regex = new RegExp($(this).val().replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i')
-        $(this).parents('.selectr').find('ul > li').each (index, option) ->
+        $('.list-group-item', selectr).each (index, option) ->
           unless $(option).text().match(regex)
             $(option).addClass 'hidden'
           else
             $(option).removeClass 'hidden'
+            
+        if $(this).val().length > 0
+          $('.clear-search', selectr).removeClass 'hidden' 
+        else
+          $('.clear-search', selectr).addClass 'hidden'
+            
 
         e.stopPropagation();
         e.preventDefault();
+        
+      # Clear search
+      $(document).on 'click', '.selectr .clear-search', (e) ->
+        $(this).siblings('input').val('').click()
 
       # Clear selected options          
       $(document).on 'click', '.selectr .reset', (e) ->
