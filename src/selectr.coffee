@@ -9,7 +9,7 @@ do ($, window) ->
       resetText:          'Clear All'
       width:              '300px'
       maxListHeight:      '250px'
-      tooltipBreakpoint:  '25'
+      tooltipBreakpoint:  25
 
     constructor: (@el, @args) ->
       @args = $.extend @defaults, @args
