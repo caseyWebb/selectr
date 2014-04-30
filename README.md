@@ -1,6 +1,6 @@
 # Selectr
 
-This plugin aims to accomplish a seemingly simple task: make a select box that doesn't suck.
+Selectr is a jQuery plugin that aims to accomplish a seemingly simple task: make a select box that doesn't suck.
 
 It currently supports ctrl+click, search, color-coding, and selection limiting (multi-selects).
 
@@ -59,7 +59,15 @@ Easy fix. Use the ASCII code, i.e. instead of ' use `&#39;` and instead of " use
 
 HTML5 data attributes take precedence over the options object. This allows you to pass certain parameters that should apply to most/all selectr instances, and "fill in the blanks" or override those options with the `data-selectr-opts attribute`. See demo file for an example.
 
+### Compatiblity
 
+Requires jQuery 1.8.3+
+
+Tested in the following browsers:
+
+- Chrome
+- Firefox
+- IE 9+
 
 ### Contributing
 
