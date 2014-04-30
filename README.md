@@ -10,6 +10,8 @@ Selectr was heavily inspired by [select2](https://github.com/ivaynberg/select2) 
 
 The files you probably want live in the prod folder. Debug contains the compiled JS, source maps, and compiled styles. Src contains the original Coffeescript and SCSS files. 
 
+__[Click here to view demo](http://caseywebb.github.io/selectr)__
+
 ## Usage
 
 To use selectr, simply fire it using jQuery
