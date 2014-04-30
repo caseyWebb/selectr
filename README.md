@@ -2,39 +2,73 @@
 
 This plugin aims to accomplish a seemingly simple task: make a select box that doesn't suck.
 
-Demo coming soon; in the meantime, here's a [fiddle](http://jsfiddle.net/CaseyWebb/5ufT7/)
+It currently supports ctrl+click, search, color-coding, and selection limiting (multi-selects).
 
-It is built using Bootstrap components, and is written in CoffeeScript and SCSS.
+It is built using Bootstrap components, and is written in CoffeeScript and SCSS; if your project is not using Bootstrap, you should use selectrWithPolyfill.css -- which includes all of selectr's styles along with the relevant Bootstrap styles (scoped to avoid conflicting with existing styles, of course) -- or write your own.
 
-Polyfill coming soon for projects not using Bootstrap.
+Selectr was heavily inspired by select2(https://github.com/ivaynberg/select2) and the label/assignee/milestone dropdowns in Github's issue tracker.
 
-### Usage
+The files you probably want live in the prod folder. Debug contains the compiled JS, source maps, and compiled styles. Src contains the original Coffeescript and SCSS files. 
+
+## Usage
 
 To use selectr, simply fire it using jQuery
 
 `$('select').selectr();`
 
-#### Options and defaults
+### Multi selects
 
-  title:          '',
-  placeholder:    'Search',
-  resetText:      'Clear All',
-  width:          '300px',
-  maxListHeight:  '250px'
+To make selectr a multi select, simply use the `multiple` attribute on your select element as you would with regular HTML.
 
-To use options, pass them as an object.
+    <select name="foo" multiple>
 
-    $('select').selectr({
-      title: 'Select things here',
-      placeholder: 'Search in options',
-      ...
-    });
+### Color coding
+
+Selectr supports color coding of options by setting the `data-selectr-color` attribute on the option. Any valid CSS color is supported, i.e. hex, rgba(a), hsl(a).
+
+Ex.
+
+    <option data-selectr-color="rgb(255, 255, 255)" value="foo">Foo</option>
+
+### Options and defaults
+
+    title:              '',
+    placeholder:        'Search',
+    resetText:          'Clear All',
+    width:              '300px',
+    maxListHeight:      '250px',
+    tooltipBreakpoint:  25,
+    maxSelection:       NaN
+
+To pass options to selectr, you may use an HTML5 data-* attribute, or an options object passed to the initialization function.
+
+#### Using HTML5 data attributes
+
+    <select name="foo" data-selectr-opts="{ title: 'Foo Bar', placeholder: 'Bax Qux', ... }">
+    
+#### Using an options object
+
+    $('select').selectr({ title: 'Foo Bar', placeholder: 'Baz Qux', ... });
+    
+#### NOTE: Order of precedence
+
+HTML5 data attributes take precedence over the options object. This allows you to pass certain parameters that should apply to most/all selectr instances, and "fill in the blanks" or override those options with the `data-selectr-opts attribute`. See demo file for an example.
 
 
-### Bugs
-If you encounter a bug, please file an issue or email me at CaseyWebb@me.com
 
-Feel free to branch or submit a pull request
+### Contributing
+
+#### Bugs
+
+If you encounter a bug, please file an issue in Github, or shoot me an email at NotCaseyWebb@gmail.com
+
+#### Pull requests
+
+If you would like to submit a pull request or fork this project, the package.json and Gruntfile.js should have everything you need to get started. Simply `cd` into the directory you cloned the repo in, `npm install`, and `grunt watch`. Coffeescript -> JS compilation, JSHinting, css prefixing, minification, and concatenation (for the polyfill styles) will be taken care of automagically.
+
+Source files live in src, compiled but unminified files in debug, and minified in prod.
+
+
 
 ### Legal Junk
 
