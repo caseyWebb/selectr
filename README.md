@@ -6,7 +6,7 @@ It currently supports ctrl+click, search, color-coding, and selection limiting (
 
 It is built using Bootstrap components, and is written in CoffeeScript and SCSS; if your project is not using Bootstrap, you should use selectrWithPolyfill.css -- which includes all of selectr's styles along with the relevant Bootstrap styles (scoped to avoid conflicting with existing styles, of course) -- or write your own.
 
-Selectr was heavily inspired by select2(https://github.com/ivaynberg/select2) and the label/assignee/milestone dropdowns in Github's issue tracker.
+Selectr was heavily inspired by [select2](https://github.com/ivaynberg/select2) and the label/assignee/milestone dropdowns in Github's issue tracker.
 
 The files you probably want live in the prod folder. Debug contains the compiled JS, source maps, and compiled styles. Src contains the original Coffeescript and SCSS files. 
 
