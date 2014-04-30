@@ -18,9 +18,8 @@
         this.el = el;
         this.args = args;
         this.$el = $(el);
-        this.args = $.extend(this.defaults, this.args, eval("(" + this.$el.data('selectr-opts') + ")"));
-        this.$el.data('selectr-opts', JSON.stringify(this.args));
-        console.log(this.$el.data('selectr-opts'));
+        this.args = $.extend(this.defaults, this.args, this.$el.data('selectr-opts'));
+        this.$el.data('selectr-opts', this.args);
         this.container = this.CreateContainer();
         this.opts = this.PrepareOpts($('option', this.el));
         $('.list-group', this.container).append(this.opts);
@@ -94,7 +93,7 @@
       Selectr.SelectOption = function(modifyCurrentSelection, opt) {
         var currentSelectionCount, el, foo, _i, _len, _ref;
         el = $(opt).parents('.selectr').prev();
-        if (JSON.parse($(el).data('selectr-opts')).maxSelection <= $(opt).siblings('.selected').length && modifyCurrentSelection) {
+        if ($(el).data('selectr-opts').maxSelection <= $(opt).siblings('.selected').length && modifyCurrentSelection) {
           return;
         }
         if (!modifyCurrentSelection) {
@@ -109,7 +108,7 @@
         $("option[value=" + ($(opt).data('val')) + "]", el).prop('selected', true);
         currentSelectionCount = $('option:selected', el).length;
         $('.current-selection', $(opt).parents('.selectr')).text(currentSelectionCount > 0 ? currentSelectionCount : '');
-        if (currentSelectionCount === JSON.parse($(el).data('selectr-opts')).maxSelection) {
+        if (currentSelectionCount === $(el).data('selectr-opts').maxSelection) {
           $(opt).parents('.selectr').addClass('max-selection-reached');
         } else {
           $(opt).parents('.selectr').removeClass('max-selection-reached');

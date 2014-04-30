@@ -14,9 +14,8 @@ do ($, window) ->
 
     constructor: (@el, @args) ->
       @$el = $(el)
-      @args = $.extend @defaults, @args, eval "("+@$el.data('selectr-opts')+")"
-      @$el.data 'selectr-opts', JSON.stringify @args
-      console.log @$el.data 'selectr-opts'
+      @args = $.extend @defaults, @args, @$el.data('selectr-opts')
+      @$el.data 'selectr-opts', @args
         
       @container = @CreateContainer()
       @opts = @PrepareOpts($('option', @el))
@@ -94,7 +93,7 @@ do ($, window) ->
     @SelectOption: (modifyCurrentSelection, opt) ->
       el = $(opt).parents('.selectr').prev()
 
-      if JSON.parse($(el).data('selectr-opts')).maxSelection <= $(opt).siblings('.selected').length && modifyCurrentSelection
+      if $(el).data('selectr-opts').maxSelection <= $(opt).siblings('.selected').length && modifyCurrentSelection
         return
 
       if not modifyCurrentSelection
@@ -109,7 +108,7 @@ do ($, window) ->
       currentSelectionCount = $('option:selected', el).length
       $('.current-selection', $(opt).parents('.selectr')).text(if currentSelectionCount > 0 then currentSelectionCount else '')
 
-      if currentSelectionCount == JSON.parse($(el).data('selectr-opts')).maxSelection
+      if currentSelectionCount == $(el).data('selectr-opts').maxSelection
         $(opt).parents('.selectr').addClass('max-selection-reached')
       else
         $(opt).parents('.selectr').removeClass('max-selection-reached')
