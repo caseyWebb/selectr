@@ -12,10 +12,7 @@
 
         <script>
             $(document).ready(function () {
-                $("select[name='foods']").selectr({
-                    title: 'What\'s for breakfast?',
-                    placeholder: 'Search foods'
-                });
+                $("select").selectr();
                 $("select[name='beverages']").selectr({
                     title: 'What would you like to drink?',
                     placeholder: 'Search beverages'
@@ -32,7 +29,7 @@
         <div class="row">
             <div class="col-sm-5">
                 <h4>Multi-select</h4>
-                <select name="foods" multiple>
+                <select name="foods" data-selectr-opts="{ title: 'What\'s for breakfast?', placeholder: 'Search foods' }"  multiple>
                     <option data-selectr-color="rgb(0, 163, 0)" value="bacon">Bacon (Extra long name foo bar baz quz)</option>
                     <option data-selectr-color="rgb(255, 0, 151)" value="eggs" selected>Eggs</option>
                     <option data-selectr-color="rgb(159, 0, 167)" value="toast">Toast</option>

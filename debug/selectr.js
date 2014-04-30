@@ -16,8 +16,8 @@
         var opt, selectedCount, _i, _len, _ref;
         this.el = el;
         this.args = args;
-        this.args = $.extend(this.defaults, this.args);
         this.$el = $(el);
+        this.args = $.extend(this.defaults, this.args, eval("(" + this.$el.data('selectr-opts') + ")"));
         this.container = this.CreateContainer();
         this.opts = this.PrepareOpts($('option', this.el));
         $('.list-group', this.container).append(this.opts);

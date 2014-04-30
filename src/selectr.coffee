@@ -12,8 +12,8 @@ do ($, window) ->
       tooltipBreakpoint:  25
 
     constructor: (@el, @args) ->
-      @args = $.extend @defaults, @args
       @$el = $(el)
+      @args = $.extend @defaults, @args, eval "("+@$el.data('selectr-opts')+")"
         
       @container = @CreateContainer()
       @opts = @PrepareOpts($('option', @el))
@@ -123,7 +123,7 @@ do ($, window) ->
       # Click option
       $(document).on 'click', '.selectr .list-group-item', (e) ->
         el = $(this).parents('.selectr').prev()
-        modifyCurrentSelection = (e.ctrlKey || e.metaKey) and el.prop 'multiple'
+        modifyCurrentSelection = (e.ctrlKey or e.metaKey) and el.prop 'multiple'
         
         if $(this).hasClass('selected') and (modifyCurrentSelection or $(this).siblings('.selected').length is 0) and el.prop 'multiple'
           Selectr.DeselectOption this
