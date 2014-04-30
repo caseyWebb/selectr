@@ -14,6 +14,9 @@ module.exports = function(grunt) {
     // Javascript
     coffee: {
       compile: {
+        options: {
+          sourceMap: true
+        },
         files: {
           'debug/selectr.js': 'src/selectr.coffee'
         }
@@ -35,7 +38,7 @@ module.exports = function(grunt) {
       },
       minify: {
         files: {
-          'selectr.min.js': 'debug/selectr.js',
+          'prod/selectr.min.js': 'debug/selectr.js',
         }      
       }
     },
@@ -57,8 +60,8 @@ module.exports = function(grunt) {
     cssmin: {
       minify: {
         files: {
-          'selectr.min.css': 'debug/selectr.css',
-          'selectrWithPolyfill.min.css': ['debug/selectr.css', 'debug/selectrPolyfill.css']
+          'prod/selectr.min.css': 'debug/selectr.css',
+          'prod/selectrWithPolyfill.min.css': ['debug/selectr.css', 'debug/selectrPolyfill.css']
         }
       }
     }

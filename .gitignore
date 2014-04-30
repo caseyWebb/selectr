@@ -42,8 +42,6 @@ local.properties
 *.sln.docstates
 
 # Build results
-
-[Dd]ebug/
 [Rr]elease/
 x64/
 build/
@@ -219,3 +217,5 @@ pip-log.txt
 #############
 
 .sass-cache
+
+node_modules/
