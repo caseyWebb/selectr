@@ -44,8 +44,13 @@ To pass options to selectr, you may use an HTML5 data-* attribute, or an options
 
 #### Using HTML5 data attributes
 
-    <select name="foo" data-selectr-opts="{ title: 'Foo Bar', placeholder: 'Bax Qux', ... }">
+    <select name="foo" data-selectr-opts="{ "title": "Foo Bar", "placeholder": "Bax Qux", "maxSelection": 5, ... }" multiple>
     
+__NOTE__: Attribute _must_ be valid JSON; that means quoted keys as well as values. This is to avoid using [eval()](http://stackoverflow.com/questions/86513/why-is-using-the-javascript-eval-function-a-bad-idea).
+
+_But wait! I need quotes/apostrophes in my title!_
+Easy fix. Use the ASCII code, i.e. instead of ' use `&#39;` and instead of " use `&quot;`.
+
 #### Using an options object
 
     $('select').selectr({ title: 'Foo Bar', placeholder: 'Baz Qux', ... });
