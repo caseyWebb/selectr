@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>selectr demo</title>
+
+        <link rel="stylesheet" href="../debug/selectr.css">
+        <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+        <script src="../debug/selectr.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                $("select[name='foods']").selectr({
+                    title: 'What\'s for breakfast?',
+                    placeholder: 'Search foods'
+                });
+                $("select[name='beverages']").selectr({
+                    title: 'What would you like to drink?',
+                    placeholder: 'Search beverages'
+                }); 
+            });
+        </script>
+    </head>
+    <body style="padding: 0px 20px;">
+        <h1>selectr demo</h1>
+        <h4>Turn ordinary select boxes into these neat guys</h4>
+        <br>
+        <br>
+        
+        <div class="row">
+            <div class="col-sm-5">
+            <h4>Multi-select</h4>
+            <select name="foods" multiple>
+                <option data-selectr-color="rgb(0, 163, 0)" value="bacon">Bacon (Extra long name foo bar baz quz)</option>
+                <option data-selectr-color="rgb(255, 0, 151)" value="eggs" selected>Eggs</option>
+                <option data-selectr-color="rgb(159, 0, 167)" value="toast">Toast</option>
+                <option data-selectr-color="rgb(185, 29, 71)" value="oatmeal">Oatmeal</option>
+                <option data-selectr-color="rgb(227, 162, 26)" value="steak" selected>Steak</option>
+                <option data-selectr-color="rgb(218, 83, 44)" value="sausage">Sausage</option>
+                <option data-selectr-color="rgb(45, 137, 239)" value="fruit">Fresh Fruit</option>
+            </select>
+            </div>
+
+            <div class="col-sm-5">
+            <h4>Single-select</h4>
+            <select name="beverages">
+                <option data-selectr-color="rgb(96, 60, 186)" value="23">Coffee</option>
+                <option data-selectr-color="rgb(0, 171, 169)" value="24" selected>Milk</option>
+            </select>
+            </div>
+        </div>
+        
+    </body>
+</html>

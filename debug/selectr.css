@@ -1,5 +1,7 @@
 .selectr {
-  margin: 0; }
+  margin: 0;
+  display: inline-block;
+  max-width: 100%; }
   .selectr .panel-heading.no-title {
     padding: 0;
     border-bottom: none; }
