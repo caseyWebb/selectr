@@ -174,7 +174,9 @@
           return e.preventDefault();
         });
         $(document).on('click', '.selectr .clear-search', function(e) {
-          return $(this).siblings('input').val('').click();
+          $(this).siblings('input').val('').click();
+          e.stopPropagation();
+          return e.preventDefault();
         });
         $(document).on('click', '.selectr .reset', function(e) {
           var el;

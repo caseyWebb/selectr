@@ -173,6 +173,9 @@ do ($, window) ->
       $(document).on 'click', '.selectr .clear-search', (e) ->
         $(this).siblings('input').val('').click()
 
+        e.stopPropagation();
+        e.preventDefault();
+
       # Clear selected options          
       $(document).on 'click', '.selectr .reset', (e) ->
         el = $(this).parents('.selectr').prev()
