@@ -122,9 +122,10 @@ do ($, window) ->
 
       # Click option
       $(document).on 'click', '.selectr .list-group-item', (e) ->
-        modifyCurrentSelection = (e.ctrlKey || e.metaKey) and $(this).parents('.selectr').prev().prop 'multiple'
+        el = $(this).parents('.selectr').prev()
+        modifyCurrentSelection = (e.ctrlKey || e.metaKey) and el.prop 'multiple'
         
-        if $(this).hasClass('selected') and (modifyCurrentSelection or $(this).siblings('.selected').length is 0) and $(this).prop 'multiple'
+        if $(this).hasClass('selected') and (modifyCurrentSelection or $(this).siblings('.selected').length is 0) and el.prop 'multiple'
           Selectr.DeselectOption this
         else
           Selectr.SelectOption modifyCurrentSelection, this

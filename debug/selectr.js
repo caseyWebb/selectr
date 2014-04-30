@@ -123,9 +123,10 @@
           return;
         }
         $(document).on('click', '.selectr .list-group-item', function(e) {
-          var modifyCurrentSelection;
-          modifyCurrentSelection = (e.ctrlKey || e.metaKey) && $(this).parents('.selectr').prev().prop('multiple');
-          if ($(this).hasClass('selected') && (modifyCurrentSelection || $(this).siblings('.selected').length === 0) && $(this).prop('multiple')) {
+          var el, modifyCurrentSelection;
+          el = $(this).parents('.selectr').prev();
+          modifyCurrentSelection = (e.ctrlKey || e.metaKey) && el.prop('multiple');
+          if ($(this).hasClass('selected') && (modifyCurrentSelection || $(this).siblings('.selected').length === 0) && el.prop('multiple')) {
             Selectr.DeselectOption(this);
           } else {
             Selectr.SelectOption(modifyCurrentSelection, this);
