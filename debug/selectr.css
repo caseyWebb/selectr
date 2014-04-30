@@ -81,3 +81,10 @@
   .selectr .current-selection {
     float: right;
     margin-top: 5px; }
+  .selectr.max-selection-reached li:not(.selected) .option-name {
+    margin-right: 0 !important;
+    border-right: none !important; }
+  .selectr.max-selection-reached li:not(.selected) .add-remove {
+    display: none !important; }
+  .selectr.max-selection-reached .current-selection {
+    background-color: #d9534f; }

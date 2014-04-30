@@ -10,10 +10,13 @@ do ($, window) ->
       width:              '300px'
       maxListHeight:      '250px'
       tooltipBreakpoint:  25
+      maxSelection:       NaN
 
     constructor: (@el, @args) ->
       @$el = $(el)
       @args = $.extend @defaults, @args, eval "("+@$el.data('selectr-opts')+")"
+      @$el.data 'selectr-opts', JSON.stringify @args
+      console.log @$el.data 'selectr-opts'
         
       @container = @CreateContainer()
       @opts = @PrepareOpts($('option', @el))
@@ -90,7 +93,10 @@ do ($, window) ->
         
     @SelectOption: (modifyCurrentSelection, opt) ->
       el = $(opt).parents('.selectr').prev()
-       
+
+      if JSON.parse($(el).data('selectr-opts')).maxSelection <= $(opt).siblings('.selected').length && modifyCurrentSelection
+        return
+
       if not modifyCurrentSelection
         $('option', el).prop('selected', false)
         for foo in $(opt).siblings()
@@ -102,11 +108,19 @@ do ($, window) ->
            
       currentSelectionCount = $('option:selected', el).length
       $('.current-selection', $(opt).parents('.selectr')).text(if currentSelectionCount > 0 then currentSelectionCount else '')
+
+      if currentSelectionCount == JSON.parse($(el).data('selectr-opts')).maxSelection
+        $(opt).parents('.selectr').addClass('max-selection-reached')
+      else
+        $(opt).parents('.selectr').removeClass('max-selection-reached')
             
       @TriggerChange(el)
             
     @DeselectOption: (opt) ->
       el = $(opt).parents('.selectr').prev()
+
+      $(opt).parents('.selectr').removeClass('max-selection-reached')
+
       $(opt).removeClass('selected')
       $("option[value=#{$(opt).data('val')}]", el).prop('selected', false)
         

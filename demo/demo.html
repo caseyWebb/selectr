@@ -12,11 +12,10 @@
 
         <script>
             $(document).ready(function () {
-                $("select").selectr();
-                $("select[name='beverages']").selectr({
+                $("select").selectr({
                     title: 'What would you like to drink?',
                     placeholder: 'Search beverages'
-                }); 
+                });
             });
         </script>
     </head>
@@ -29,7 +28,8 @@
         <div class="row">
             <div class="col-sm-5">
                 <h4>Multi-select</h4>
-                <select name="foods" data-selectr-opts="{ title: 'What\'s for breakfast?', placeholder: 'Search foods' }"  multiple>
+                <!-- Using data attributes -->
+                <select name="foods" data-selectr-opts="{ title: 'What\'s for breakfast? (max 5)', placeholder: 'Search foods', maxSelection: 5 }"  multiple>
                     <option data-selectr-color="rgb(0, 163, 0)" value="bacon">Bacon (Extra long name foo bar baz quz)</option>
                     <option data-selectr-color="rgb(255, 0, 151)" value="eggs" selected>Eggs</option>
                     <option data-selectr-color="rgb(159, 0, 167)" value="toast">Toast</option>
@@ -42,6 +42,7 @@
 
             <div class="col-sm-5">
                 <h4>Single-select</h4>
+                <!-- Using opts object from .selectr() call above -->
                 <select name="beverages">
                     <option data-selectr-color="rgb(96, 60, 186)" value="23">Coffee</option>
                     <option data-selectr-color="rgb(0, 171, 169)" value="24" selected>Milk</option>

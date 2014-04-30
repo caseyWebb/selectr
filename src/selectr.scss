@@ -116,4 +116,19 @@
         float: right;
         margin-top: 5px;
     }
+
+    &.max-selection-reached {
+        li:not(.selected) {
+            .option-name {
+                margin-right: 0 !important;
+                border-right: none !important;
+            }
+            .add-remove {
+                display: none !important;
+            }
+        }
+        .current-selection {
+            background-color: #d9534f;
+        }
+    }
 }
