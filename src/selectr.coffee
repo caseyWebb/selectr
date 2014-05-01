@@ -135,8 +135,6 @@ do ($, window) ->
 
       # Click option
       $(document).on 'click', '.selectr .list-group-item', (e) ->
-        console.log e
-        console.log e.originalEvent
         if e.originalEvent.detail && e.originalEvent.detail == 2
           return
 
@@ -160,7 +158,7 @@ do ($, window) ->
 
       # Click add/remove button
       $(document).on 'click', '.selectr .add-remove', (e) ->
-        if !e.originalEvent.detail || e.originalEvent.detail == 2
+        if e.originalEvent.detail && e.originalEvent.detail == 2
           return
 
         option = $(e.target).parents('.selectr .list-group-item')

@@ -135,8 +135,6 @@
         }
         $(document).on('click', '.selectr .list-group-item', function(e) {
           var el, modifyCurrentSelection;
-          console.log(e);
-          console.log(e.originalEvent);
           if (e.originalEvent.detail && e.originalEvent.detail === 2) {
             return;
           }
@@ -162,7 +160,7 @@
         });
         $(document).on('click', '.selectr .add-remove', function(e) {
           var option;
-          if (!e.originalEvent.detail || e.originalEvent.detail === 2) {
+          if (e.originalEvent.detail && e.originalEvent.detail === 2) {
             return;
           }
           option = $(e.target).parents('.selectr .list-group-item');
