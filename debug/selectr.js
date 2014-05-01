@@ -135,6 +135,11 @@
         }
         $(document).on('click', '.selectr .list-group-item', function(e) {
           var el, modifyCurrentSelection;
+          console.log(e);
+          console.log(e.originalEvent);
+          if (e.originalEvent.detail && e.originalEvent.detail === 2) {
+            return;
+          }
           el = $(this).parents('.selectr').prev();
           modifyCurrentSelection = (e.ctrlKey || e.metaKey) && el.prop('multiple');
           if ($(this).hasClass('selected') && (modifyCurrentSelection || $(this).siblings('.selected').length === 0) && el.prop('multiple')) {
@@ -143,20 +148,23 @@
             Selectr.SelectOption(modifyCurrentSelection, this);
           }
           e.stopPropagation();
-          return e.preventDefault();
-        });
-        $(document).on('keydown', function(e) {
-          if (e.ctrlKey) {
-            return $('.selectr .list-group').addClass('ctrl-key');
-          }
-        });
-        $(document).on('keyup', function(e) {
-          if (!e.ctrlKey) {
-            return $('.selectr .list-group').removeClass('ctrl-key');
-          }
+          e.preventDefault();
+          $(document).on('keydown', function(e) {
+            if (e.ctrlKey) {
+              return $('.selectr .list-group').addClass('ctrl-key');
+            }
+          });
+          return $(document).on('keyup', function(e) {
+            if (!e.ctrlKey) {
+              return $('.selectr .list-group').removeClass('ctrl-key');
+            }
+          });
         });
         $(document).on('click', '.selectr .add-remove', function(e) {
           var option;
+          if (!e.originalEvent.detail || e.originalEvent.detail === 2) {
+            return;
+          }
           option = $(e.target).parents('.selectr .list-group-item');
           if (option.hasClass('selected')) {
             Selectr.DeselectOption(option);

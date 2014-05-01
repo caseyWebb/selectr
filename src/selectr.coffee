@@ -135,6 +135,11 @@ do ($, window) ->
 
       # Click option
       $(document).on 'click', '.selectr .list-group-item', (e) ->
+        console.log e
+        console.log e.originalEvent
+        if e.originalEvent.detail && e.originalEvent.detail == 2
+          return
+
         el = $(this).parents('.selectr').prev()
         modifyCurrentSelection = (e.ctrlKey or e.metaKey) and el.prop 'multiple'
         
@@ -145,16 +150,19 @@ do ($, window) ->
         
         e.stopPropagation()
         e.preventDefault()
-        
-      # CTRL depressed
-      $(document).on 'keydown', (e) ->
-        $('.selectr .list-group').addClass 'ctrl-key' if e.ctrlKey
-        
-      $(document).on 'keyup', (e) ->
-        $('.selectr .list-group').removeClass 'ctrl-key' if not e.ctrlKey
+          
+        # CTRL depressed
+        $(document).on 'keydown', (e) ->
+          $('.selectr .list-group').addClass 'ctrl-key' if e.ctrlKey
+          
+        $(document).on 'keyup', (e) ->
+          $('.selectr .list-group').removeClass 'ctrl-key' if not e.ctrlKey
 
       # Click add/remove button
       $(document).on 'click', '.selectr .add-remove', (e) ->
+        if !e.originalEvent.detail || e.originalEvent.detail == 2
+          return
+
         option = $(e.target).parents('.selectr .list-group-item')
         if option.hasClass 'selected'
           Selectr.DeselectOption option
