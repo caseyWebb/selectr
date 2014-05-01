@@ -59,7 +59,7 @@ Easy fix. Use the ASCII code, i.e. instead of ' use `&#39;` and instead of " use
     
 #### NOTE: Order of precedence
 
-HTML5 data attributes take precedence over the options object. This allows you to pass certain parameters that should apply to most/all selectr instances, and "fill in the blanks" or override those options with the `data-selectr-opts attribute`. See demo file for an example.
+HTML5 data attributes take precedence over the options object. This allows you to pass certain parameters that should apply to most/all selectr instances, and "fill in the blanks" or override those options with the `data-selectr-opts` attribute. See demo file for an example.
 
 ### Compatiblity
 
