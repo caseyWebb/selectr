@@ -7,10 +7,18 @@
     margin: 0;  
     display: inline-block;
     max-width: 100%;
+    user-select: none;
 
-    .panel-heading.no-title {
-        padding: 0;
-        border-bottom: none;
+    * {
+        user-select: none;
+    }
+
+    .panel-heading {
+        cursor: default;
+        &.no-title {
+            padding: 0;
+            border-bottom: none;
+        }
     }
     
     .panel-body {
@@ -115,6 +123,7 @@
     .current-selection {
         float: right;
         margin-top: 5px;
+        cursor: default;
     }
 
     &.max-selection-reached {

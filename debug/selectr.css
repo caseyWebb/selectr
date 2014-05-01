@@ -1,10 +1,21 @@
 .selectr {
   margin: 0;
   display: inline-block;
-  max-width: 100%; }
-  .selectr .panel-heading.no-title {
-    padding: 0;
-    border-bottom: none; }
+  max-width: 100%;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
+  .selectr * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none; }
+  .selectr .panel-heading {
+    cursor: default; }
+    .selectr .panel-heading.no-title {
+      padding: 0;
+      border-bottom: none; }
   .selectr .panel-body {
     position: relative; }
   .selectr .clear-search {
@@ -80,7 +91,8 @@
     opacity: 0.8; }
   .selectr .current-selection {
     float: right;
-    margin-top: 5px; }
+    margin-top: 5px;
+    cursor: default; }
   .selectr.max-selection-reached li:not(.selected) .option-name {
     margin-right: 0 !important;
     border-right: none !important; }
