@@ -32,6 +32,9 @@
           }
         }
         $('.current-selection', this.container).text(selectedCount > 0 ? selectedCount : void 0);
+        if (selectedCount === 0) {
+          $('.panel-footer', this.container).addClass('hidden');
+        }
         this.MonitorSource();
         this.container.insertAfter(this.el);
         this.$el.hide();
@@ -77,7 +80,12 @@
             updatedList.append(opts);
             $('.list-group', $(this).next()).replaceWith(updatedList);
             currentSelectionCount = $('option:selected', this).length;
-            return $('.current-selection', $(this).next()).text(currentSelectionCount > 0 ? currentSelectionCount : '');
+            $('.current-selection', $(this).next()).text(currentSelectionCount > 0 ? currentSelectionCount : '');
+            if (currentSelectionCount > 0 && $(this).prop('multiple')) {
+              return $('.panel-footer', $(this).next()).removeClass('hidden');
+            } else {
+              return $('.panel-footer', $(this).next()).addClass('hidden');
+            }
           }
         });
       };
@@ -108,6 +116,9 @@
         $("option[value=" + ($(opt).data('val')) + "]", el).prop('selected', true);
         currentSelectionCount = $('option:selected', el).length;
         $('.current-selection', $(opt).parents('.selectr')).text(currentSelectionCount > 0 ? currentSelectionCount : '');
+        if (el.prop('multiple')) {
+          $('.panel-footer', $(opt).parents('.selectr')).removeClass('hidden');
+        }
         if (currentSelectionCount === $(el).data('selectr-opts').maxSelection) {
           $(opt).parents('.selectr').addClass('max-selection-reached');
         } else {
@@ -124,6 +135,9 @@
         $("option[value=" + ($(opt).data('val')) + "]", el).prop('selected', false);
         currentSelectionCount = $('option:selected', el).length;
         $('.current-selection', $(opt).parents('.selectr')).text(currentSelectionCount > 0 ? currentSelectionCount : '');
+        if (currentSelectionCount === 0) {
+          $('.panel-footer', $(opt).parents('.selectr')).addClass('hidden');
+        }
         return this.TriggerChange(el);
       };
 
@@ -203,6 +217,7 @@
           $('option', el).prop('selected', false);
           Selectr.TriggerChange(el);
           $('.current-selection', $(this).parents('.selectr')).text('');
+          $('.panel-footer', $(this).parents('.selectr')).addClass('hidden');
           e.stopPropagation();
           return e.preventDefault();
         });
