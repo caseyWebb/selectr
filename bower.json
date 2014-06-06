@@ -1,0 +1,27 @@
+{
+  "name": "selectr",
+  "version": "0.1.0",
+  "homepage": "https://github.com/caseyWebb/selectr",
+  "authors": [
+    "Casey Webb"
+  ],
+  "description": "Selectr is a jQuery plugin that aims to accomplish a seemingly simple task: make a select box that doesn't suck",
+  "main": "prod/selectr.min.js",
+  "keywords": [
+    "jquery",
+    "bootstrap",
+    "select"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": ">= 1.8.3",
+    "bootstrap": ">= 3.0.0"
+  }
+}
