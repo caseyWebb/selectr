@@ -12,6 +12,18 @@ The files you probably want live in the prod folder. Debug contains the compiled
 
 __[Click here to view demo](http://caseywebb.github.io/selectr)__
 
+## Installation
+
+#### From this repository
+
+Copy selectr.min.js and the appropriate stylesheet (selectr.min.css if your project does not use Bootstrap, or selectrWithPolyfill.min.css if you are) and include them on the page(s) you would like to use selectr on
+
+#### Installing with Bower
+
+`bower install selectr`
+
+Note: The bower package lists bootstrap as a dependency; thus bootstrap will be copied to your project.
+
 ## Usage
 
 To use selectr, simply fire it using jQuery
