@@ -16,7 +16,7 @@ __[Click here to view demo](http://caseywebb.github.io/selectr)__
 
 #### From this repository
 
-Copy selectr.min.js and the appropriate stylesheet (selectr.min.css if your project does not use Bootstrap, or selectrWithPolyfill.min.css if you are) and include them on the page(s) you would like to use selectr on
+Copy selectr.min.js and the appropriate stylesheet (selectr.min.css if your project uses Bootstrap, or selectrWithPolyfill.min.css if your project does not) and include them on the page(s) you would like to use selectr on
 
 #### Installing with Bower
 
