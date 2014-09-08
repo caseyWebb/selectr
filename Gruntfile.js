@@ -38,8 +38,8 @@ module.exports = function(grunt) {
       },
       minify: {
         files: {
-          'prod/selectr.min.js': 'debug/selectr.js',
-        }      
+          'dist/selectr.min.js': 'debug/selectr.js',
+        }
       }
     },
 
@@ -60,8 +60,8 @@ module.exports = function(grunt) {
     cssmin: {
       minify: {
         files: {
-          'prod/selectr.min.css': 'debug/selectr.css',
-          'prod/selectrWithPolyfill.min.css': ['debug/selectr.css', 'debug/selectrPolyfill.css']
+          'dist/selectr.min.css': 'debug/selectr.css',
+          'dist/selectrWithPolyfill.min.css': ['debug/selectr.css', 'debug/selectrPolyfill.css']
         }
       }
     }
