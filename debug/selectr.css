@@ -104,5 +104,9 @@
     display: none !important; }
   .selectr.max-selection-reached .current-selection {
     background-color: #d9534f; }
+  .selectr .no-matching-options {
+    padding: 10px;
+    padding-top: 0;
+    text-align: center; }
 
 /*# sourceMappingURL=selectr.css.map */

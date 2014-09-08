@@ -4,13 +4,14 @@ do ($, window) ->
 
     defaults:
       Selectr: this
-      title:              'Select Options'
-      placeholder:        'Search'
-      resetText:          'Clear All'
-      width:              '300px'
-      maxListHeight:      '250px'
-      tooltipBreakpoint:  25
-      maxSelection:       NaN
+      title:                  'Select Options'
+      noMatchingOptionsText:  'No options found'
+      placeholder:            'Search'
+      resetText:              'Clear All'
+      width:                  '300px'
+      maxListHeight:          '250px'
+      tooltipBreakpoint:      25
+      maxSelection:           NaN
 
     constructor: (@el, @args) ->
       @$el = $(el)
@@ -49,6 +50,9 @@ do ($, window) ->
         </div>
         <ul class='list-group' style='max-height: #{@args.maxListHeight}'>
         </ul>
+        <div class='no-matching-options hidden'>
+          <strong>#{@args.noMatchingOptionsText}</strong>
+        </div>
         <div class='panel-footer #{'hidden' if not @$el.prop 'multiple'}'>
           <button class='reset btn btn-sm btn-default'>
             #{@args.resetText}
@@ -183,17 +187,25 @@ do ($, window) ->
       $(document).on 'click change keyup', '.selectr .form-control', (e) ->
         selectr = $(this).parents('.selectr')
         regex = new RegExp($(this).val().replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i')
+        noMatchingOptions = true
+
         $('.list-group-item', selectr).each (index, option) ->
           unless $(option).text().match(regex)
             $(option).addClass 'hidden'
           else
             $(option).removeClass 'hidden'
+            noMatchingOptions = false
+          return # ohh coffeescript...
 
         if $(this).val().length > 0
           $('.clear-search', selectr).removeClass 'hidden'
         else
           $('.clear-search', selectr).addClass 'hidden'
 
+        if noMatchingOptions
+          $('.no-matching-options', selectr).removeClass 'hidden'
+        else
+          $('.no-matching-options', selectr).addClass 'hidden'
 
         e.stopPropagation();
         e.preventDefault();

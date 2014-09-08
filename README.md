@@ -46,13 +46,14 @@ Ex.
 
 ### Options and defaults
 
-    title:              '',
-    placeholder:        'Search',
-    resetText:          'Clear All',
-    width:              '300px',
-    maxListHeight:      '250px',
-    tooltipBreakpoint:  25,
-    maxSelection:       NaN
+    title:                  '',
+    noMatchingOptionsText:  'No options found'
+    placeholder:            'Search',
+    resetText:              'Clear All',
+    width:                  '300px',
+    maxListHeight:          '250px',
+    tooltipBreakpoint:      25, // min length of option name to show tooltip on
+    maxSelection:           NaN
 
 To pass options to selectr, you may use an HTML5 data-* attribute, or an options object passed to the initialization function.
 

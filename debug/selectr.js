@@ -5,6 +5,7 @@
       Selectr.prototype.defaults = {
         Selectr: Selectr,
         title: 'Select Options',
+        noMatchingOptionsText: 'No options found',
         placeholder: 'Search',
         resetText: 'Clear All',
         width: '300px',
@@ -44,7 +45,7 @@
         return $(document.createElement('div')).attr({
           'class': "selectr panel panel-default " + (this.$el.prop('multiple') ? 'multi' : void 0),
           'style': "width: " + this.args.width + ";"
-        }).html("<div class='panel-heading " + (this.args.title === "" ? "no-title" : void 0) + "'>\n  <h4 class='panel-title'>\n    " + this.args.title + "\n  </h4>\n</div>\n<div class='panel-body'>\n  <input class='form-control' placeholder='" + this.args.placeholder + "'>\n  <span class='clear-search hidden'>&times;</span>\n</div>\n<ul class='list-group' style='max-height: " + this.args.maxListHeight + "'>\n</ul>\n<div class='panel-footer " + (!this.$el.prop('multiple') ? 'hidden' : void 0) + "'>\n  <button class='reset btn btn-sm btn-default'>\n    " + this.args.resetText + "\n  </button>\n  " + (this.$el.prop('multiple') ? "<span class='current-selection badge'></span>" : void 0) + "\n</div>");
+        }).html("<div class='panel-heading " + (this.args.title === "" ? "no-title" : void 0) + "'>\n  <h4 class='panel-title'>\n    " + this.args.title + "\n  </h4>\n</div>\n<div class='panel-body'>\n  <input class='form-control' placeholder='" + this.args.placeholder + "'>\n  <span class='clear-search hidden'>&times;</span>\n</div>\n<ul class='list-group' style='max-height: " + this.args.maxListHeight + "'>\n</ul>\n<div class='no-matching-options hidden'>\n  <strong>" + this.args.noMatchingOptionsText + "</strong>\n</div>\n<div class='panel-footer " + (!this.$el.prop('multiple') ? 'hidden' : void 0) + "'>\n  <button class='reset btn btn-sm btn-default'>\n    " + this.args.resetText + "\n  </button>\n  " + (this.$el.prop('multiple') ? "<span class='current-selection badge'></span>" : void 0) + "\n</div>");
       };
 
       Selectr.prototype.PrepareOpts = function(opts) {
@@ -187,20 +188,27 @@
           return e.preventDefault();
         });
         $(document).on('click change keyup', '.selectr .form-control', function(e) {
-          var regex, selectr;
+          var noMatchingOptions, regex, selectr;
           selectr = $(this).parents('.selectr');
           regex = new RegExp($(this).val().replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i');
+          noMatchingOptions = true;
           $('.list-group-item', selectr).each(function(index, option) {
             if (!$(option).text().match(regex)) {
-              return $(option).addClass('hidden');
+              $(option).addClass('hidden');
             } else {
-              return $(option).removeClass('hidden');
+              $(option).removeClass('hidden');
+              noMatchingOptions = false;
             }
           });
           if ($(this).val().length > 0) {
             $('.clear-search', selectr).removeClass('hidden');
           } else {
             $('.clear-search', selectr).addClass('hidden');
+          }
+          if (noMatchingOptions) {
+            $('.no-matching-options', selectr).removeClass('hidden');
+          } else {
+            $('.no-matching-options', selectr).addClass('hidden');
           }
           e.stopPropagation();
           return e.preventDefault();
