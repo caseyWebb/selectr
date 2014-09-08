@@ -69,7 +69,7 @@
       Selectr.prototype.MonitorSource = function() {
         var self;
         self = this;
-        return this.$el.on('change', function(e) {
+        return this.$el.on('DOMSubtreeModified', function(e) {
           var currentSelectionCount, opts, updatedList;
           if (!$(this).data('selectr-change-triggered')) {
             updatedList = $(document.createElement('ul')).attr({
