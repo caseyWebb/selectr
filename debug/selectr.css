@@ -18,6 +18,10 @@
       border-bottom: none; }
   .selectr .panel-body {
     position: relative; }
+  .selectr input::-ms-clear {
+    display: none;
+    width: 0;
+    height: 0; }
   .selectr .clear-search {
     position: absolute;
     right: 25px;

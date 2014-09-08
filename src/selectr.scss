@@ -4,7 +4,7 @@
 
 .selectr {
 
-    margin: 0;  
+    margin: 0;
     display: inline-block;
     max-width: 100%;
     user-select: none;
@@ -20,11 +20,18 @@
             border-bottom: none;
         }
     }
-    
+
     .panel-body {
         position: relative;
     }
-    
+
+    // prevent IE from doubling up the clear input 'X'
+    input::-ms-clear {
+        display: none;
+        width:0;
+        height:0;
+    }
+
     .clear-search {
         position: absolute;
         right: 25px;
@@ -38,7 +45,7 @@
             opacity: 1;
         }
     }
-    
+
     .list-group {
         overflow-x: hidden;
 
@@ -67,14 +74,14 @@
             .selected {
                 .option-name {
                     border-right: 1px solid white;
-                }  
+                }
             }
             .add-remove {
                 display: block;
             }
         }
     }
-    
+
     .option-name {
         height: 100%;
         padding: 10px 15px;
@@ -82,7 +89,7 @@
         white-space: nowrap;
         overflow: hidden;
     }
-        
+
     .color-code {
         width: 20px;
         height: 20px;
@@ -115,7 +122,7 @@
         text-align: center;
         vertical-align: middle;
     }
-        
+
     .ctrl-key .add-remove, .add-remove:hover {
         opacity: 0.8;
     }
