@@ -77,6 +77,7 @@
           return function() {
             var $selectrFooter, currentSelectionCount, opts, thisSelectr, updatedList;
             if (!_this.$el.data('selectr-change-triggered')) {
+              console.log('sync');
               thisSelectr = _this.$el.next();
               updatedList = $(document.createElement('ul')).attr({
                 'class': 'list-group',
@@ -96,12 +97,11 @@
             }
           };
         })(this);
-        if (this.$el.length && this.$el[0].attachEvent) {
-          this.$el.each(function() {
-            return this.attachEvent("onpropertychange", self.sync);
-          });
-        }
         observer = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+        this.$el.on('change', function(e) {
+          console.log('change');
+          return self.sync();
+        });
         if (observer != null) {
           if (this.propertyObserver) {
             delete this.propertyObserver;

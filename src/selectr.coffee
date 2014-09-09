@@ -100,6 +100,8 @@ do ($, window) ->
         # if not triggered by selectr
         unless @$el.data 'selectr-change-triggered'
 
+          console.log 'sync'
+
           thisSelectr = @$el.next()
           updatedList = $(document.createElement 'ul').attr({ 'class': 'list-group', 'style': "max-height: #{self.args.maxListHeight};"})
           opts = @PrepareOpts($('option', @$el))
@@ -118,13 +120,15 @@ do ($, window) ->
           else
            $selectrFooter.addClass('hidden')
 
-      # IE8-10 (what did you expect...)
-      if @$el.length && @$el[0].attachEvent
-        @$el.each ->
-          this.attachEvent("onpropertychange", self.sync)
-
-      # chrome, safari, firefox, IE11
       observer = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver
+
+      # selection change
+      @$el.on 'change', (e) ->
+        console.log 'change'
+        self.sync()
+
+      # options change
+      # chrome, safari, firefox, IE11
       if observer?
 
         if @propertyObserver
@@ -135,6 +139,11 @@ do ($, window) ->
           $.each(mutations, self.sync)
 
         @propertyObserver.observe(@$el.get(0), { attributes: false, childList: true })
+
+      # To observe changes to the options in legacy IE,
+      # you'll have to manually trigger a change event
+      # on the source element when the options change. Sorry.
+      # I'm done wasting time on this.
 
 
     ##############################
