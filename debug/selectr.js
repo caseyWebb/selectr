@@ -75,31 +75,35 @@
         self = this;
         this.sync = (function(_this) {
           return function() {
-            var $selectrFooter, currentSelectionCount, opts, thisSelectr, updatedList;
             if (!_this.$el.data('selectr-change-triggered')) {
-              console.log('sync');
-              thisSelectr = _this.$el.next();
-              updatedList = $(document.createElement('ul')).attr({
-                'class': 'list-group',
-                'style': "max-height: " + self.args.maxListHeight + ";"
-              });
-              opts = _this.PrepareOpts($('option', _this.$el));
-              updatedList.append(opts);
-              $('.list-group', thisSelectr).replaceWith(updatedList);
-              currentSelectionCount = $('option:selected', _this.$el).length;
-              $('.current-selection', thisSelectr).text(currentSelectionCount > 0 ? currentSelectionCount : '');
-              $selectrFooter = $('.panel-footer', thisSelectr);
-              if (currentSelectionCount > 0 && $(_this.$el).prop('multiple')) {
-                return $selectrFooter.removeClass('hidden');
-              } else {
-                return $selectrFooter.addClass('hidden');
+              if (self.prev != null) {
+                clearTimeout(self.prev);
               }
+              return self.prev = setTimeout(function() {
+                var $selectrFooter, currentSelectionCount, opts, thisSelectr, updatedList;
+                console.log('sync');
+                thisSelectr = _this.$el.next();
+                updatedList = $(document.createElement('ul')).attr({
+                  'class': 'list-group',
+                  'style': "max-height: " + self.args.maxListHeight + ";"
+                });
+                opts = _this.PrepareOpts($('option', _this.$el));
+                updatedList.append(opts);
+                $('.list-group', thisSelectr).replaceWith(updatedList);
+                currentSelectionCount = $('option:selected', _this.$el).length;
+                $('.current-selection', thisSelectr).text(currentSelectionCount > 0 ? currentSelectionCount : '');
+                $selectrFooter = $('.panel-footer', thisSelectr);
+                if (currentSelectionCount > 0 && $(_this.$el).prop('multiple')) {
+                  return $selectrFooter.removeClass('hidden');
+                } else {
+                  return $selectrFooter.addClass('hidden');
+                }
+              }, 200);
             }
           };
         })(this);
         observer = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
         this.$el.on('change', function(e) {
-          console.log('change');
           return self.sync();
         });
         if (observer != null) {

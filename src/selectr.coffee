@@ -100,31 +100,37 @@ do ($, window) ->
         # if not triggered by selectr
         unless @$el.data 'selectr-change-triggered'
 
-          console.log 'sync'
+          if self.prev?
+            clearTimeout(self.prev)
 
-          thisSelectr = @$el.next()
-          updatedList = $(document.createElement 'ul').attr({ 'class': 'list-group', 'style': "max-height: #{self.args.maxListHeight};"})
-          opts = @PrepareOpts($('option', @$el))
+          self.prev = setTimeout =>
 
-          updatedList.append(opts)
-          $('.list-group', thisSelectr).replaceWith(updatedList)
+            console.log 'sync'
 
-          #update current selection counter
-          currentSelectionCount = $('option:selected', @$el).length
-          $('.current-selection', thisSelectr).text(if currentSelectionCount > 0 then currentSelectionCount else '')
+            thisSelectr = @$el.next()
+            updatedList = $(document.createElement 'ul').attr({ 'class': 'list-group', 'style': "max-height: #{self.args.maxListHeight};"})
+            opts = @PrepareOpts($('option', @$el))
 
-          #show/hide footer
-          $selectrFooter = $('.panel-footer', thisSelectr)
-          if currentSelectionCount > 0 && $(@$el).prop('multiple')
-           $selectrFooter.removeClass('hidden')
-          else
-           $selectrFooter.addClass('hidden')
+            updatedList.append(opts)
+            $('.list-group', thisSelectr).replaceWith(updatedList)
+
+            #update current selection counter
+            currentSelectionCount = $('option:selected', @$el).length
+            $('.current-selection', thisSelectr).text(if currentSelectionCount > 0 then currentSelectionCount else '')
+
+            #show/hide footer
+            $selectrFooter = $('.panel-footer', thisSelectr)
+            if currentSelectionCount > 0 && $(@$el).prop('multiple')
+             $selectrFooter.removeClass('hidden')
+            else
+             $selectrFooter.addClass('hidden')
+
+          , 200
 
       observer = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver
 
       # selection change
       @$el.on 'change', (e) ->
-        console.log 'change'
         self.sync()
 
       # options change
