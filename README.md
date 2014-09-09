@@ -2,7 +2,7 @@
 
 Selectr is a jQuery plugin that aims to accomplish a seemingly simple task: make a select box that doesn't suck.
 
-It currently supports ctrl+click, search, color-coding, and selection limiting (multi-selects). In modern browsers (Chrome, Safari, FF, IE11), selectr ensures your source element and itself remain in sync. If you require this behavior (_e.g.__ because you're using a data-binding framework of some sort) in legacy IE, see **Legacy Browser Caveats** below.
+It currently supports ctrl+click, search, color-coding, and selection limiting (multi-selects). In modern browsers (Chrome, Safari, FF, IE11), selectr ensures your source element and itself remain in sync. If you require this behavior (_e.g._ because you're using a data-binding framework of some sort) in legacy IE, see **Legacy Browser Caveats** below.
 
 It is built using Bootstrap components, and is written in CoffeeScript and SCSS; if your project is not using Bootstrap, you should use selectrWithPolyfill.css -- which includes all of selectr's styles along with the relevant Bootstrap styles (scoped to avoid conflicting with existing styles, of course) -- or write your own.
 
