@@ -81,7 +81,6 @@
               }
               return self.prev = setTimeout(function() {
                 var $selectrFooter, currentSelectionCount, opts, thisSelectr, updatedList;
-                console.log('sync');
                 thisSelectr = _this.$el.next();
                 updatedList = $(document.createElement('ul')).attr({
                   'class': 'list-group',

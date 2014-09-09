@@ -105,8 +105,6 @@ do ($, window) ->
 
           self.prev = setTimeout =>
 
-            console.log 'sync'
-
             thisSelectr = @$el.next()
             updatedList = $(document.createElement 'ul').attr({ 'class': 'list-group', 'style': "max-height: #{self.args.maxListHeight};"})
             opts = @PrepareOpts($('option', @$el))
