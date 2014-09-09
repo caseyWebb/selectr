@@ -24,7 +24,8 @@ module.exports = function(grunt) {
     },
     coffee_jshint: {
       options: {
-        jshintOptions: ['browser', 'jquery']
+        jshintOptions: ['browser', 'jquery'],
+        globals: ['console']
       },
       files: {
         src: 'src/selectr.coffee'

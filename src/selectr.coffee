@@ -18,10 +18,14 @@ do ($, window) ->
       @args = $.extend @defaults, @args, @$el.data('selectr-opts')
       @$el.data 'selectr-opts', @args
 
+      # create container
       @container = @CreateContainer()
+
+      # populate options
       @opts = @PrepareOpts($('option', @el))
       $('.list-group', @container).append(@opts)
 
+      # set current selection badge
       selectedCount = 0
       for opt in @opts
         selectedCount++ if opt.hasClass 'selected'
@@ -29,10 +33,18 @@ do ($, window) ->
       if selectedCount == 0
         $('.panel-footer', @container).addClass('hidden')
 
+      # watch for programatic changes
       @MonitorSource()
 
+      # insert selectr instance in DOM
       @container.insertAfter(@el)
+
+      # hide source
       @$el.hide()
+
+    ##############################
+    ### Initialization methods ###
+    ##############################
 
     CreateContainer: ->
       $(document.createElement 'div').attr({
@@ -63,36 +75,71 @@ do ($, window) ->
 
     PrepareOpts: (opts) ->
       for opt in opts
+        # create li
         $(document.createElement 'li').attr({
           'class': "list-group-item #{if opt.selected then 'selected' else ''}"
         }).data('val', $(opt).val())
+        # insert color-code square
         .append($(document.createElement 'div')
                 .attr({ 'class': "color-code #{'no-color' if not $(opt).data 'selectr-color'}" })
                 .css('background-color', $(opt).data 'selectr-color'))
+        # insert name
         .append($(document.createElement 'div')
                 .text($(opt).text())
                 .attr({ 'class': 'option-name', 'title': if $(opt).text().length > @args.tooltipBreakpoint then $(opt).text() }))
+        # insert add/remove
         .append($(document.createElement 'div')
                 .html('&times')
                 .attr({ 'class': "add-remove #{if not @$el.prop 'multiple' then 'hidden'}"}))
 
     MonitorSource: ->
       self = this
-      @$el.on 'DOMSubtreeModified', (e) ->
-        unless $(this).data 'selectr-change-triggered'
+
+      @sync = =>
+
+        # if not triggered by selectr
+        unless @$el.data 'selectr-change-triggered'
+
+          thisSelectr = @$el.next()
           updatedList = $(document.createElement 'ul').attr({ 'class': 'list-group', 'style': "max-height: #{self.args.maxListHeight};"})
-          opts = self.PrepareOpts($('option', this))
+          opts = @PrepareOpts($('option', @$el))
+
           updatedList.append(opts)
-          $('.list-group', $(this).next()).replaceWith(updatedList)
+          $('.list-group', thisSelectr).replaceWith(updatedList)
 
-          currentSelectionCount = $('option:selected', this).length
-          $('.current-selection', $(this).next()).text(if currentSelectionCount > 0 then currentSelectionCount else '')
-          if currentSelectionCount > 0 && $(this).prop('multiple')
-            $('.panel-footer', $(this).next()).removeClass('hidden')
+          #update current selection counter
+          currentSelectionCount = $('option:selected', @$el).length
+          $('.current-selection', thisSelectr).text(if currentSelectionCount > 0 then currentSelectionCount else '')
+
+          #show/hide footer
+          $selectrFooter = $('.panel-footer', thisSelectr)
+          if currentSelectionCount > 0 && $(@$el).prop('multiple')
+           $selectrFooter.removeClass('hidden')
           else
-            $('.panel-footer', $(this).next()).addClass('hidden')
+           $selectrFooter.addClass('hidden')
 
-    # Static selectr methods
+      # IE8-10 (what did you expect...)
+      if @$el.length && @$el[0].attachEvent
+        @$el.each ->
+          this.attachEvent("onpropertychange", self.sync)
+
+      # chrome, safari, firefox, IE11
+      observer = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver
+      if observer?
+
+        if @propertyObserver
+          delete @propertyObserver
+          @propertyObserver = null
+
+        @propertyObserver = new observer (mutations) ->
+          $.each(mutations, self.sync)
+
+        @propertyObserver.observe(@$el.get(0), { attributes: false, childList: true })
+
+
+    ##############################
+    ### Static selectr methods ###
+    ##############################
 
     @TriggerChange: (el) ->
 
@@ -101,60 +148,69 @@ do ($, window) ->
       el.data 'selectr-change-triggered', false
 
     @SelectOption: (modifyCurrentSelection, opt) ->
-      el = $(opt).parents('.selectr').prev()
+      thisSelectr = $(opt).parents('.selectr')
+      sourceElement = $(opt).parents('.selectr').prev()
 
-      if $(el).data('selectr-opts').maxSelection <= $(opt).siblings('.selected').length && modifyCurrentSelection
+      # prevent >maxSelection
+      if $(sourceElement).data('selectr-opts').maxSelection <= $(opt).siblings('.selected').length && modifyCurrentSelection
         return
 
-      if not modifyCurrentSelection
-        $('option', el).prop('selected', false)
+      # clear current selection unless CTRL key pressed
+      if !modifyCurrentSelection
+        $('option', sourceElement).prop('selected', false)
         for foo in $(opt).siblings()
           $(foo).removeClass('selected')
 
+      # select this option
       $(opt).addClass('selected')
 
-      $("option[value=#{$(opt).data('val')}]", el).prop('selected', true)
+      # select option on source
+      $("option[value=#{$(opt).data('val')}]", sourceElement).prop('selected', true)
 
-      currentSelectionCount = $('option:selected', el).length
-      $('.current-selection', $(opt).parents('.selectr')).text(if currentSelectionCount > 0 then currentSelectionCount else '')
-      $('.panel-footer', $(opt).parents('.selectr')).removeClass('hidden') if el.prop('multiple')
+      # change current selection count
+      currentSelectionCount = $('option:selected', sourceElement).length
+      $('.current-selection', thisSelectr).text(if currentSelectionCount > 0 then currentSelectionCount else '')
+      $('.panel-footer', thisSelectr).removeClass('hidden') if sourceElement.prop('multiple')
 
-      if currentSelectionCount == $(el).data('selectr-opts').maxSelection
-        $(opt).parents('.selectr').addClass('max-selection-reached')
+      if currentSelectionCount == $(sourceElement).data('selectr-opts').maxSelection
+        thisSelectr.addClass('max-selection-reached')
       else
-        $(opt).parents('.selectr').removeClass('max-selection-reached')
+       thisSelectr.removeClass('max-selection-reached')
 
-      @TriggerChange(el)
+      @TriggerChange(sourceElement)
 
     @DeselectOption: (opt) ->
-      el = $(opt).parents('.selectr').prev()
+      sourceElement = $(opt).parents('.selectr').prev()
 
       $(opt).parents('.selectr').removeClass('max-selection-reached')
 
       $(opt).removeClass('selected')
-      $("option[value=#{$(opt).data('val')}]", el).prop('selected', false)
+      $("option[value=#{$(opt).data('val')}]", sourceElement).prop('selected', false)
 
-      currentSelectionCount = $('option:selected', el).length
+      currentSelectionCount = $('option:selected', sourceElement).length
       $('.current-selection', $(opt).parents('.selectr')).text(if currentSelectionCount > 0 then currentSelectionCount else '')
       if currentSelectionCount == 0
         $('.panel-footer', $(opt).parents('.selectr')).addClass('hidden');
 
-      @TriggerChange(el)
+      @TriggerChange(sourceElement)
 
     @bindingsInitialized: false
     @InstallBindings: ->
 
+      # bail if already initialized
       return if Selectr.bindingsInitialized
 
       # Click option
       $(document).on 'click', '.selectr .list-group-item', (e) ->
+
+        # debounce double-clicks
         if e.originalEvent.detail && e.originalEvent.detail == 2
           return
 
-        el = $(this).parents('.selectr').prev()
-        modifyCurrentSelection = (e.ctrlKey or e.metaKey) and el.prop 'multiple'
+        sourceElement = $(this).parents('.selectr').prev()
+        modifyCurrentSelection = (e.ctrlKey || e.metaKey) && sourceElement.prop 'multiple'
 
-        if $(this).hasClass('selected') and (modifyCurrentSelection or $(this).siblings('.selected').length is 0) and el.prop 'multiple'
+        if $(this).hasClass('selected') && (modifyCurrentSelection || $(this).siblings('.selected').length == 0) && sourceElement.prop 'multiple'
           Selectr.DeselectOption this
         else
           Selectr.SelectOption modifyCurrentSelection, this
@@ -162,10 +218,9 @@ do ($, window) ->
         e.stopPropagation()
         e.preventDefault()
 
-        # CTRL depressed
+        # CTRL key handler
         $(document).on 'keydown', (e) ->
           $('.selectr .list-group').addClass 'ctrl-key' if e.ctrlKey
-
         $(document).on 'keyup', (e) ->
           $('.selectr .list-group').removeClass 'ctrl-key' if not e.ctrlKey
 
@@ -185,27 +240,32 @@ do ($, window) ->
 
       # Type in search
       $(document).on 'click change keyup', '.selectr .form-control', (e) ->
-        selectr = $(this).parents('.selectr')
-        regex = new RegExp($(this).val().replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i')
+        thisSelectr = $(this).parents('.selectr')
+        escapedSearchTerm = new RegExp($(this).val().replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i')
         noMatchingOptions = true
 
-        $('.list-group-item', selectr).each (index, option) ->
-          unless $(option).text().match(regex)
+        # show/hide options
+        $('.list-group-item', thisSelectr).each (index, option) ->
+          unless $(option).text().match(escapedSearchTerm)
             $(option).addClass 'hidden'
           else
             $(option).removeClass 'hidden'
             noMatchingOptions = false
           return # ohh coffeescript...
 
+        # show/hide clear search 'X'
+        $clearSearchX = $('.clear-search', thisSelectr)
         if $(this).val().length > 0
-          $('.clear-search', selectr).removeClass 'hidden'
+          $clearSearchX.removeClass 'hidden'
         else
-          $('.clear-search', selectr).addClass 'hidden'
+          $clearSearchX.addClass 'hidden'
 
+        # show/hide 'No options found' message
+        $noOptionsFoundMessage = $('.no-matching-options', thisSelectr)
         if noMatchingOptions
-          $('.no-matching-options', selectr).removeClass 'hidden'
+          $noOptionsFoundMessage.removeClass 'hidden'
         else
-          $('.no-matching-options', selectr).addClass 'hidden'
+          $noOptionsFoundMessage.addClass 'hidden'
 
         e.stopPropagation();
         e.preventDefault();
@@ -219,13 +279,17 @@ do ($, window) ->
 
       # Clear selected options
       $(document).on 'click', '.selectr .reset', (e) ->
-        el = $(this).parents('.selectr').prev()
-        $(this).parents('.selectr').find('ul > li').removeClass('selected')
-        $('option', el).prop('selected', false)
-        Selectr.TriggerChange(el)
+        thisSelectr = $(this).parents('.selectr')
+        sourceElement = thisSelectr.prev()
 
-        $('.current-selection', $(this).parents('.selectr')).text('')
-        $('.panel-footer', $(this).parents('.selectr')).addClass('hidden')
+        # deselect all on selectr and source
+        thisSelectr.find('ul > li').removeClass('selected')
+        $('option', sourceElement).prop('selected', false)
+        Selectr.TriggerChange(sourceElement)
+
+        # clear selection count and hide footer
+        $('.current-selection', thisSelectr).text('')
+        $('.panel-footer', thisSelectr).addClass('hidden')
 
         e.stopPropagation();
         e.preventDefault();

@@ -41,6 +41,9 @@
         this.$el.hide();
       }
 
+
+      /* Initialization methods */
+
       Selectr.prototype.CreateContainer = function() {
         return $(document.createElement('div')).attr({
           'class': "selectr panel panel-default " + (this.$el.prop('multiple') ? 'multi' : void 0),
@@ -68,28 +71,54 @@
       };
 
       Selectr.prototype.MonitorSource = function() {
-        var self;
+        var observer, self;
         self = this;
-        return this.$el.on('DOMSubtreeModified', function(e) {
-          var currentSelectionCount, opts, updatedList;
-          if (!$(this).data('selectr-change-triggered')) {
-            updatedList = $(document.createElement('ul')).attr({
-              'class': 'list-group',
-              'style': "max-height: " + self.args.maxListHeight + ";"
-            });
-            opts = self.PrepareOpts($('option', this));
-            updatedList.append(opts);
-            $('.list-group', $(this).next()).replaceWith(updatedList);
-            currentSelectionCount = $('option:selected', this).length;
-            $('.current-selection', $(this).next()).text(currentSelectionCount > 0 ? currentSelectionCount : '');
-            if (currentSelectionCount > 0 && $(this).prop('multiple')) {
-              return $('.panel-footer', $(this).next()).removeClass('hidden');
-            } else {
-              return $('.panel-footer', $(this).next()).addClass('hidden');
+        this.sync = (function(_this) {
+          return function() {
+            var $selectrFooter, currentSelectionCount, opts, thisSelectr, updatedList;
+            if (!_this.$el.data('selectr-change-triggered')) {
+              thisSelectr = _this.$el.next();
+              updatedList = $(document.createElement('ul')).attr({
+                'class': 'list-group',
+                'style': "max-height: " + self.args.maxListHeight + ";"
+              });
+              opts = _this.PrepareOpts($('option', _this.$el));
+              updatedList.append(opts);
+              $('.list-group', thisSelectr).replaceWith(updatedList);
+              currentSelectionCount = $('option:selected', _this.$el).length;
+              $('.current-selection', thisSelectr).text(currentSelectionCount > 0 ? currentSelectionCount : '');
+              $selectrFooter = $('.panel-footer', thisSelectr);
+              if (currentSelectionCount > 0 && $(_this.$el).prop('multiple')) {
+                return $selectrFooter.removeClass('hidden');
+              } else {
+                return $selectrFooter.addClass('hidden');
+              }
             }
+          };
+        })(this);
+        if (this.$el.length && this.$el[0].attachEvent) {
+          this.$el.each(function() {
+            return this.attachEvent("onpropertychange", self.sync);
+          });
+        }
+        observer = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+        if (observer != null) {
+          if (this.propertyObserver) {
+            delete this.propertyObserver;
+            this.propertyObserver = null;
           }
-        });
+          this.propertyObserver = new observer(function(mutations) {
+            return $.each(mutations, self.sync);
+          });
+          return this.propertyObserver.observe(this.$el.get(0), {
+            attributes: false,
+            childList: true
+          });
+        }
       };
+
+
+      /* Static selectr methods */
 
       Selectr.TriggerChange = function(el) {
         el.data('selectr-change-triggered', true);
@@ -100,13 +129,14 @@
       };
 
       Selectr.SelectOption = function(modifyCurrentSelection, opt) {
-        var currentSelectionCount, el, foo, _i, _len, _ref;
-        el = $(opt).parents('.selectr').prev();
-        if ($(el).data('selectr-opts').maxSelection <= $(opt).siblings('.selected').length && modifyCurrentSelection) {
+        var currentSelectionCount, foo, sourceElement, thisSelectr, _i, _len, _ref;
+        thisSelectr = $(opt).parents('.selectr');
+        sourceElement = $(opt).parents('.selectr').prev();
+        if ($(sourceElement).data('selectr-opts').maxSelection <= $(opt).siblings('.selected').length && modifyCurrentSelection) {
           return;
         }
         if (!modifyCurrentSelection) {
-          $('option', el).prop('selected', false);
+          $('option', sourceElement).prop('selected', false);
           _ref = $(opt).siblings();
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             foo = _ref[_i];
@@ -114,32 +144,32 @@
           }
         }
         $(opt).addClass('selected');
-        $("option[value=" + ($(opt).data('val')) + "]", el).prop('selected', true);
-        currentSelectionCount = $('option:selected', el).length;
-        $('.current-selection', $(opt).parents('.selectr')).text(currentSelectionCount > 0 ? currentSelectionCount : '');
-        if (el.prop('multiple')) {
-          $('.panel-footer', $(opt).parents('.selectr')).removeClass('hidden');
+        $("option[value=" + ($(opt).data('val')) + "]", sourceElement).prop('selected', true);
+        currentSelectionCount = $('option:selected', sourceElement).length;
+        $('.current-selection', thisSelectr).text(currentSelectionCount > 0 ? currentSelectionCount : '');
+        if (sourceElement.prop('multiple')) {
+          $('.panel-footer', thisSelectr).removeClass('hidden');
         }
-        if (currentSelectionCount === $(el).data('selectr-opts').maxSelection) {
-          $(opt).parents('.selectr').addClass('max-selection-reached');
+        if (currentSelectionCount === $(sourceElement).data('selectr-opts').maxSelection) {
+          thisSelectr.addClass('max-selection-reached');
         } else {
-          $(opt).parents('.selectr').removeClass('max-selection-reached');
+          thisSelectr.removeClass('max-selection-reached');
         }
-        return this.TriggerChange(el);
+        return this.TriggerChange(sourceElement);
       };
 
       Selectr.DeselectOption = function(opt) {
-        var currentSelectionCount, el;
-        el = $(opt).parents('.selectr').prev();
+        var currentSelectionCount, sourceElement;
+        sourceElement = $(opt).parents('.selectr').prev();
         $(opt).parents('.selectr').removeClass('max-selection-reached');
         $(opt).removeClass('selected');
-        $("option[value=" + ($(opt).data('val')) + "]", el).prop('selected', false);
-        currentSelectionCount = $('option:selected', el).length;
+        $("option[value=" + ($(opt).data('val')) + "]", sourceElement).prop('selected', false);
+        currentSelectionCount = $('option:selected', sourceElement).length;
         $('.current-selection', $(opt).parents('.selectr')).text(currentSelectionCount > 0 ? currentSelectionCount : '');
         if (currentSelectionCount === 0) {
           $('.panel-footer', $(opt).parents('.selectr')).addClass('hidden');
         }
-        return this.TriggerChange(el);
+        return this.TriggerChange(sourceElement);
       };
 
       Selectr.bindingsInitialized = false;
@@ -149,13 +179,13 @@
           return;
         }
         $(document).on('click', '.selectr .list-group-item', function(e) {
-          var el, modifyCurrentSelection;
+          var modifyCurrentSelection, sourceElement;
           if (e.originalEvent.detail && e.originalEvent.detail === 2) {
             return;
           }
-          el = $(this).parents('.selectr').prev();
-          modifyCurrentSelection = (e.ctrlKey || e.metaKey) && el.prop('multiple');
-          if ($(this).hasClass('selected') && (modifyCurrentSelection || $(this).siblings('.selected').length === 0) && el.prop('multiple')) {
+          sourceElement = $(this).parents('.selectr').prev();
+          modifyCurrentSelection = (e.ctrlKey || e.metaKey) && sourceElement.prop('multiple');
+          if ($(this).hasClass('selected') && (modifyCurrentSelection || $(this).siblings('.selected').length === 0) && sourceElement.prop('multiple')) {
             Selectr.DeselectOption(this);
           } else {
             Selectr.SelectOption(modifyCurrentSelection, this);
@@ -188,27 +218,29 @@
           return e.preventDefault();
         });
         $(document).on('click change keyup', '.selectr .form-control', function(e) {
-          var noMatchingOptions, regex, selectr;
-          selectr = $(this).parents('.selectr');
-          regex = new RegExp($(this).val().replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i');
+          var $clearSearchX, $noOptionsFoundMessage, escapedSearchTerm, noMatchingOptions, thisSelectr;
+          thisSelectr = $(this).parents('.selectr');
+          escapedSearchTerm = new RegExp($(this).val().replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i');
           noMatchingOptions = true;
-          $('.list-group-item', selectr).each(function(index, option) {
-            if (!$(option).text().match(regex)) {
+          $('.list-group-item', thisSelectr).each(function(index, option) {
+            if (!$(option).text().match(escapedSearchTerm)) {
               $(option).addClass('hidden');
             } else {
               $(option).removeClass('hidden');
               noMatchingOptions = false;
             }
           });
+          $clearSearchX = $('.clear-search', thisSelectr);
           if ($(this).val().length > 0) {
-            $('.clear-search', selectr).removeClass('hidden');
+            $clearSearchX.removeClass('hidden');
           } else {
-            $('.clear-search', selectr).addClass('hidden');
+            $clearSearchX.addClass('hidden');
           }
+          $noOptionsFoundMessage = $('.no-matching-options', thisSelectr);
           if (noMatchingOptions) {
-            $('.no-matching-options', selectr).removeClass('hidden');
+            $noOptionsFoundMessage.removeClass('hidden');
           } else {
-            $('.no-matching-options', selectr).addClass('hidden');
+            $noOptionsFoundMessage.addClass('hidden');
           }
           e.stopPropagation();
           return e.preventDefault();
@@ -219,13 +251,14 @@
           return e.preventDefault();
         });
         $(document).on('click', '.selectr .reset', function(e) {
-          var el;
-          el = $(this).parents('.selectr').prev();
-          $(this).parents('.selectr').find('ul > li').removeClass('selected');
-          $('option', el).prop('selected', false);
-          Selectr.TriggerChange(el);
-          $('.current-selection', $(this).parents('.selectr')).text('');
-          $('.panel-footer', $(this).parents('.selectr')).addClass('hidden');
+          var sourceElement, thisSelectr;
+          thisSelectr = $(this).parents('.selectr');
+          sourceElement = thisSelectr.prev();
+          thisSelectr.find('ul > li').removeClass('selected');
+          $('option', sourceElement).prop('selected', false);
+          Selectr.TriggerChange(sourceElement);
+          $('.current-selection', thisSelectr).text('');
+          $('.panel-footer', thisSelectr).addClass('hidden');
           e.stopPropagation();
           return e.preventDefault();
         });
