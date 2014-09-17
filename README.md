@@ -50,14 +50,14 @@ Ex.
 ### Options and defaults
 
 ```coffeescript
-    title:                  'Select Options'
-    noMatchingOptionsText:  'No options found
-    placeholder:            'Search'
-    resetText:              'Clear All'
-    width:                  '300px'
-    maxListHeight:          '250px'
-    tooltipBreakpoint:      25 # min length of option name to show tooltip on
-    maxSelection:           Infinity
+title:                  'Select Options'
+noMatchingOptionsText:  'No options found'
+placeholder:            'Search'
+resetText:              'Clear All'
+width:                  '300px'
+maxListHeight:          '250px'
+tooltipBreakpoint:      25 # min length of option name to show tooltip on
+maxSelection:           Infinity
 ```
 
 To pass options to selectr, you may use an HTML5 data-* attribute, or an options object passed to the initialization function.
