@@ -11,7 +11,7 @@ do ($, window) ->
       width:                  '300px'
       maxListHeight:          '250px'
       tooltipBreakpoint:      25
-      maxSelection:           NaN
+      maxSelection:           Infinity
 
     constructor: (@el, @args) ->
       @$el = $(el)

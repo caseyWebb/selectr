@@ -11,7 +11,7 @@
         width: '300px',
         maxListHeight: '250px',
         tooltipBreakpoint: 25,
-        maxSelection: NaN
+        maxSelection: Infinity
       };
 
       function Selectr(el, args) {
