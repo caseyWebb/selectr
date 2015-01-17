@@ -12,10 +12,12 @@ do ($, window) ->
       maxListHeight:          '250px'
       tooltipBreakpoint:      25
       maxSelection:           Infinity
+      panelStyle:             'default'
+      alwaysShowFooter:       false
 
     constructor: (@el, @args) ->
       @$el = $(el)
-      @args = $.extend @defaults, @args, @$el.data('selectr-opts')
+      @args = $.extend {}, @defaults, @args, @$el.data('selectr-opts')
       @$el.data 'selectr-opts', @args
 
       # create container
@@ -30,7 +32,7 @@ do ($, window) ->
       for opt in @opts
         selectedCount++ if opt.hasClass 'selected'
       $('.current-selection', @container).text(selectedCount if selectedCount > 0)
-      if selectedCount == 0
+      if selectedCount == 0 and not @args.alwaysShowFooter
         $('.panel-footer', @container).addClass('hidden')
 
       # watch for programatic changes
@@ -48,7 +50,7 @@ do ($, window) ->
 
     CreateContainer: ->
       $(document.createElement 'div').attr({
-        'class': "selectr panel panel-default #{if @$el.prop 'multiple' then 'multi'}",
+        'class': "selectr panel panel-#{@args.panelStyle} #{if @$el.prop 'multiple' then 'multi'}",
         'style': "width: #{@args.width};"
       }).html("""
         <div class='panel-heading #{if @args.title is "" then "no-title"}'>
@@ -118,7 +120,7 @@ do ($, window) ->
 
             #show/hide footer
             $selectrFooter = $('.panel-footer', thisSelectr)
-            if currentSelectionCount > 0 && $(@$el).prop('multiple')
+            if currentSelectionCount > 0 && $(@$el).prop('multiple') && not @args.alwaysShowFooter
              $selectrFooter.removeClass('hidden')
             else
              $selectrFooter.addClass('hidden')
@@ -183,7 +185,7 @@ do ($, window) ->
       # change current selection count
       currentSelectionCount = $('option:selected', sourceElement).length
       $('.current-selection', thisSelectr).text(if currentSelectionCount > 0 then currentSelectionCount else '')
-      $('.panel-footer', thisSelectr).removeClass('hidden') if sourceElement.prop('multiple')
+      $('.panel-footer', thisSelectr).removeClass('hidden') if sourceElement.prop('multiple') and not $(sourceElement).data('selectr-opts').alwaysShowFooter
 
       if currentSelectionCount == $(sourceElement).data('selectr-opts').maxSelection
         thisSelectr.addClass('max-selection-reached')
@@ -202,7 +204,7 @@ do ($, window) ->
 
       currentSelectionCount = $('option:selected', sourceElement).length
       $('.current-selection', $(opt).parents('.selectr')).text(if currentSelectionCount > 0 then currentSelectionCount else '')
-      if currentSelectionCount == 0
+      if currentSelectionCount == 0 and not $(sourceElement).data('selectr-opts').alwaysShowFooter
         $('.panel-footer', $(opt).parents('.selectr')).addClass('hidden');
 
       @TriggerChange(sourceElement)
@@ -302,7 +304,7 @@ do ($, window) ->
 
         # clear selection count and hide footer
         $('.current-selection', thisSelectr).text('')
-        $('.panel-footer', thisSelectr).addClass('hidden')
+        $('.panel-footer', thisSelectr).addClass('hidden') if not $(sourceElement).data('selectr-opts').alwaysShowFooter
 
         e.stopPropagation();
         e.preventDefault();

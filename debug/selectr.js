@@ -11,7 +11,9 @@
         width: '300px',
         maxListHeight: '250px',
         tooltipBreakpoint: 25,
-        maxSelection: Infinity
+        maxSelection: Infinity,
+        panelStyle: 'default',
+        alwaysShowFooter: false
       };
 
       function Selectr(el, args) {
@@ -19,7 +21,7 @@
         this.el = el;
         this.args = args;
         this.$el = $(el);
-        this.args = $.extend(this.defaults, this.args, this.$el.data('selectr-opts'));
+        this.args = $.extend({}, this.defaults, this.args, this.$el.data('selectr-opts'));
         this.$el.data('selectr-opts', this.args);
         this.container = this.CreateContainer();
         this.opts = this.PrepareOpts($('option', this.el));
@@ -33,7 +35,7 @@
           }
         }
         $('.current-selection', this.container).text(selectedCount > 0 ? selectedCount : void 0);
-        if (selectedCount === 0) {
+        if (selectedCount === 0 && !this.args.alwaysShowFooter) {
           $('.panel-footer', this.container).addClass('hidden');
         }
         this.MonitorSource();
@@ -46,7 +48,7 @@
 
       Selectr.prototype.CreateContainer = function() {
         return $(document.createElement('div')).attr({
-          'class': "selectr panel panel-default " + (this.$el.prop('multiple') ? 'multi' : void 0),
+          'class': "selectr panel panel-" + this.args.panelStyle + " " + (this.$el.prop('multiple') ? 'multi' : void 0),
           'style': "width: " + this.args.width + ";"
         }).html("<div class='panel-heading " + (this.args.title === "" ? "no-title" : void 0) + "'>\n  <h4 class='panel-title'>\n    " + this.args.title + "\n  </h4>\n</div>\n<div class='panel-body'>\n  <input class='form-control' placeholder='" + this.args.placeholder + "'>\n  <span class='clear-search hidden'>&times;</span>\n</div>\n<ul class='list-group' style='max-height: " + this.args.maxListHeight + "'>\n</ul>\n<div class='no-matching-options hidden'>\n  <strong>" + this.args.noMatchingOptionsText + "</strong>\n</div>\n<div class='panel-footer " + (!this.$el.prop('multiple') ? 'hidden' : void 0) + "'>\n  <button class='reset btn btn-sm btn-default'>\n    " + this.args.resetText + "\n  </button>\n  " + (this.$el.prop('multiple') ? "<span class='current-selection badge'></span>" : void 0) + "\n</div>");
       };
@@ -92,7 +94,7 @@
                 currentSelectionCount = $('option:selected', _this.$el).length;
                 $('.current-selection', thisSelectr).text(currentSelectionCount > 0 ? currentSelectionCount : '');
                 $selectrFooter = $('.panel-footer', thisSelectr);
-                if (currentSelectionCount > 0 && $(_this.$el).prop('multiple')) {
+                if (currentSelectionCount > 0 && $(_this.$el).prop('multiple') && !_this.args.alwaysShowFooter) {
                   return $selectrFooter.removeClass('hidden');
                 } else {
                   return $selectrFooter.addClass('hidden');
@@ -150,7 +152,7 @@
         $("option[value=" + ($(opt).data('val')) + "]", sourceElement).prop('selected', true);
         currentSelectionCount = $('option:selected', sourceElement).length;
         $('.current-selection', thisSelectr).text(currentSelectionCount > 0 ? currentSelectionCount : '');
-        if (sourceElement.prop('multiple')) {
+        if (sourceElement.prop('multiple') && !$(sourceElement).data('selectr-opts').alwaysShowFooter) {
           $('.panel-footer', thisSelectr).removeClass('hidden');
         }
         if (currentSelectionCount === $(sourceElement).data('selectr-opts').maxSelection) {
@@ -169,7 +171,7 @@
         $("option[value=" + ($(opt).data('val')) + "]", sourceElement).prop('selected', false);
         currentSelectionCount = $('option:selected', sourceElement).length;
         $('.current-selection', $(opt).parents('.selectr')).text(currentSelectionCount > 0 ? currentSelectionCount : '');
-        if (currentSelectionCount === 0) {
+        if (currentSelectionCount === 0 && !$(sourceElement).data('selectr-opts').alwaysShowFooter) {
           $('.panel-footer', $(opt).parents('.selectr')).addClass('hidden');
         }
         return this.TriggerChange(sourceElement);
@@ -261,7 +263,9 @@
           $('option', sourceElement).prop('selected', false);
           Selectr.TriggerChange(sourceElement);
           $('.current-selection', thisSelectr).text('');
-          $('.panel-footer', thisSelectr).addClass('hidden');
+          if (!$(sourceElement).data('selectr-opts').alwaysShowFooter) {
+            $('.panel-footer', thisSelectr).addClass('hidden');
+          }
           e.stopPropagation();
           return e.preventDefault();
         });
