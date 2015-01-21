@@ -27,7 +27,7 @@ do ($, window) ->
 
       @bindEventListeners()
 
-      @source.hide()
+      #@source.hide()
 
     createSelectr: ->
       @selectrContainer = @createContainer()
@@ -55,11 +55,11 @@ do ($, window) ->
           <div class='no-matching-options hidden'>
             <strong>#{@args.noMatchingOptionsText}</strong>
           </div>
-          <div class='panel-footer #{'hidden' if !@multi}'>
+          <div class='panel-footer #{'hidden' if !@multi && !@args.alwaysShowFooter}'>
             <button class='reset btn btn-sm btn-default'>
               #{@args.resetText}
             </button>
-            #{"<span class='current-selection badge'></span>" if !@multi}
+            #{if @multi then "<span class='current-selection badge'></span>" else ''}
           </div>
         "
 
@@ -111,20 +111,16 @@ do ($, window) ->
     monitorSource: ->
 
       sync = =>
-        clearTimeout(@prev) if @prev?
+        updatedList = $(document.createElement 'ul')
+          .addClass 'list-group'
+          .css      'max-height', @args.maxListHeight
+          .append   @createOpts()
 
-        @prev = setTimeout =>
+        $('.list-group', @selectrContainer).replaceWith(updatedList)
 
-          updatedList = $(document.createElement 'ul')
-            .addClass 'list-group'
-            .css      'max-height', @args.maxListHeight
-            .append   @createOpts()
+        @updateFooter()
 
-          $('.list-group', @selectrContainer).replaceWith(updatedList)
-
-          @updateFooter()
-
-        , 200
+        @bind
 
       # source selection change
       @source.on 'change', (e) ->
@@ -247,13 +243,13 @@ do ($, window) ->
       ctrlKeyUpHandler = (e) ->
         $('.selectr .list-group').removeClass 'ctrl-key' if not e.ctrlKey
 
-      $('.list-group-item', @selectrContainer).click                    listItemHandler
-      $('.add-remove',      @selectrContainer).click                    addRemoveHandler
-      $('.form-control',    @selectrContainer).on 'click change keyup', searchHandler
-      $('.clear-search',    @selectrContainer).click                    clearSearchHandler
-      $('.reset',           @selectrContainer).click                    resetOptsHandler
-      $(document).on 'keydown',                                         ctrlKeyDownHandler
-      $(document).on 'keyup',                                           ctrlKeyUpHandler
+      $(selectrContainer).on 'click',               '.list-group-item', listItemHandler
+      $(selectrContainer).on 'click',               '.add-remove',      addRemoveHandler
+      $(selectrContainer).on 'click change keyup',  '.form-control',    searchHandler
+      $(selectrContainer).on 'click',               '.clear-search',    clearSearchHandler
+      $(selectrContainer).on 'click',               '.reset',           resetOptsHandler
+      $(document).on         'keydown',                                 ctrlKeyDownHandler
+      $(document).on         'keyup',                                   ctrlKeyUpHandler
 
 
     triggerChange: =>

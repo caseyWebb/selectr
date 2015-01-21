@@ -30,7 +30,6 @@
         this.selectrContainer.insertAfter(this.source);
         this.selectrContainer = $(this.source.next());
         this.bindEventListeners();
-        this.source.hide();
       }
 
       Selectr.prototype.createSelectr = function() {
@@ -40,7 +39,7 @@
       };
 
       Selectr.prototype.createContainer = function() {
-        return $(document.createElement('div')).addClass("selectr panel panel-" + this.args.panelStyle + " " + (this.multi ? 'multi' : void 0)).css('width', this.args.width).html("<div class='panel-heading " + (this.args.title === '' ? "no-title" : void 0) + "'> <h4 class='panel-title'> " + this.args.title + " </h4> </div> <div class='panel-body'> <input class='form-control' placeholder='" + this.args.placeholder + "'> <span class='clear-search hidden'>&times;</span> </div> <ul class='list-group' style='max-height: " + this.args.maxListHeight + "'> </ul> <div class='no-matching-options hidden'> <strong>" + this.args.noMatchingOptionsText + "</strong> </div> <div class='panel-footer " + (!this.multi ? 'hidden' : void 0) + "'> <button class='reset btn btn-sm btn-default'> " + this.args.resetText + " </button> " + (!this.multi ? "<span class='current-selection badge'></span>" : void 0) + " </div>");
+        return $(document.createElement('div')).addClass("selectr panel panel-" + this.args.panelStyle + " " + (this.multi ? 'multi' : void 0)).css('width', this.args.width).html("<div class='panel-heading " + (this.args.title === '' ? "no-title" : void 0) + "'> <h4 class='panel-title'> " + this.args.title + " </h4> </div> <div class='panel-body'> <input class='form-control' placeholder='" + this.args.placeholder + "'> <span class='clear-search hidden'>&times;</span> </div> <ul class='list-group' style='max-height: " + this.args.maxListHeight + "'> </ul> <div class='no-matching-options hidden'> <strong>" + this.args.noMatchingOptionsText + "</strong> </div> <div class='panel-footer " + (!this.multi && !this.args.alwaysShowFooter ? 'hidden' : void 0) + "'> <button class='reset btn btn-sm btn-default'> " + this.args.resetText + " </button> " + (this.multi ? "<span class='current-selection badge'></span>" : '') + " </div>");
       };
 
       Selectr.prototype.createOpts = function() {
@@ -80,15 +79,11 @@
         var observer, propertyObserver, sync;
         sync = (function(_this) {
           return function() {
-            if (_this.prev != null) {
-              clearTimeout(_this.prev);
-            }
-            return _this.prev = setTimeout(function() {
-              var updatedList;
-              updatedList = $(document.createElement('ul')).addClass('list-group').css('max-height', _this.args.maxListHeight).append(_this.createOpts());
-              $('.list-group', _this.selectrContainer).replaceWith(updatedList);
-              return _this.updateFooter();
-            }, 200);
+            var updatedList;
+            updatedList = $(document.createElement('ul')).addClass('list-group').css('max-height', _this.args.maxListHeight).append(_this.createOpts());
+            $('.list-group', _this.selectrContainer).replaceWith(updatedList);
+            _this.updateFooter();
+            return _this.bind;
           };
         })(this);
         this.source.on('change', function(e) {
@@ -206,11 +201,11 @@
             return $('.selectr .list-group').removeClass('ctrl-key');
           }
         };
-        $('.list-group-item', this.selectrContainer).click(listItemHandler);
-        $('.add-remove', this.selectrContainer).click(addRemoveHandler);
-        $('.form-control', this.selectrContainer).on('click change keyup', searchHandler);
-        $('.clear-search', this.selectrContainer).click(clearSearchHandler);
-        $('.reset', this.selectrContainer).click(resetOptsHandler);
+        $(selectrContainer).on('click', '.list-group-item', listItemHandler);
+        $(selectrContainer).on('click', '.add-remove', addRemoveHandler);
+        $(selectrContainer).on('click change keyup', '.form-control', searchHandler);
+        $(selectrContainer).on('click', '.clear-search', clearSearchHandler);
+        $(selectrContainer).on('click', '.reset', resetOptsHandler);
         $(document).on('keydown', ctrlKeyDownHandler);
         return $(document).on('keyup', ctrlKeyUpHandler);
       };
