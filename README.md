@@ -113,3 +113,5 @@ If you would like to submit a pull request or fork this project, the package.jso
 ### Legal Junk
 
 Selectr is distributed under the [MIT License](http://opensource.org/licenses/mit-license.php). Have at it.
+
+# If you find this useful, send me an email. I'd love to see some selectrs in the wild and add them to the README
