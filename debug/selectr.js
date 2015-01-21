@@ -58,6 +58,9 @@
 
       Selectr.prototype.updateFooter = function() {
         var $footer, count;
+        if (!this.multi) {
+          return;
+        }
         count = $('option:selected', this.source).length;
         $('.current-selection', this.selectrContainer).text(count > 0 ? count : '');
         if (count === this.args.maxSelection) {
@@ -117,12 +120,13 @@
       };
 
       Selectr.prototype.bindEventListeners = function() {
-        var addRemoveHandler, clearSearchHandler, ctrlKeyDownHandler, ctrlKeyUpHandler, deselect, listItemHandler, resetOptsHandler, searchHandler, select, selectrContainer, source, triggerChange;
+        var addRemoveHandler, clearSearchHandler, ctrlKeyDownHandler, ctrlKeyUpHandler, deselect, listItemHandler, resetOptsHandler, searchHandler, select, selectrContainer, source, triggerChange, updateFooter;
         selectrContainer = this.selectrContainer;
         source = this.source;
         select = this.selectOption;
         deselect = this.deselectOption;
         triggerChange = this.triggerChange;
+        updateFooter = this.updateFooter;
         listItemHandler = function(e) {
           var modifyCurrentSelection, _ref;
           if (((_ref = e.originalEvent) != null ? _ref.detail : void 0) === 2) {
@@ -179,7 +183,7 @@
           return e.preventDefault();
         };
         clearSearchHandler = function(e) {
-          $(this).siblings('input').val('').click();
+          $(this).siblings('input').val('');
           e.stopPropagation();
           return e.preventDefault();
         };
@@ -187,8 +191,7 @@
           selectrContainer.find('ul > li').removeClass('selected');
           $('option', source).prop('selected', false);
           triggerChange(source);
-          $('.current-selection', selectrContainer).text('');
-          $('.panel-footer', selectrContainer).addClass('hidden');
+          updateFooter();
           e.stopPropagation();
           return e.preventDefault();
         };

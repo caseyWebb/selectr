@@ -92,6 +92,8 @@ do ($, window) ->
           )
 
     updateFooter: ->
+      return if !@multi
+
       count = $('option:selected', @source).length
       $('.current-selection', @selectrContainer).text(if count > 0 then count else '')
 
@@ -151,6 +153,7 @@ do ($, window) ->
       select            = @selectOption
       deselect          = @deselectOption
       triggerChange     = @triggerChange
+      updateFooter      = @updateFooter
 
       listItemHandler = (e) ->
         # debounce double-clicks
@@ -219,7 +222,7 @@ do ($, window) ->
         e.preventDefault()
 
       clearSearchHandler = (e) ->
-        $(@).siblings('input').val('').click()
+        $(@).siblings('input').val('')
 
         e.stopPropagation()
         e.preventDefault()
@@ -228,11 +231,9 @@ do ($, window) ->
         # deselect all on selectr and source
         selectrContainer.find('ul > li').removeClass('selected')
         $('option', source).prop('selected', false)
-        triggerChange source
 
-        # clear selection count and hide footer
-        $('.current-selection', selectrContainer).text      ''
-        $('.panel-footer',      selectrContainer).addClass  'hidden'
+        triggerChange source
+        updateFooter()
 
         e.stopPropagation()
         e.preventDefault()
