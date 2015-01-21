@@ -27,7 +27,7 @@ do ($, window) ->
 
       @bindEventListeners()
 
-      #@source.hide()
+      @source.hide()
 
     createSelectr: ->
       @selectrContainer = @createContainer()

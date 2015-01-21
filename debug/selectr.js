@@ -30,6 +30,7 @@
         this.selectrContainer.insertAfter(this.source);
         this.selectrContainer = $(this.source.next());
         this.bindEventListeners();
+        this.source.hide();
       }
 
       Selectr.prototype.createSelectr = function() {

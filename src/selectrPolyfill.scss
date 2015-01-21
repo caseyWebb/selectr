@@ -3,7 +3,7 @@
     * {
         box-sizing: border-box;
     }
-        
+
     .hidden {
         display: none !important;
     }
@@ -22,13 +22,13 @@
         border-bottom: 1px solid transparent;
         border-top-right-radius: 3px;
         border-top-left-radius: 3px;
+    }
 
-        .panel-title {
-            margin-top: 0;
-            margin-bottom: 0;
-            font-size: 16px;
-            color: inherit;
-        }
+    .panel-title {
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: 16px;
+        color: inherit;
     }
 
     .panel-body {
@@ -54,17 +54,17 @@
     .list-group {
         margin: 0;
         padding: 0;
+    }
 
-        .list-group-item {
-            border-width: 1px 0;
-            border-radius: 0;
-            position: relative;
-            display: block;
-            padding: 10px 15px;
-            margin-bottom: -1px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-        }
+    .list-group-item {
+        border-width: 1px 0;
+        border-radius: 0;
+        position: relative;
+        display: block;
+        padding: 10px 15px;
+        margin-bottom: -1px;
+        background-color: #fff;
+        border: 1px solid #ddd;
     }
 
     .panel-footer {

@@ -48,19 +48,19 @@
 
     .list-group {
         overflow-x: hidden;
+    }
 
-        .list-group-item {
-            padding: 0 !important;
-            overflow: hidden;
-            cursor: pointer;
+    .list-group-item {
+        padding: 0 !important;
+        overflow: hidden;
+        cursor: pointer;
 
-            &.selected {
-                background-color: #4679bd;
-                color: white;
-                font-weight: 700;
-                .add-remove {
-                    transform: rotate(0deg);
-                }
+        &.selected {
+            background-color: #4679bd;
+            color: white;
+            font-weight: 700;
+            .add-remove {
+                transform: rotate(0deg);
             }
         }
     }
