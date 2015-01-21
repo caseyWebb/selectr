@@ -75,7 +75,7 @@
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
-    transition: -webkit-transform 0.2s linear;
+    -webkit-transition: -webkit-transform 0.2s linear;
     transition: transform 0.2s linear;
     opacity: 0.5;
     display: none;
