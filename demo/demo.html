@@ -26,7 +26,7 @@
         <br>
         
         <div class="row">
-            <div class="col-sm-5">
+            <div class="col-sm-3">
                 <h4>Multi-select</h4>
                 <!-- Using data attributes -->
                 <select name="foods" data-selectr-opts='{ "title": "What&#39;s for breakfast? (max 5)", "placeholder": "Search foods", "maxSelection": 5 }'  multiple>
@@ -40,13 +40,26 @@
                 </select>
             </div>
 
-            <div class="col-sm-5">
+            <div class="col-sm-3">
                 <h4>Single-select</h4>
                 <!-- Using opts object from .selectr() call above -->
                 <select name="beverages">
                     <option data-selectr-color="rgb(96, 60, 186)" value="coffee">Coffee</option>
                     <option data-selectr-color="rgb(0, 171, 169)" value="milk" selected>Milk</option>
                     <option value="juice">Juice (no color coding)</option>
+                </select>
+            </div>
+			<div class="col-sm-3">
+                <h4>Multi-select</h4>
+                <!-- Using data attributes -->
+                <select name="foods" data-selectr-opts='{ "title": "What&#39;s for breakfast? (max 5)", "placeholder": "Search foods", "maxSelection": 5, "alwaysShowFooter": true, "panelStyle":"primary" }'  multiple>
+                    <option data-selectr-color="rgb(0, 163, 0)" value="bacon">Bacon (Extra long name foo bar baz quz)</option>
+                    <option data-selectr-color="rgb(255, 0, 151)" value="eggs" selected>Eggs</option>
+                    <option data-selectr-color="rgb(159, 0, 167)" value="toast">Toast</option>
+                    <option data-selectr-color="rgb(185, 29, 71)" value="oatmeal">Oatmeal</option>
+                    <option data-selectr-color="rgb(227, 162, 26)" value="steak" selected>Steak</option>
+                    <option data-selectr-color="rgb(218, 83, 44)" value="sausage">Sausage</option>
+                    <option data-selectr-color="rgb(45, 137, 239)" value="fruit">Fresh Fruit</option>
                 </select>
             </div>
         </div>

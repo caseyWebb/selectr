@@ -58,6 +58,8 @@ width:                  '300px'
 maxListHeight:          '250px'
 tooltipBreakpoint:      25 # min length of option name to show tooltip on
 maxSelection:           Infinity
+panelStyle:				'default'
+alwaysShowFooter:		false
 ```
 
 To pass options to selectr, you may use an HTML5 data-* attribute, or an options object passed to the initialization function.
