@@ -112,7 +112,7 @@
             return;
           }
           modifyCurrentSelection = (e.ctrlKey || e.metaKey) && multi;
-          if ($(this).hasClass('selected') && (modifyCurrentSelection || $(this).siblings('.selected').length === 0) && this.multi) {
+          if ($(this).hasClass('selected') && (modifyCurrentSelection || $(this).siblings('.selected').length === 0) && multi) {
             deselect(this);
           } else {
             select(modifyCurrentSelection, this);

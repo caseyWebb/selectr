@@ -144,7 +144,7 @@ do ($, window) ->
 
         modifyCurrentSelection = (e.ctrlKey || e.metaKey) && multi
 
-        if $(@).hasClass('selected') && (modifyCurrentSelection || $(@).siblings('.selected').length == 0) && @multi
+        if $(@).hasClass('selected') && (modifyCurrentSelection || $(@).siblings('.selected').length == 0) && multi
           deselect @
 
         else
