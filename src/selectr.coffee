@@ -1,4 +1,4 @@
-do ($, window) ->
+do ($ = jQuery, window = @) ->
 
   class Selectr
 
