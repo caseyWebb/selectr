@@ -91,25 +91,6 @@ do ($, window) ->
               .addClass "add-remove #{'hidden' if !@multi}"
           )
 
-    updateFooter: ->
-      return if !@multi
-
-      count = $('option:selected', @source).length
-      $('.current-selection', @selectrContainer).text(if count > 0 then count else '')
-
-      if count == @args.maxSelection
-        @selectrContainer.addClass('max-selection-reached')
-      else
-        @selectrContainer.removeClass('max-selection-reached')
-
-      return if @args.alwaysShowFooter
-
-      $footer = $('.panel-footer', @selectrContainer)
-      if count == 0
-        $footer.addClass('hidden')
-      else
-        $footer.removeClass('hidden')
-
     monitorSource: ->
 
       sync = =>
@@ -148,6 +129,8 @@ do ($, window) ->
 
     bindEventListeners: ->
 
+      # accessors for handler functions
+      multi             = @multi
       selectrContainer  = @selectrContainer
       source            = @source
       select            = @selectOption
@@ -159,7 +142,7 @@ do ($, window) ->
         # debounce double-clicks
         return if e.originalEvent?.detail == 2
 
-        modifyCurrentSelection = (e.ctrlKey || e.metaKey) && @multi
+        modifyCurrentSelection = (e.ctrlKey || e.metaKey) && multi
 
         if $(@).hasClass('selected') && (modifyCurrentSelection || $(@).siblings('.selected').length == 0) && @multi
           deselect @
@@ -239,10 +222,10 @@ do ($, window) ->
         e.preventDefault()
 
       ctrlKeyDownHandler = (e) ->
-        $('.selectr .list-group').addClass 'ctrl-key' if e.ctrlKey
+        $('.list-group', selectrContainer).addClass 'ctrl-key' if e.ctrlKey
 
       ctrlKeyUpHandler = (e) ->
-        $('.selectr .list-group').removeClass 'ctrl-key' if not e.ctrlKey
+        $('.list-group', selectrContainer).removeClass 'ctrl-key' if not e.ctrlKey
 
       $(selectrContainer).on 'click',               '.list-group-item', listItemHandler
       $(selectrContainer).on 'click',               '.add-remove',      addRemoveHandler
@@ -285,6 +268,25 @@ do ($, window) ->
 
       @updateFooter()
       @triggerChange()
+
+    updateFooter: =>
+      return if !@multi
+
+      count = $('option:selected', @source).length
+      $('.current-selection', @selectrContainer).text(if count > 0 then count else '')
+
+      if count == @args.maxSelection
+        @selectrContainer.addClass('max-selection-reached')
+      else
+        @selectrContainer.removeClass('max-selection-reached')
+
+      return if @args.alwaysShowFooter
+
+      $footer = $('.panel-footer', @selectrContainer)
+      if count == 0
+        $footer.addClass('hidden')
+      else
+        $footer.removeClass('hidden')
 
   $.fn.extend selectr: (args) ->
     @each ->

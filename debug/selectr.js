@@ -20,6 +20,7 @@
       function Selectr(source, args) {
         this.source = source;
         this.args = args;
+        this.updateFooter = __bind(this.updateFooter, this);
         this.deselectOption = __bind(this.deselectOption, this);
         this.selectOption = __bind(this.selectOption, this);
         this.triggerChange = __bind(this.triggerChange, this);
@@ -54,29 +55,6 @@
           })).append($(document.createElement('div')).html('&times').addClass("add-remove " + (!this.multi ? 'hidden' : void 0))));
         }
         return _results;
-      };
-
-      Selectr.prototype.updateFooter = function() {
-        var $footer, count;
-        if (!this.multi) {
-          return;
-        }
-        count = $('option:selected', this.source).length;
-        $('.current-selection', this.selectrContainer).text(count > 0 ? count : '');
-        if (count === this.args.maxSelection) {
-          this.selectrContainer.addClass('max-selection-reached');
-        } else {
-          this.selectrContainer.removeClass('max-selection-reached');
-        }
-        if (this.args.alwaysShowFooter) {
-          return;
-        }
-        $footer = $('.panel-footer', this.selectrContainer);
-        if (count === 0) {
-          return $footer.addClass('hidden');
-        } else {
-          return $footer.removeClass('hidden');
-        }
       };
 
       Selectr.prototype.monitorSource = function() {
@@ -120,7 +98,8 @@
       };
 
       Selectr.prototype.bindEventListeners = function() {
-        var addRemoveHandler, clearSearchHandler, ctrlKeyDownHandler, ctrlKeyUpHandler, deselect, listItemHandler, resetOptsHandler, searchHandler, select, selectrContainer, source, triggerChange, updateFooter;
+        var addRemoveHandler, clearSearchHandler, ctrlKeyDownHandler, ctrlKeyUpHandler, deselect, listItemHandler, multi, resetOptsHandler, searchHandler, select, selectrContainer, source, triggerChange, updateFooter;
+        multi = this.multi;
         selectrContainer = this.selectrContainer;
         source = this.source;
         select = this.selectOption;
@@ -132,7 +111,7 @@
           if (((_ref = e.originalEvent) != null ? _ref.detail : void 0) === 2) {
             return;
           }
-          modifyCurrentSelection = (e.ctrlKey || e.metaKey) && this.multi;
+          modifyCurrentSelection = (e.ctrlKey || e.metaKey) && multi;
           if ($(this).hasClass('selected') && (modifyCurrentSelection || $(this).siblings('.selected').length === 0) && this.multi) {
             deselect(this);
           } else {
@@ -197,12 +176,12 @@
         };
         ctrlKeyDownHandler = function(e) {
           if (e.ctrlKey) {
-            return $('.selectr .list-group').addClass('ctrl-key');
+            return $('.list-group', selectrContainer).addClass('ctrl-key');
           }
         };
         ctrlKeyUpHandler = function(e) {
           if (!e.ctrlKey) {
-            return $('.selectr .list-group').removeClass('ctrl-key');
+            return $('.list-group', selectrContainer).removeClass('ctrl-key');
           }
         };
         $(selectrContainer).on('click', '.list-group-item', listItemHandler);
@@ -243,6 +222,29 @@
         $("option[value=" + ($(opt).data('val')) + "]", this.source).prop('selected', false);
         this.updateFooter();
         return this.triggerChange();
+      };
+
+      Selectr.prototype.updateFooter = function() {
+        var $footer, count;
+        if (!this.multi) {
+          return;
+        }
+        count = $('option:selected', this.source).length;
+        $('.current-selection', this.selectrContainer).text(count > 0 ? count : '');
+        if (count === this.args.maxSelection) {
+          this.selectrContainer.addClass('max-selection-reached');
+        } else {
+          this.selectrContainer.removeClass('max-selection-reached');
+        }
+        if (this.args.alwaysShowFooter) {
+          return;
+        }
+        $footer = $('.panel-footer', this.selectrContainer);
+        if (count === 0) {
+          return $footer.addClass('hidden');
+        } else {
+          return $footer.removeClass('hidden');
+        }
       };
 
       return Selectr;
