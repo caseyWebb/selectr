@@ -139,6 +139,8 @@ do ($ = jQuery, window = @) ->
       updateFooter      = @updateFooter
 
       listItemHandler = (e) ->
+        e.stopPropagation()
+
         # debounce double-clicks
         return if e.originalEvent?.detail == 2
 
@@ -164,6 +166,8 @@ do ($ = jQuery, window = @) ->
           select true, opt
 
       searchHandler = (e) ->
+        e.stopPropagation()
+
         escapedSearchTerm = new RegExp $(@).val().replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i'
         noMatchingOptions = true
 
