@@ -18,7 +18,7 @@ module.exports = function(grunt) {
           sourceMap: true
         },
         files: {
-          'debug/selectr.js': 'src/selectr.coffee'
+          'build/selectr.js': 'src/selectr.coffee'
         }
       }
     },
@@ -39,7 +39,7 @@ module.exports = function(grunt) {
       },
       minify: {
         files: {
-          'dist/selectr.min.js': 'debug/selectr.js',
+          'dist/selectr.min.js': 'build/selectr.js',
         }
       }
     },
@@ -48,21 +48,21 @@ module.exports = function(grunt) {
     sass: {
       compile : {
         files: {
-          'debug/selectr.css': 'src/selectr.scss',
-          'debug/selectrPolyfill.css': 'src/selectrPolyfill.scss'
+          'build/selectr.css': 'src/selectr.scss',
+          'build/selectrPolyfill.css': 'src/selectrPolyfill.scss'
         }
       }
     },
     autoprefixer: {
       prefix: {
-        src: 'debug/*.css'
+        src: 'build/*.css'
       }
     },
     cssmin: {
       minify: {
         files: {
-          'dist/selectr.min.css': 'debug/selectr.css',
-          'dist/selectrWithPolyfill.min.css': ['debug/selectr.css', 'debug/selectrPolyfill.css']
+          'dist/selectr.min.css': 'build/selectr.css',
+          'dist/selectrWithPolyfill.min.css': ['build/selectr.css', 'build/selectrPolyfill.css']
         }
       }
     }
