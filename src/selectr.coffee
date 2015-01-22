@@ -66,7 +66,7 @@ do ($ = jQuery, window = @) ->
     createOpts: ->
       for opt in $('option', @source)
         $(document.createElement 'li')
-          .addClass "list-group-item #{'selected' if opt.selected}"
+          .addClass "list-group-item #{'selected' if $(opt).is(':selected')}"
           .data     'val', $(opt).val()
 
           # insert color-code square
@@ -93,7 +93,7 @@ do ($ = jQuery, window = @) ->
 
     monitorSource: ->
 
-      sync = =>
+      _sync = =>
         updatedList = $(document.createElement 'ul')
           .addClass 'list-group'
           .css      'max-height', @args.maxListHeight
@@ -103,29 +103,32 @@ do ($ = jQuery, window = @) ->
 
         @updateFooter()
 
-        @bind
+      ###
+      Update selectr on source element 'change' event
 
-      # source selection change
-      @source.on 'change', (e) ->
-        sync() if e.namespace != 'selectr'
+      Ideally, this should handle added/removed opts, as well
+      as a programatic changes to the selection, but many
+      popular data-binding frameworks do not fire change events,
+      so in that case, you will have to do so manually.
+      ###
+      @source.on 'change', (e, selectrInitiated) ->
+        _sync() if selectrInitiated != 'selectrInitiated'
 
       ###
-      In modern browsers, watch for changes to the source
-      element's options (think Angular/Knockout/etc. bound opts)
-      and update accordingly.
+      In modern browsers, we can work around the lack of change
+      events for adding/removing options by observing the child nodes
+      (option elements) of the source element. This still does not
+      cover programatic changes to the selection, though.
 
-      To observe changes to the options in legacy IE,
-      you'll have to manually trigger a change event
-      on the source element when the options change. Sorry.
-      I'm done wasting time on this.
+      If you know how to do that, please please submit a PR.
       ###
       observer = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver
       return if !observer?
 
       propertyObserver = new observer (mutations) ->
-        $.each mutations, sync
+        $.each mutations, _sync
 
-      propertyObserver.observe @source.get(0), attributes: false, childList: true
+      propertyObserver.observe @source.get(0), attributes: false, childList: true, subtree: true
 
     bindEventListeners: ->
 
@@ -227,7 +230,7 @@ do ($ = jQuery, window = @) ->
       $(document).on         'keyup',                                   ctrlKeyUpHandler
 
     triggerChange: =>
-      @source.trigger 'change.selectr'
+      @source.trigger 'change', ['selectrInitiated']
 
     selectOption: (modifyCurrentSelection, opt) =>
       # prevent >maxSelection
