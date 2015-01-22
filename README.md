@@ -8,7 +8,7 @@ It is built using Bootstrap components, and is written in CoffeeScript and SCSS;
 
 Selectr was heavily inspired by [select2](https://github.com/ivaynberg/select2) and the label/assignee/milestone dropdowns in Github's issue tracker.
 
-__[Click here to view demo](http://caseywebb.github.io/selectr)__
+__[Click here to view demo](http://caseywebb.github.io/selectr/demo)__
 
 ## Installation
 
