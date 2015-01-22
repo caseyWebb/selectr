@@ -9,7 +9,7 @@
     max-width: 100%;
     user-select: none;
 
-    * {
+    *:not(input) {
         user-select: none;
     }
 
