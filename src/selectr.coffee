@@ -150,10 +150,9 @@ do ($ = jQuery, window = @) ->
         else
           select modifyCurrentSelection, @
 
-        e.stopPropagation()
-        e.preventDefault()
-
       addRemoveHandler = (e) ->
+        e.stopPropagation()
+
         return if e.originalEvent.detail && e.originalEvent.detail == 2
 
         opt = $(e.target).parents('.list-group-item')
@@ -163,9 +162,6 @@ do ($ = jQuery, window = @) ->
 
         else
           select true, opt
-
-        e.stopPropagation()
-        e.preventDefault()
 
       searchHandler = (e) ->
         escapedSearchTerm = new RegExp $(@).val().replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i'
@@ -201,14 +197,8 @@ do ($ = jQuery, window = @) ->
         else
           $noOptionsFoundMessage.addClass 'hidden'
 
-        e.stopPropagation()
-        e.preventDefault()
-
       clearSearchHandler = (e) ->
-        $(@).siblings('input').val('')
-
-        e.stopPropagation()
-        e.preventDefault()
+        $(@).siblings('input').val('').trigger('change')
 
       resetOptsHandler = (e) ->
         # deselect all on selectr and source
@@ -217,9 +207,6 @@ do ($ = jQuery, window = @) ->
 
         triggerChange source
         updateFooter()
-
-        e.stopPropagation()
-        e.preventDefault()
 
       ctrlKeyDownHandler = (e) ->
         $('.list-group', selectrContainer).addClass 'ctrl-key' if e.ctrlKey
@@ -234,7 +221,6 @@ do ($ = jQuery, window = @) ->
       $(selectrContainer).on 'click',               '.reset',           resetOptsHandler
       $(document).on         'keydown',                                 ctrlKeyDownHandler
       $(document).on         'keyup',                                   ctrlKeyUpHandler
-
 
     triggerChange: =>
       @source.trigger 'change.selectr'
