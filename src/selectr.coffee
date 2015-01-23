@@ -248,7 +248,7 @@ do ($ = jQuery, window = @) ->
       $(opt).addClass('selected')
 
       # select source option
-      $("option[value=#{$(opt).data('val')}]", @source).prop 'selected', true
+      $("option[value='#{$(opt).data('val')}']", @source).prop 'selected', true
 
       @updateFooter()
       @triggerChange()
