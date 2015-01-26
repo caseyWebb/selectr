@@ -56,7 +56,7 @@ do ($ = jQuery, window = @) ->
             <strong>#{@args.noMatchingOptionsText}</strong>
           </div>
           <div class='panel-footer #{'hidden' if !@multi && !@args.alwaysShowFooter}'>
-            <button class='reset btn btn-sm btn-default'>
+            <button class='reset btn btn-sm btn-default' type='button'>
               #{@args.resetText}
             </button>
             #{if @multi then "<span class='current-selection badge'></span>" else ''}
