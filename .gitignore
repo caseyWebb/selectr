@@ -6,3 +6,4 @@ $RECYCLE.BIN/
 .sass-cache
 node_modules/
 build/
+*.sublime-workspace

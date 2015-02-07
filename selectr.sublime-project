@@ -1,0 +1,26 @@
+{
+	"folders":
+	[
+		{
+			"file_exclude_patterns":
+			[
+				".gitattributes",
+				"Thumbs.db",
+				"ehthumbs.db",
+				"Desktop.ini",
+				"$RECYCLE.BIN/",
+				".DS_Store",
+				"*.sublime-workspace",
+				"*.sublime-project"
+			],
+			"folder_exclude_patterns":
+			[
+				".sass-cache",
+				"node_modules",
+				"build"
+			],
+			"follow_symlinks": true,
+			"path": "."
+		}
+	]
+}
