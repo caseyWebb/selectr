@@ -1,3 +1,9 @@
+jQuery = require 'jquery'
+
+unless NO_STYLES
+  require './selectr.scss'
+  require './bs-polyfill.scss' if POLYFILL_BOOTSTRAP_STYLES
+
 do ($ = jQuery, window = @) ->
 
   class Selectr

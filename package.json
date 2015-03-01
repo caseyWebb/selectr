@@ -1,14 +1,41 @@
 {
   "name": "selectr",
-  "version": "1.1.3",
+  "version": "2.0.0",
+  "scripts": {
+    "build-native": "webpack -p --config ./webpack.config.js",
+    "build-polyfilled": "webpack -p --config ./webpack.config.polyfill.js",
+    "build-no-styles": "webpack -p --config ./webpack.config.no-styles.js",
+    "build": "npm run build-native && npm run build-polyfilled && npm run build-no-styles",
+    "prepublish": "npm run build"
+  },
   "devDependencies": {
-    "grunt": "^0.4.4",
-    "grunt-contrib-watch": "~0.6.1",
-    "grunt-coffee-jshint": "~0.2.0",
-    "grunt-contrib-sass": "~0.7.3",
-    "grunt-contrib-cssmin": "~0.9.0",
-    "grunt-autoprefixer": "~0.7.2",
-    "grunt-contrib-coffee": "~0.10.1",
-    "grunt-contrib-uglify": "~0.2.2"
-  }
+    "autoprefixer-loader": "^1.1.0",
+    "coffee-loader": "^0.7.2",
+    "css-loader": "^0.9.1",
+    "lodash": "^3.3.1",
+    "sass-loader": "^0.4.0",
+    "style-loader": "^0.8.3",
+    "webpack": "^1.6.0"
+  },
+  "dependencies": {
+    "jquery": "^2.1.3"
+  },
+  "description": "Selectr is a jQuery plugin that aims to accomplish a seemingly simple task: make a select box that doesn't suck.",
+  "main": "./dist/selectr.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/caseyWebb/selectr"
+  },
+  "keywords": [
+    "select",
+    "jquery",
+    "selectr",
+    "menu"
+  ],
+  "author": "Casey Webb <notcaseywebb@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/caseyWebb/selectr/issues"
+  },
+  "homepage": "https://github.com/caseyWebb/selectr"
 }

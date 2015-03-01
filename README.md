@@ -12,22 +12,37 @@ __[Click here to view demo](http://caseywebb.github.io/selectr/demo)__
 
 ## Installation
 
-#### From this repository
+Selectr can be consumed as a CommonJS module, AMD module, or global var. It is built with webpack and uses the style loader, so you do not need to worry about including a stylesheet.
 
-Copy selectr.min.js and the appropriate stylesheet (selectr.min.css if your project uses Bootstrap, or selectrWithPolyfill.min.css if your project does not) and include them on the page(s) you would like to use selectr on
+__NOTE:__ CommonJS and AMD modules still merely extend jQuery, so this __will not work__
 
-#### Installing with Bower
+```javascript
+var selectr = require('selectr')
+
+selectr('#my-selectr')
+```
+
+you must instead use the following
+
+```javascript
+require('selectr')
+$ = require('jquery')
+
+$.selectr('#my-selectr')
+```
+
+#### NPM / Bower
+
+`npm install selectr`
 
 `bower install selectr`
-
-Note: The bower package lists bootstrap as a dependency; thus bootstrap will be copied to your project.
 
 ## Usage
 
 To use selectr, simply fire it using jQuery
 
 ```javascript
-$('select').selectr();
+$('select').selectr()
 ```
 
 ### Multi selects
@@ -108,10 +123,10 @@ If you encounter a bug, please file an issue in Github, or shoot me an email at 
 
 #### Pull requests
 
-If you would like to submit a pull request or fork this project, the package.json and Gruntfile.js should have everything you need to get started. Simply `cd` into the directory you cloned the repo in, `npm install`, and `grunt watch`. Coffeescript -> JS compilation, JSHinting, css prefixing, minification, and concatenation (for the polyfill styles) will be taken care of automagically.
+PRs and forks are always welcome. With webpack installed, use `npm run build` to build.
 
 ### Legal Junk
 
 Selectr is distributed under the [MIT License](http://opensource.org/licenses/mit-license.php). Have at it.
 
-# If you find this useful, send me an email. I'd love to see some selectrs in the wild and add them to the README
+### If you find this useful, send me an email. I'd love to see some selectrs in the wild and add them to the README
