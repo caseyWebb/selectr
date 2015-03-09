@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "scripts": {
     "build-native": "webpack -p --config ./webpack.config.js",
-    "build-debug": "webpack --config ./webpack.config.js",
+    "build-debug": "webpack --config ./webpack.config.debug.js",
     "build-polyfilled": "webpack -p --config ./webpack.config.polyfill.js",
     "build-no-styles": "webpack -p --config ./webpack.config.no-styles.js",
     "build": "npm run build-native && npm run build-debug && npm run build-polyfilled && npm run build-no-styles",
