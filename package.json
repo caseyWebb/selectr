@@ -3,13 +3,14 @@
   "version": "2.0.0",
   "scripts": {
     "build-native": "webpack -p --config ./webpack.config.js",
+    "build-debug": "webpack --config ./webpack.config.js",
     "build-polyfilled": "webpack -p --config ./webpack.config.polyfill.js",
     "build-no-styles": "webpack -p --config ./webpack.config.no-styles.js",
-    "build": "npm run build-native && npm run build-polyfilled && npm run build-no-styles",
+    "build": "npm run build-native && npm run build-debug && npm run build-polyfilled && npm run build-no-styles",
     "prepublish": "npm run build"
   },
   "devDependencies": {
-    "autoprefixer-loader": "^1.1.0",
+    "autoprefixer-loader": "=1.1.0",
     "coffee-loader": "^0.7.2",
     "css-loader": "^0.9.1",
     "lodash": "^3.3.1",
