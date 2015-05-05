@@ -120,21 +120,15 @@ do ($ = jQuery, window = @) ->
       @source.on 'change', (e, selectrInitiated) ->
         _sync() if selectrInitiated != 'selectrInitiated'
 
-      ###
-      In modern browsers, we can work around the lack of change
-      events for adding/removing options by observing the child nodes
-      (option elements) of the source element. This still does not
-      cover programatic changes to the selection, though.
+      # The below causes issues in IE, remove and improve in v3
+      
+      # observer = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver
+      # return if !observer?
 
-      If you know how to do that, please please submit a PR.
-      ###
-      observer = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver
-      return if !observer?
+      # propertyObserver = new observer (mutations) ->
+      #   $.each mutations, _sync
 
-      propertyObserver = new observer (mutations) ->
-        $.each mutations, _sync
-
-      propertyObserver.observe @source.get(0), attributes: false, childList: true, subtree: true
+      # propertyObserver.observe @source.get(0), attributes: false, childList: true, subtree: true
 
     bindEventListeners: ->
 
