@@ -23,7 +23,12 @@ module.exports = {
   },
 
   externals: {
-    'jquery': 'jQuery'
+    jquery: {
+      root: '$',
+      amd: 'jquery',
+      commonjs: 'jquery',
+      commonjs2: 'jquery'
+    }
   },
 
   plugins: [
