@@ -48,6 +48,8 @@
 
     .list-group {
         overflow-x: hidden;
+        // -ms-overflow-x: hidden;
+        -ms-overflow-y: auto;
     }
 
     .list-group-item {
