@@ -1,8 +1,8 @@
 jQuery = require 'jquery'
 
-unless NO_STYLES
+unless window.NO_STYLES
   require './selectr.scss'
-  require './bs-polyfill.scss' if POLYFILL_BOOTSTRAP_STYLES
+  require './bs-polyfill.scss' if window.POLYFILL_BOOTSTRAP_STYLES
 
 do ($ = jQuery, window = @) ->
 
@@ -121,7 +121,7 @@ do ($ = jQuery, window = @) ->
         _sync() if selectrInitiated != 'selectrInitiated'
 
       # The below causes issues in IE, remove and improve in v3
-      
+
       # observer = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver
       # return if !observer?
 

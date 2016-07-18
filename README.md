@@ -1,3 +1,6 @@
+__NOTE:__ This package is unmaintained, but I'll do my best to tend to any PRs that are submitted. Why? I've found it
+much easier to implement the same thing natively with whichever framework/library I'm using (Knockout, Angular, etc.).
+
 # Selectr
 
 Selectr is a jQuery plugin that aims to accomplish a seemingly simple task: make a select box that doesn't suck.
@@ -114,19 +117,3 @@ Tested in the following browsers:
 
 selectr uses MutationObservers to update the list of options, which are unsupported by older browsers. Instead of hacking together a buggy solution,
 I've opted to require that, in order to sync the options list in older browsers, a change event be manually fired on the source select element when the options change.
-
-### Contributing
-
-#### Bugs
-
-If you encounter a bug, please file an issue in Github, or shoot me an email at NotCaseyWebb@gmail.com
-
-#### Pull requests
-
-PRs and forks are always welcome. With webpack installed, use `npm run build` to build.
-
-### Legal Junk
-
-Selectr is distributed under the [MIT License](http://opensource.org/licenses/mit-license.php). Have at it.
-
-### If you find this useful, send me an email. I'd love to see some selectrs in the wild and add them to the README

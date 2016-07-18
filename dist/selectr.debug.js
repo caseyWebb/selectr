@@ -11,41 +11,41 @@
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-
+/******/
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			exports: {},
 /******/ 			id: moduleId,
 /******/ 			loaded: false
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.loaded = true;
-
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(0);
 /******/ })
@@ -54,39 +54,658 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("var jQuery,\n  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };\n\njQuery = __webpack_require__(1);\n\nif (true) {\n  __webpack_require__(2);\n  if (false) {\n    require('./bs-polyfill.scss');\n  }\n}\n\n(function($, window) {\n  var Selectr;\n  Selectr = (function() {\n    Selectr.prototype.defaults = {\n      title: 'Select Options',\n      noMatchingOptionsText: 'No options found',\n      placeholder: 'Search',\n      resetText: 'Clear All',\n      width: '300px',\n      maxListHeight: '250px',\n      tooltipBreakpoint: 25,\n      maxSelection: Infinity,\n      panelStyle: 'default',\n      alwaysShowFooter: false\n    };\n\n    function Selectr(source1, args1) {\n      this.source = source1;\n      this.args = args1;\n      this.updateFooter = bind(this.updateFooter, this);\n      this.deselectOption = bind(this.deselectOption, this);\n      this.selectOption = bind(this.selectOption, this);\n      this.triggerChange = bind(this.triggerChange, this);\n      this.args = $.extend({}, this.defaults, this.args, this.source.data('selectr-opts'));\n      this.multi = this.source.prop('multiple');\n      this.createSelectr();\n      this.monitorSource();\n      this.selectrContainer.insertAfter(this.source);\n      this.selectrContainer = $(this.source.next());\n      this.bindEventListeners();\n      this.source.hide();\n    }\n\n    Selectr.prototype.createSelectr = function() {\n      this.selectrContainer = this.createContainer();\n      $('.list-group', this.selectrContainer).append(this.createOpts());\n      return this.updateFooter();\n    };\n\n    Selectr.prototype.createContainer = function() {\n      return $(document.createElement('div')).addClass(\"selectr panel panel-\" + this.args.panelStyle + \" \" + (this.multi ? 'multi' : void 0)).css('width', this.args.width).html(\"<div class='panel-heading \" + (this.args.title === '' ? \"no-title\" : void 0) + \"'> <h4 class='panel-title'> \" + this.args.title + \" </h4> </div> <div class='panel-body'> <input class='form-control' placeholder='\" + this.args.placeholder + \"'> <span class='clear-search hidden'>&times;</span> </div> <ul class='list-group' style='max-height: \" + this.args.maxListHeight + \"'> </ul> <div class='no-matching-options hidden'> <strong>\" + this.args.noMatchingOptionsText + \"</strong> </div> <div class='panel-footer \" + (!this.multi && !this.args.alwaysShowFooter ? 'hidden' : void 0) + \"'> <button class='reset btn btn-sm btn-default' type='button'> \" + this.args.resetText + \" </button> \" + (this.multi ? \"<span class='current-selection badge'></span>\" : '') + \" </div>\");\n    };\n\n    Selectr.prototype.createOpts = function() {\n      var i, len, opt, ref, results;\n      ref = $('option', this.source);\n      results = [];\n      for (i = 0, len = ref.length; i < len; i++) {\n        opt = ref[i];\n        results.push($(document.createElement('li')).addClass(\"list-group-item \" + ($(opt).is(':selected') ? 'selected' : void 0)).data('val', $(opt).val()).append($(document.createElement('div')).addClass(\"color-code \" + (!$(opt).data('selectr-color') ? 'no-color' : void 0)).css('background-color', $(opt).data('selectr-color'))).append($(document.createElement('div')).text($(opt).text()).addClass('option-name').attr({\n          title: $(opt).text().length > this.args.tooltipBreakpoint ? $(opt).text() : ''\n        })).append($(document.createElement('div')).html('&times').addClass(\"add-remove \" + (!this.multi ? 'hidden' : void 0))));\n      }\n      return results;\n    };\n\n    Selectr.prototype.monitorSource = function() {\n      var _sync;\n      _sync = (function(_this) {\n        return function() {\n          var updatedList;\n          updatedList = $(document.createElement('ul')).addClass('list-group').css('max-height', _this.args.maxListHeight).append(_this.createOpts());\n          $('.list-group', _this.selectrContainer).replaceWith(updatedList);\n          return _this.updateFooter();\n        };\n      })(this);\n\n      /*\n      Update selectr on source element 'change' event\n      \n      Ideally, this should handle added/removed opts, as well\n      as a programatic changes to the selection, but many\n      popular data-binding frameworks do not fire change events,\n      so in that case, you will have to do so manually.\n       */\n      return this.source.on('change', function(e, selectrInitiated) {\n        if (selectrInitiated !== 'selectrInitiated') {\n          return _sync();\n        }\n      });\n    };\n\n    Selectr.prototype.bindEventListeners = function() {\n      var addRemoveHandler, clearSearchHandler, ctrlKeyDownHandler, ctrlKeyUpHandler, deselect, listItemHandler, multi, resetOptsHandler, searchHandler, select, selectrContainer, source, triggerChange, updateFooter;\n      multi = this.multi;\n      selectrContainer = this.selectrContainer;\n      source = this.source;\n      select = this.selectOption;\n      deselect = this.deselectOption;\n      triggerChange = this.triggerChange;\n      updateFooter = this.updateFooter;\n      listItemHandler = function(e) {\n        var modifyCurrentSelection, ref;\n        e.stopPropagation();\n        if (((ref = e.originalEvent) != null ? ref.detail : void 0) === 2) {\n          return;\n        }\n        modifyCurrentSelection = (e.ctrlKey || e.metaKey) && multi;\n        if ($(this).hasClass('selected') && (modifyCurrentSelection || $(this).siblings('.selected').length === 0) && multi) {\n          return deselect(this);\n        } else {\n          return select(modifyCurrentSelection, this);\n        }\n      };\n      addRemoveHandler = function(e) {\n        var opt;\n        e.stopPropagation();\n        if (e.originalEvent.detail && e.originalEvent.detail === 2) {\n          return;\n        }\n        opt = $(e.target).parents('.list-group-item');\n        if (opt.hasClass('selected')) {\n          return deselect(opt);\n        } else {\n          return select(true, opt);\n        }\n      };\n      searchHandler = function(e) {\n        var $clearSearchX, $noOptionsFoundMessage, escapedSearchTerm, noMatchingOptions;\n        e.stopPropagation();\n        escapedSearchTerm = new RegExp($(this).val().replace(/[\\-\\[\\]\\/\\{\\}\\(\\)\\*\\+\\?\\.\\\\\\^\\$\\|]/g, \"\\\\$&\"), 'i');\n        noMatchingOptions = true;\n        $('.list-group-item', selectrContainer).each(function(index, option) {\n          if (!$(option).text().match(escapedSearchTerm)) {\n            $(option).addClass('hidden');\n          } else {\n            $(option).removeClass('hidden');\n            noMatchingOptions = false;\n          }\n        });\n        $clearSearchX = $('.clear-search', selectrContainer);\n        if ($(this).val().length > 0) {\n          $clearSearchX.removeClass('hidden');\n        } else {\n          $clearSearchX.addClass('hidden');\n        }\n        $noOptionsFoundMessage = $('.no-matching-options', selectrContainer);\n        if (noMatchingOptions) {\n          return $noOptionsFoundMessage.removeClass('hidden');\n        } else {\n          return $noOptionsFoundMessage.addClass('hidden');\n        }\n      };\n      clearSearchHandler = function(e) {\n        return $(this).siblings('input').val('').trigger('change');\n      };\n      resetOptsHandler = function(e) {\n        selectrContainer.find('ul > li').removeClass('selected');\n        $('option', source).prop('selected', false);\n        triggerChange(source);\n        return updateFooter();\n      };\n      ctrlKeyDownHandler = function(e) {\n        if (e.ctrlKey) {\n          return $('.list-group', selectrContainer).addClass('ctrl-key');\n        }\n      };\n      ctrlKeyUpHandler = function(e) {\n        if (!e.ctrlKey) {\n          return $('.list-group', selectrContainer).removeClass('ctrl-key');\n        }\n      };\n      $(selectrContainer).on('click', '.list-group-item', listItemHandler);\n      $(selectrContainer).on('click', '.add-remove', addRemoveHandler);\n      $(selectrContainer).on('click change keyup', '.form-control', searchHandler);\n      $(selectrContainer).on('click', '.clear-search', clearSearchHandler);\n      $(selectrContainer).on('click', '.reset', resetOptsHandler);\n      $(document).on('keydown', ctrlKeyDownHandler);\n      return $(document).on('keyup', ctrlKeyUpHandler);\n    };\n\n    Selectr.prototype.triggerChange = function() {\n      return this.source.trigger('change', ['selectrInitiated']);\n    };\n\n    Selectr.prototype.selectOption = function(modifyCurrentSelection, opt) {\n      var i, len, ref, sibling;\n      if (this.args.maxSelection <= $(opt).siblings('.selected').length && modifyCurrentSelection) {\n        return;\n      }\n      if (!modifyCurrentSelection) {\n        $('option', this.source).prop('selected', false);\n        ref = $(opt).siblings();\n        for (i = 0, len = ref.length; i < len; i++) {\n          sibling = ref[i];\n          $(sibling).removeClass('selected');\n        }\n      }\n      $(opt).addClass('selected');\n      $(\"option[value='\" + ($(opt).data('val')) + \"']\", this.source).prop('selected', true);\n      this.updateFooter();\n      return this.triggerChange();\n    };\n\n    Selectr.prototype.deselectOption = function(opt) {\n      this.selectrContainer.removeClass('max-selection-reached');\n      $(opt).removeClass('selected');\n      $(\"option[value=\" + ($(opt).data('val')) + \"]\", this.source).prop('selected', false);\n      this.updateFooter();\n      return this.triggerChange();\n    };\n\n    Selectr.prototype.updateFooter = function() {\n      var $footer, count;\n      if (!this.multi) {\n        return;\n      }\n      count = $('option:selected', this.source).length;\n      $('.current-selection', this.selectrContainer).text(count > 0 ? count : '');\n      if (count === this.args.maxSelection) {\n        this.selectrContainer.addClass('max-selection-reached');\n      } else {\n        this.selectrContainer.removeClass('max-selection-reached');\n      }\n      if (this.args.alwaysShowFooter) {\n        return;\n      }\n      $footer = $('.panel-footer', this.selectrContainer);\n      if (count === 0) {\n        return $footer.addClass('hidden');\n      } else {\n        return $footer.removeClass('hidden');\n      }\n    };\n\n    return Selectr;\n\n  })();\n  return $.fn.extend({\n    selectr: function(args) {\n      return this.each(function() {\n        var $el;\n        $el = $(this);\n        if ($el.data('selectr-initialized')) {\n          return;\n        }\n        new Selectr($el, args);\n        return $el.data('selectr-initialized', true);\n      });\n    }\n  });\n})(jQuery, this);\n//@ sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9zcmMvc2VsZWN0ci5jb2ZmZWU/Y2JmOSJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUFBOztBQUFBLFNBQVMsb0JBQVEsQ0FBUixDQUFUOztBQUVBO0FBQ0Usc0JBQVEsQ0FBUjtBQUNBLE1BQWdDLEtBQWhDO0FBQUEsWUFBUSxvQkFBUjtHQUZGO0NBRkE7O0FBQUEsQ0FNRyxTQUFDLENBQUQsRUFBYSxNQUFiO0FBRUQ7QUFBQSxFQUFNO0FBRUosaUNBQ0U7QUFBQSxhQUF3QixnQkFBeEI7QUFBQSxNQUNBLHVCQUF3QixrQkFEeEI7QUFBQSxNQUVBLGFBQXdCLFFBRnhCO0FBQUEsTUFHQSxXQUF3QixXQUh4QjtBQUFBLE1BSUEsT0FBd0IsT0FKeEI7QUFBQSxNQUtBLGVBQXdCLE9BTHhCO0FBQUEsTUFNQSxtQkFBd0IsRUFOeEI7QUFBQSxNQU9BLGNBQXdCLFFBUHhCO0FBQUEsTUFRQSxZQUF3QixTQVJ4QjtBQUFBLE1BU0Esa0JBQXdCLEtBVHhCO0tBREY7O0FBWWEscUJBQUMsT0FBRCxFQUFVLEtBQVY7QUFDWCxNQURZLElBQUMsVUFBRCxPQUNaO0FBQUEsTUFEcUIsSUFBQyxRQUFELEtBQ3JCO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxVQUFDLEtBQUQsR0FBVSxDQUFDLENBQUMsTUFBRixDQUFTLEVBQVQsRUFBYSxJQUFDLFNBQWQsRUFBd0IsSUFBQyxLQUF6QixFQUErQixJQUFDLE9BQU0sQ0FBQyxJQUFSLENBQWEsY0FBYixDQUEvQixDQUFWO0FBQUEsTUFDQSxJQUFDLE1BQUQsR0FBVSxJQUFDLE9BQU0sQ0FBQyxJQUFSLENBQWEsVUFBYixDQURWO0FBQUEsTUFHQSxJQUFDLGNBQUQsRUFIQTtBQUFBLE1BS0EsSUFBQyxjQUFELEVBTEE7QUFBQSxNQU9BLElBQUMsaUJBQWdCLENBQUMsV0FBbEIsQ0FBOEIsSUFBQyxPQUEvQixDQVBBO0FBQUEsTUFRQSxJQUFDLGlCQUFELEdBQW9CLEVBQUUsSUFBQyxPQUFNLENBQUMsSUFBUixFQUFGLENBUnBCO0FBQUEsTUFVQSxJQUFDLG1CQUFELEVBVkE7QUFBQSxNQVlBLElBQUMsT0FBTSxDQUFDLElBQVIsRUFaQSxDQURXO0lBQUEsQ0FaYjs7QUFBQSxzQkEyQkEsZ0JBQWU7QUFDYixVQUFDLGlCQUFELEdBQW9CLElBQUMsZ0JBQUQsRUFBcEI7QUFBQSxNQUVBLEVBQUUsYUFBRixFQUFpQixJQUFDLGlCQUFsQixDQUFtQyxDQUFDLE1BQXBDLENBQTJDLElBQUMsV0FBRCxFQUEzQyxDQUZBO2FBSUEsSUFBQyxhQUFELEdBTGE7SUFBQSxDQTNCZjs7QUFBQSxzQkFrQ0Esa0JBQWlCO2FBQ2YsRUFBRSxRQUFRLENBQUMsYUFBVCxDQUF1QixLQUF2QixDQUFGLENBQ0UsQ0FBQyxRQURILENBQ1kseUJBQXVCLElBQUMsS0FBSSxDQUFDLFVBQTdCLEdBQXdDLEdBQXhDLEdBQTBDLENBQVksSUFBQyxNQUFaLG1CQUFELENBRHRELENBRUUsQ0FBQyxHQUZILENBRVksT0FGWixFQUVxQixJQUFDLEtBQUksQ0FBQyxLQUYzQixDQUdFLENBQUMsSUFISCxDQUdRLCtCQUN1QixDQUFlLElBQUMsS0FBSSxDQUFDLEtBQU4sS0FBZSxFQUE3QixzQkFBRCxDQUR2QixHQUN3RCw4QkFEeEQsR0FHRSxJQUFDLEtBQUksQ0FBQyxLQUhSLEdBR2Msa0ZBSGQsR0FPeUMsSUFBQyxLQUFJLENBQUMsV0FQL0MsR0FPMkQsdUdBUDNELEdBVXdDLElBQUMsS0FBSSxDQUFDLGFBVjlDLEdBVTRELDREQVY1RCxHQWFRLElBQUMsS0FBSSxDQUFDLHFCQWJkLEdBYW9DLDRDQWJwQyxHQWVzQixDQUFhLEtBQUUsTUFBRixJQUFXLEtBQUUsS0FBSSxDQUFDLGdCQUE5QixvQkFBRCxDQWZ0QixHQWVzRSxpRUFmdEUsR0FpQkUsSUFBQyxLQUFJLENBQUMsU0FqQlIsR0FpQmtCLGFBakJsQixHQW1CRCxDQUFJLElBQUMsTUFBSixHQUFlLCtDQUFmLEdBQW9FLEVBQXJFLENBbkJDLEdBbUJ1RSxTQXRCL0UsRUFEZTtJQUFBLENBbENqQjs7QUFBQSxzQkE2REEsYUFBWTtBQUNWO0FBQUE7QUFBQTtXQUFBO3FCQUFBO0FBQ0UsdUJBQUUsUUFBUSxDQUFDLGFBQVQsQ0FBdUIsSUFBdkIsQ0FBRixDQUNFLENBQUMsUUFESCxDQUNZLHFCQUFrQixDQUFlLEVBQUUsR0FBRixDQUFNLENBQUMsRUFBUCxDQUFVLFdBQVYsQ0FBZCxzQkFBRCxDQUQ5QixDQUVFLENBQUMsSUFGSCxDQUVZLEtBRlosRUFFbUIsRUFBRSxHQUFGLENBQU0sQ0FBQyxHQUFQLEVBRm5CLENBS0UsQ0FBQyxNQUxILENBTUksRUFBRSxRQUFRLENBQUMsYUFBVCxDQUF1QixLQUF2QixDQUFGLENBQ0UsQ0FBQyxRQURILENBQ1ksZ0JBQWEsQ0FBZSxFQUFDLENBQUUsR0FBRixDQUFNLENBQUMsSUFBUCxDQUFZLGVBQVosQ0FBZixzQkFBRCxDQUR6QixDQUVFLENBQUMsR0FGSCxDQUVZLGtCQUZaLEVBRWdDLEVBQUUsR0FBRixDQUFNLENBQUMsSUFBUCxDQUFZLGVBQVosQ0FGaEMsQ0FOSixDQVlFLENBQUMsTUFaSCxDQWFJLEVBQUUsUUFBUSxDQUFDLGFBQVQsQ0FBdUIsS0FBdkIsQ0FBRixDQUNFLENBQUMsSUFESCxDQUNZLEVBQUUsR0FBRixDQUFNLENBQUMsSUFBUCxFQURaLENBRUUsQ0FBQyxRQUZILENBRVksYUFGWixDQUdFLENBQUMsSUFISCxDQUdZO0FBQUEsaUJBQVUsRUFBRSxHQUFGLENBQU0sQ0FBQyxJQUFQLEVBQWEsQ0FBQyxNQUFkLEdBQXVCLElBQUMsS0FBSSxDQUFDLGlCQUFoQyxHQUF1RCxFQUFFLEdBQUYsQ0FBTSxDQUFDLElBQVAsRUFBdkQsR0FBMEUsRUFBakY7U0FIWixDQWJKLENBb0JFLENBQUMsTUFwQkgsQ0FxQkksRUFBRSxRQUFRLENBQUMsYUFBVCxDQUF1QixLQUF2QixDQUFGLENBQ0UsQ0FBQyxJQURILENBQ1ksUUFEWixDQUVFLENBQUMsUUFGSCxDQUVZLGdCQUFhLENBQWEsS0FBRSxNQUFkLG9CQUFELENBRnpCLENBckJKLEdBREY7QUFBQTtxQkFEVTtJQUFBLENBN0RaOztBQUFBLHNCQXlGQSxnQkFBZTtBQUViO0FBQUEsY0FBUTtlQUFBO0FBQ047QUFBQSx3QkFBYyxFQUFFLFFBQVEsQ0FBQyxhQUFULENBQXVCLElBQXZCLENBQUYsQ0FDWixDQUFDLFFBRFcsQ0FDRixZQURFLENBRVosQ0FBQyxHQUZXLENBRUYsWUFGRSxFQUVZLEtBQUMsS0FBSSxDQUFDLGFBRmxCLENBR1osQ0FBQyxNQUhXLENBR0YsS0FBQyxXQUFELEVBSEUsQ0FBZDtBQUFBLFVBS0EsRUFBRSxhQUFGLEVBQWlCLEtBQUMsaUJBQWxCLENBQW1DLENBQUMsV0FBcEMsQ0FBZ0QsV0FBaEQsQ0FMQTtpQkFPQSxLQUFDLGFBQUQsR0FSTTtRQUFBO01BQUEsUUFBUjtBQVVBO0FBQUE7Ozs7Ozs7U0FWQTthQWtCQSxJQUFDLE9BQU0sQ0FBQyxFQUFSLENBQVcsUUFBWCxFQUFxQixTQUFDLENBQUQsRUFBSSxnQkFBSjtBQUNuQixZQUFXLHFCQUFvQixrQkFBL0I7aUJBQUE7U0FEbUI7TUFBQSxDQUFyQixFQXBCYTtJQUFBLENBekZmOztBQUFBLHNCQTBIQSxxQkFBb0I7QUFHbEI7QUFBQSxjQUFvQixJQUFDLE1BQXJCO0FBQUEsTUFDQSxtQkFBb0IsSUFBQyxpQkFEckI7QUFBQSxNQUVBLFNBQW9CLElBQUMsT0FGckI7QUFBQSxNQUdBLFNBQW9CLElBQUMsYUFIckI7QUFBQSxNQUlBLFdBQW9CLElBQUMsZUFKckI7QUFBQSxNQUtBLGdCQUFvQixJQUFDLGNBTHJCO0FBQUEsTUFNQSxlQUFvQixJQUFDLGFBTnJCO0FBQUEsTUFRQSxrQkFBa0IsU0FBQyxDQUFEO0FBQ2hCO0FBQUEsU0FBQyxDQUFDLGVBQUY7QUFHQSxrREFBeUIsQ0FBRSxnQkFBakIsS0FBMkIsQ0FBckM7QUFBQTtTQUhBO0FBQUEsUUFLQSx5QkFBeUIsQ0FBQyxDQUFDLENBQUMsT0FBRixJQUFhLENBQUMsQ0FBQyxPQUFoQixLQUE0QixLQUxyRDtBQU9BLFlBQUcsRUFBRSxJQUFGLENBQUksQ0FBQyxRQUFMLENBQWMsVUFBZCxLQUE2QixDQUFDLDBCQUEwQixFQUFFLElBQUYsQ0FBSSxDQUFDLFFBQUwsQ0FBYyxXQUFkLENBQTBCLENBQUMsTUFBM0IsS0FBcUMsQ0FBaEUsQ0FBN0IsSUFBbUcsS0FBdEc7aUJBQ0UsU0FBUyxJQUFULEVBREY7U0FBQTtpQkFJRSxPQUFPLHNCQUFQLEVBQStCLElBQS9CLEVBSkY7U0FSZ0I7TUFBQSxDQVJsQjtBQUFBLE1Bc0JBLG1CQUFtQixTQUFDLENBQUQ7QUFDakI7QUFBQSxTQUFDLENBQUMsZUFBRjtBQUVBLFlBQVUsQ0FBQyxDQUFDLGFBQWEsQ0FBQyxNQUFoQixJQUEwQixDQUFDLENBQUMsYUFBYSxDQUFDLE1BQWhCLEtBQTBCLENBQTlEO0FBQUE7U0FGQTtBQUFBLFFBSUEsTUFBTSxFQUFFLENBQUMsQ0FBQyxNQUFKLENBQVcsQ0FBQyxPQUFaLENBQW9CLGtCQUFwQixDQUpOO0FBTUEsWUFBRyxHQUFHLENBQUMsUUFBSixDQUFhLFVBQWIsQ0FBSDtpQkFDRSxTQUFTLEdBQVQsRUFERjtTQUFBO2lCQUlFLE9BQU8sSUFBUCxFQUFhLEdBQWIsRUFKRjtTQVBpQjtNQUFBLENBdEJuQjtBQUFBLE1BbUNBLGdCQUFnQixTQUFDLENBQUQ7QUFDZDtBQUFBLFNBQUMsQ0FBQyxlQUFGO0FBQUEsUUFFQSxvQkFBd0IsV0FBTyxFQUFFLElBQUYsQ0FBSSxDQUFDLEdBQUwsRUFBVSxDQUFDLE9BQVgsQ0FBbUIscUNBQW5CLEVBQTBELE1BQTFELENBQVAsRUFBMEUsR0FBMUUsQ0FGeEI7QUFBQSxRQUdBLG9CQUFvQixJQUhwQjtBQUFBLFFBTUEsRUFBRSxrQkFBRixFQUFzQixnQkFBdEIsQ0FBdUMsQ0FBQyxJQUF4QyxDQUE2QyxTQUFDLEtBQUQsRUFBUSxNQUFSO0FBRTNDLGdCQUFPLENBQUUsTUFBRixDQUFTLENBQUMsSUFBVixFQUFnQixDQUFDLEtBQWpCLENBQXVCLGlCQUF2QixDQUFQO0FBQ0UsY0FBRSxNQUFGLENBQVMsQ0FBQyxRQUFWLENBQW1CLFFBQW5CLEVBREY7V0FBQTtBQUlFLGNBQUUsTUFBRixDQUFTLENBQUMsV0FBVixDQUFzQixRQUF0QjtBQUFBLFlBQ0Esb0JBQW9CLEtBRHBCLENBSkY7V0FGMkM7UUFBQSxDQUE3QyxDQU5BO0FBQUEsUUFrQkEsZ0JBQWdCLEVBQUUsZUFBRixFQUFtQixnQkFBbkIsQ0FsQmhCO0FBb0JBLFlBQUcsRUFBRSxJQUFGLENBQUksQ0FBQyxHQUFMLEVBQVUsQ0FBQyxNQUFYLEdBQW9CLENBQXZCO0FBQ0UsdUJBQWEsQ0FBQyxXQUFkLENBQTBCLFFBQTFCLEVBREY7U0FBQTtBQUlFLHVCQUFhLENBQUMsUUFBZCxDQUF1QixRQUF2QixFQUpGO1NBcEJBO0FBQUEsUUEyQkEseUJBQXlCLEVBQUUsc0JBQUYsRUFBMEIsZ0JBQTFCLENBM0J6QjtBQTZCQSxZQUFHLGlCQUFIO2lCQUNFLHNCQUFzQixDQUFDLFdBQXZCLENBQW1DLFFBQW5DLEVBREY7U0FBQTtpQkFJRSxzQkFBc0IsQ0FBQyxRQUF2QixDQUFnQyxRQUFoQyxFQUpGO1NBOUJjO01BQUEsQ0FuQ2hCO0FBQUEsTUF1RUEscUJBQXFCLFNBQUMsQ0FBRDtlQUNuQixFQUFFLElBQUYsQ0FBSSxDQUFDLFFBQUwsQ0FBYyxPQUFkLENBQXNCLENBQUMsR0FBdkIsQ0FBMkIsRUFBM0IsQ0FBOEIsQ0FBQyxPQUEvQixDQUF1QyxRQUF2QyxFQURtQjtNQUFBLENBdkVyQjtBQUFBLE1BMEVBLG1CQUFtQixTQUFDLENBQUQ7QUFFakIsd0JBQWdCLENBQUMsSUFBakIsQ0FBc0IsU0FBdEIsQ0FBZ0MsQ0FBQyxXQUFqQyxDQUE2QyxVQUE3QztBQUFBLFFBQ0EsRUFBRSxRQUFGLEVBQVksTUFBWixDQUFtQixDQUFDLElBQXBCLENBQXlCLFVBQXpCLEVBQXFDLEtBQXJDLENBREE7QUFBQSxRQUdBLGNBQWMsTUFBZCxDQUhBO2VBSUEsZUFOaUI7TUFBQSxDQTFFbkI7QUFBQSxNQWtGQSxxQkFBcUIsU0FBQyxDQUFEO0FBQ25CLFlBQTBELENBQUMsQ0FBQyxPQUE1RDtpQkFBQSxFQUFFLGFBQUYsRUFBaUIsZ0JBQWpCLENBQWtDLENBQUMsUUFBbkMsQ0FBNEMsVUFBNUM7U0FEbUI7TUFBQSxDQWxGckI7QUFBQSxNQXFGQSxtQkFBbUIsU0FBQyxDQUFEO0FBQ2pCLFlBQTZELEVBQUssQ0FBQyxPQUFuRTtpQkFBQSxFQUFFLGFBQUYsRUFBaUIsZ0JBQWpCLENBQWtDLENBQUMsV0FBbkMsQ0FBK0MsVUFBL0M7U0FEaUI7TUFBQSxDQXJGbkI7QUFBQSxNQXdGQSxFQUFFLGdCQUFGLENBQW1CLENBQUMsRUFBcEIsQ0FBdUIsT0FBdkIsRUFBOEMsa0JBQTlDLEVBQWtFLGVBQWxFLENBeEZBO0FBQUEsTUF5RkEsRUFBRSxnQkFBRixDQUFtQixDQUFDLEVBQXBCLENBQXVCLE9BQXZCLEVBQThDLGFBQTlDLEVBQWtFLGdCQUFsRSxDQXpGQTtBQUFBLE1BMEZBLEVBQUUsZ0JBQUYsQ0FBbUIsQ0FBQyxFQUFwQixDQUF1QixvQkFBdkIsRUFBOEMsZUFBOUMsRUFBa0UsYUFBbEUsQ0ExRkE7QUFBQSxNQTJGQSxFQUFFLGdCQUFGLENBQW1CLENBQUMsRUFBcEIsQ0FBdUIsT0FBdkIsRUFBOEMsZUFBOUMsRUFBa0Usa0JBQWxFLENBM0ZBO0FBQUEsTUE0RkEsRUFBRSxnQkFBRixDQUFtQixDQUFDLEVBQXBCLENBQXVCLE9BQXZCLEVBQThDLFFBQTlDLEVBQWtFLGdCQUFsRSxDQTVGQTtBQUFBLE1BNkZBLEVBQUUsUUFBRixDQUFXLENBQUMsRUFBWixDQUF1QixTQUF2QixFQUFrRSxrQkFBbEUsQ0E3RkE7YUE4RkEsRUFBRSxRQUFGLENBQVcsQ0FBQyxFQUFaLENBQXVCLE9BQXZCLEVBQWtFLGdCQUFsRSxFQWpHa0I7SUFBQSxDQTFIcEI7O0FBQUEsc0JBNk5BLGdCQUFlO2FBQ2IsSUFBQyxPQUFNLENBQUMsT0FBUixDQUFnQixRQUFoQixFQUEwQixDQUFDLGtCQUFELENBQTFCLEVBRGE7SUFBQSxDQTdOZjs7QUFBQSxzQkFnT0EsZUFBYyxTQUFDLHNCQUFELEVBQXlCLEdBQXpCO0FBRVo7QUFBQSxVQUFVLElBQUMsS0FBSSxDQUFDLFlBQU4sSUFBc0IsRUFBRSxHQUFGLENBQU0sQ0FBQyxRQUFQLENBQWdCLFdBQWhCLENBQTRCLENBQUMsTUFBbkQsSUFBNkQsc0JBQXZFO0FBQUE7T0FBQTtBQUdBLFVBQUcsdUJBQUg7QUFFRSxVQUFFLFFBQUYsRUFBWSxJQUFDLE9BQWIsQ0FBb0IsQ0FBQyxJQUFyQixDQUEwQixVQUExQixFQUFzQyxLQUF0QztBQUVBO0FBQUE7MkJBQUE7QUFDRSxZQUFFLE9BQUYsQ0FBVSxDQUFDLFdBQVgsQ0FBdUIsVUFBdkIsRUFERjtBQUFBLFNBSkY7T0FIQTtBQUFBLE1BV0EsRUFBRSxHQUFGLENBQU0sQ0FBQyxRQUFQLENBQWdCLFVBQWhCLENBWEE7QUFBQSxNQWNBLEVBQUUsbUJBQWdCLENBQUMsRUFBRSxHQUFGLENBQU0sQ0FBQyxJQUFQLENBQVksS0FBWixDQUFELENBQWhCLEdBQW9DLElBQXRDLEVBQTJDLElBQUMsT0FBNUMsQ0FBbUQsQ0FBQyxJQUFwRCxDQUF5RCxVQUF6RCxFQUFxRSxJQUFyRSxDQWRBO0FBQUEsTUFnQkEsSUFBQyxhQUFELEVBaEJBO2FBaUJBLElBQUMsY0FBRCxHQW5CWTtJQUFBLENBaE9kOztBQUFBLHNCQXFQQSxpQkFBZ0IsU0FBQyxHQUFEO0FBQ2QsVUFBQyxpQkFBZ0IsQ0FBQyxXQUFsQixDQUE4Qix1QkFBOUI7QUFBQSxNQUVBLEVBQUUsR0FBRixDQUFNLENBQUMsV0FBUCxDQUFtQixVQUFuQixDQUZBO0FBQUEsTUFHQSxFQUFFLGtCQUFlLENBQUMsRUFBRSxHQUFGLENBQU0sQ0FBQyxJQUFQLENBQVksS0FBWixDQUFELENBQWYsR0FBbUMsR0FBckMsRUFBeUMsSUFBQyxPQUExQyxDQUFpRCxDQUFDLElBQWxELENBQXVELFVBQXZELEVBQW1FLEtBQW5FLENBSEE7QUFBQSxNQUtBLElBQUMsYUFBRCxFQUxBO2FBTUEsSUFBQyxjQUFELEdBUGM7SUFBQSxDQXJQaEI7O0FBQUEsc0JBOFBBLGVBQWM7QUFDWjtBQUFBLFVBQVUsS0FBRSxNQUFaO0FBQUE7T0FBQTtBQUFBLE1BRUEsUUFBUSxFQUFFLGlCQUFGLEVBQXFCLElBQUMsT0FBdEIsQ0FBNkIsQ0FBQyxNQUZ0QztBQUFBLE1BR0EsRUFBRSxvQkFBRixFQUF3QixJQUFDLGlCQUF6QixDQUEwQyxDQUFDLElBQTNDLENBQW1ELFFBQVEsQ0FBWCxHQUFrQixLQUFsQixHQUE2QixFQUE3RSxDQUhBO0FBS0EsVUFBRyxVQUFTLElBQUMsS0FBSSxDQUFDLFlBQWxCO0FBQ0UsWUFBQyxpQkFBZ0IsQ0FBQyxRQUFsQixDQUEyQix1QkFBM0IsRUFERjtPQUFBO0FBR0UsWUFBQyxpQkFBZ0IsQ0FBQyxXQUFsQixDQUE4Qix1QkFBOUIsRUFIRjtPQUxBO0FBVUEsVUFBVSxJQUFDLEtBQUksQ0FBQyxnQkFBaEI7QUFBQTtPQVZBO0FBQUEsTUFZQSxVQUFVLEVBQUUsZUFBRixFQUFtQixJQUFDLGlCQUFwQixDQVpWO0FBYUEsVUFBRyxVQUFTLENBQVo7ZUFDRSxPQUFPLENBQUMsUUFBUixDQUFpQixRQUFqQixFQURGO09BQUE7ZUFHRSxPQUFPLENBQUMsV0FBUixDQUFvQixRQUFwQixFQUhGO09BZFk7SUFBQSxDQTlQZDs7bUJBQUE7O01BRkY7U0FtUkEsQ0FBQyxDQUFDLEVBQUUsQ0FBQyxNQUFMLENBQVk7QUFBQSxhQUFTLFNBQUMsSUFBRDthQUNuQixJQUFDLEtBQUQsQ0FBTTtBQUNKO0FBQUEsY0FBTSxFQUFFLElBQUYsQ0FBTjtBQUVBLFlBQVUsR0FBRyxDQUFDLElBQUosQ0FBUyxxQkFBVCxDQUFWO0FBQUE7U0FGQTtBQUFBLFFBSUksWUFBUSxHQUFSLEVBQWEsSUFBYixDQUpKO2VBS0EsR0FBRyxDQUFDLElBQUosQ0FBUyxxQkFBVCxFQUFnQyxJQUFoQyxFQU5JO01BQUEsQ0FBTixFQURtQjtJQUFBLENBQVQ7R0FBWixFQXJSQztBQUFBLEVBQUgsQ0FBUSxNQUFSLEVBQXlCLElBQXpCLENBTkEiLCJmaWxlIjoiMC5qcyIsInNvdXJjZXNDb250ZW50IjpbImpRdWVyeSA9IHJlcXVpcmUgJ2pxdWVyeSdcclxuXHJcbnVubGVzcyBOT19TVFlMRVNcclxuICByZXF1aXJlICcuL3NlbGVjdHIuc2NzcydcclxuICByZXF1aXJlICcuL2JzLXBvbHlmaWxsLnNjc3MnIGlmIFBPTFlGSUxMX0JPT1RTVFJBUF9TVFlMRVNcclxuXHJcbmRvICgkID0galF1ZXJ5LCB3aW5kb3cgPSBAKSAtPlxyXG5cclxuICBjbGFzcyBTZWxlY3RyXHJcblxyXG4gICAgZGVmYXVsdHM6XHJcbiAgICAgIHRpdGxlOiAgICAgICAgICAgICAgICAgICdTZWxlY3QgT3B0aW9ucydcclxuICAgICAgbm9NYXRjaGluZ09wdGlvbnNUZXh0OiAgJ05vIG9wdGlvbnMgZm91bmQnXHJcbiAgICAgIHBsYWNlaG9sZGVyOiAgICAgICAgICAgICdTZWFyY2gnXHJcbiAgICAgIHJlc2V0VGV4dDogICAgICAgICAgICAgICdDbGVhciBBbGwnXHJcbiAgICAgIHdpZHRoOiAgICAgICAgICAgICAgICAgICczMDBweCdcclxuICAgICAgbWF4TGlzdEhlaWdodDogICAgICAgICAgJzI1MHB4J1xyXG4gICAgICB0b29sdGlwQnJlYWtwb2ludDogICAgICAyNVxyXG4gICAgICBtYXhTZWxlY3Rpb246ICAgICAgICAgICBJbmZpbml0eVxyXG4gICAgICBwYW5lbFN0eWxlOiAgICAgICAgICAgICAnZGVmYXVsdCdcclxuICAgICAgYWx3YXlzU2hvd0Zvb3RlcjogICAgICAgZmFsc2VcclxuXHJcbiAgICBjb25zdHJ1Y3RvcjogKEBzb3VyY2UsIEBhcmdzKSAtPlxyXG4gICAgICBAYXJncyAgID0gJC5leHRlbmQge30sIEBkZWZhdWx0cywgQGFyZ3MsIEBzb3VyY2UuZGF0YSgnc2VsZWN0ci1vcHRzJylcclxuICAgICAgQG11bHRpICA9IEBzb3VyY2UucHJvcCAnbXVsdGlwbGUnXHJcblxyXG4gICAgICBAY3JlYXRlU2VsZWN0cigpXHJcblxyXG4gICAgICBAbW9uaXRvclNvdXJjZSgpXHJcblxyXG4gICAgICBAc2VsZWN0ckNvbnRhaW5lci5pbnNlcnRBZnRlcihAc291cmNlKVxyXG4gICAgICBAc2VsZWN0ckNvbnRhaW5lciA9ICQgQHNvdXJjZS5uZXh0KClcclxuXHJcbiAgICAgIEBiaW5kRXZlbnRMaXN0ZW5lcnMoKVxyXG5cclxuICAgICAgQHNvdXJjZS5oaWRlKClcclxuXHJcbiAgICBjcmVhdGVTZWxlY3RyOiAtPlxyXG4gICAgICBAc2VsZWN0ckNvbnRhaW5lciA9IEBjcmVhdGVDb250YWluZXIoKVxyXG5cclxuICAgICAgJCgnLmxpc3QtZ3JvdXAnLCBAc2VsZWN0ckNvbnRhaW5lcikuYXBwZW5kIEBjcmVhdGVPcHRzKClcclxuXHJcbiAgICAgIEB1cGRhdGVGb290ZXIoKVxyXG5cclxuICAgIGNyZWF0ZUNvbnRhaW5lcjogLT5cclxuICAgICAgJChkb2N1bWVudC5jcmVhdGVFbGVtZW50ICdkaXYnKVxyXG4gICAgICAgIC5hZGRDbGFzcyBcInNlbGVjdHIgcGFuZWwgcGFuZWwtI3tAYXJncy5wYW5lbFN0eWxlfSAjeydtdWx0aScgaWYgQG11bHRpfVwiXHJcbiAgICAgICAgLmNzcyAgICAgICd3aWR0aCcsIEBhcmdzLndpZHRoXHJcbiAgICAgICAgLmh0bWwgXCJcclxuICAgICAgICAgIDxkaXYgY2xhc3M9J3BhbmVsLWhlYWRpbmcgI3tcIm5vLXRpdGxlXCIgaWYgQGFyZ3MudGl0bGUgPT0gJyd9Jz5cclxuICAgICAgICAgICAgPGg0IGNsYXNzPSdwYW5lbC10aXRsZSc+XHJcbiAgICAgICAgICAgICAgI3tAYXJncy50aXRsZX1cclxuICAgICAgICAgICAgPC9oND5cclxuICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgICAgPGRpdiBjbGFzcz0ncGFuZWwtYm9keSc+XHJcbiAgICAgICAgICAgIDxpbnB1dCBjbGFzcz0nZm9ybS1jb250cm9sJyBwbGFjZWhvbGRlcj0nI3tAYXJncy5wbGFjZWhvbGRlcn0nPlxyXG4gICAgICAgICAgICA8c3BhbiBjbGFzcz0nY2xlYXItc2VhcmNoIGhpZGRlbic+JnRpbWVzOzwvc3Bhbj5cclxuICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgICAgPHVsIGNsYXNzPSdsaXN0LWdyb3VwJyBzdHlsZT0nbWF4LWhlaWdodDogI3tAYXJncy5tYXhMaXN0SGVpZ2h0fSc+XHJcbiAgICAgICAgICA8L3VsPlxyXG4gICAgICAgICAgPGRpdiBjbGFzcz0nbm8tbWF0Y2hpbmctb3B0aW9ucyBoaWRkZW4nPlxyXG4gICAgICAgICAgICA8c3Ryb25nPiN7QGFyZ3Mubm9NYXRjaGluZ09wdGlvbnNUZXh0fTwvc3Ryb25nPlxyXG4gICAgICAgICAgPC9kaXY+XHJcbiAgICAgICAgICA8ZGl2IGNsYXNzPSdwYW5lbC1mb290ZXIgI3snaGlkZGVuJyBpZiAhQG11bHRpICYmICFAYXJncy5hbHdheXNTaG93Rm9vdGVyfSc+XHJcbiAgICAgICAgICAgIDxidXR0b24gY2xhc3M9J3Jlc2V0IGJ0biBidG4tc20gYnRuLWRlZmF1bHQnIHR5cGU9J2J1dHRvbic+XHJcbiAgICAgICAgICAgICAgI3tAYXJncy5yZXNldFRleHR9XHJcbiAgICAgICAgICAgIDwvYnV0dG9uPlxyXG4gICAgICAgICAgICAje2lmIEBtdWx0aSB0aGVuIFwiPHNwYW4gY2xhc3M9J2N1cnJlbnQtc2VsZWN0aW9uIGJhZGdlJz48L3NwYW4+XCIgZWxzZSAnJ31cclxuICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgIFwiXHJcblxyXG4gICAgY3JlYXRlT3B0czogLT5cclxuICAgICAgZm9yIG9wdCBpbiAkKCdvcHRpb24nLCBAc291cmNlKVxyXG4gICAgICAgICQoZG9jdW1lbnQuY3JlYXRlRWxlbWVudCAnbGknKVxyXG4gICAgICAgICAgLmFkZENsYXNzIFwibGlzdC1ncm91cC1pdGVtICN7J3NlbGVjdGVkJyBpZiAkKG9wdCkuaXMoJzpzZWxlY3RlZCcpfVwiXHJcbiAgICAgICAgICAuZGF0YSAgICAgJ3ZhbCcsICQob3B0KS52YWwoKVxyXG5cclxuICAgICAgICAgICMgaW5zZXJ0IGNvbG9yLWNvZGUgc3F1YXJlXHJcbiAgICAgICAgICAuYXBwZW5kKFxyXG4gICAgICAgICAgICAkKGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQgJ2RpdicpXHJcbiAgICAgICAgICAgICAgLmFkZENsYXNzIFwiY29sb3ItY29kZSAjeyduby1jb2xvcicgaWYgISQob3B0KS5kYXRhICdzZWxlY3RyLWNvbG9yJ31cIlxyXG4gICAgICAgICAgICAgIC5jc3MgICAgICAnYmFja2dyb3VuZC1jb2xvcicsICQob3B0KS5kYXRhICdzZWxlY3RyLWNvbG9yJ1xyXG4gICAgICAgICAgKVxyXG5cclxuICAgICAgICAgICMgaW5zZXJ0IG5hbWVcclxuICAgICAgICAgIC5hcHBlbmQoXHJcbiAgICAgICAgICAgICQoZG9jdW1lbnQuY3JlYXRlRWxlbWVudCAnZGl2JylcclxuICAgICAgICAgICAgICAudGV4dCAgICAgJChvcHQpLnRleHQoKVxyXG4gICAgICAgICAgICAgIC5hZGRDbGFzcyAnb3B0aW9uLW5hbWUnXHJcbiAgICAgICAgICAgICAgLmF0dHIgICAgIHRpdGxlOiBpZiAkKG9wdCkudGV4dCgpLmxlbmd0aCA+IEBhcmdzLnRvb2x0aXBCcmVha3BvaW50IHRoZW4gJChvcHQpLnRleHQoKSBlbHNlICcnXHJcbiAgICAgICAgICApXHJcblxyXG4gICAgICAgICAgIyBpbnNlcnQgYWRkL3JlbW92ZVxyXG4gICAgICAgICAgLmFwcGVuZChcclxuICAgICAgICAgICAgJChkb2N1bWVudC5jcmVhdGVFbGVtZW50ICdkaXYnKVxyXG4gICAgICAgICAgICAgIC5odG1sICAgICAnJnRpbWVzJ1xyXG4gICAgICAgICAgICAgIC5hZGRDbGFzcyBcImFkZC1yZW1vdmUgI3snaGlkZGVuJyBpZiAhQG11bHRpfVwiXHJcbiAgICAgICAgICApXHJcblxyXG4gICAgbW9uaXRvclNvdXJjZTogLT5cclxuXHJcbiAgICAgIF9zeW5jID0gPT5cclxuICAgICAgICB1cGRhdGVkTGlzdCA9ICQoZG9jdW1lbnQuY3JlYXRlRWxlbWVudCAndWwnKVxyXG4gICAgICAgICAgLmFkZENsYXNzICdsaXN0LWdyb3VwJ1xyXG4gICAgICAgICAgLmNzcyAgICAgICdtYXgtaGVpZ2h0JywgQGFyZ3MubWF4TGlzdEhlaWdodFxyXG4gICAgICAgICAgLmFwcGVuZCAgIEBjcmVhdGVPcHRzKClcclxuXHJcbiAgICAgICAgJCgnLmxpc3QtZ3JvdXAnLCBAc2VsZWN0ckNvbnRhaW5lcikucmVwbGFjZVdpdGgodXBkYXRlZExpc3QpXHJcblxyXG4gICAgICAgIEB1cGRhdGVGb290ZXIoKVxyXG5cclxuICAgICAgIyMjXHJcbiAgICAgIFVwZGF0ZSBzZWxlY3RyIG9uIHNvdXJjZSBlbGVtZW50ICdjaGFuZ2UnIGV2ZW50XHJcblxyXG4gICAgICBJZGVhbGx5LCB0aGlzIHNob3VsZCBoYW5kbGUgYWRkZWQvcmVtb3ZlZCBvcHRzLCBhcyB3ZWxsXHJcbiAgICAgIGFzIGEgcHJvZ3JhbWF0aWMgY2hhbmdlcyB0byB0aGUgc2VsZWN0aW9uLCBidXQgbWFueVxyXG4gICAgICBwb3B1bGFyIGRhdGEtYmluZGluZyBmcmFtZXdvcmtzIGRvIG5vdCBmaXJlIGNoYW5nZSBldmVudHMsXHJcbiAgICAgIHNvIGluIHRoYXQgY2FzZSwgeW91IHdpbGwgaGF2ZSB0byBkbyBzbyBtYW51YWxseS5cclxuICAgICAgIyMjXHJcbiAgICAgIEBzb3VyY2Uub24gJ2NoYW5nZScsIChlLCBzZWxlY3RySW5pdGlhdGVkKSAtPlxyXG4gICAgICAgIF9zeW5jKCkgaWYgc2VsZWN0ckluaXRpYXRlZCAhPSAnc2VsZWN0ckluaXRpYXRlZCdcclxuXHJcbiAgICAgICMgVGhlIGJlbG93IGNhdXNlcyBpc3N1ZXMgaW4gSUUsIHJlbW92ZSBhbmQgaW1wcm92ZSBpbiB2M1xyXG4gICAgICBcclxuICAgICAgIyBvYnNlcnZlciA9IHdpbmRvdy5NdXRhdGlvbk9ic2VydmVyIHx8IHdpbmRvdy5XZWJLaXRNdXRhdGlvbk9ic2VydmVyIHx8IHdpbmRvdy5Nb3pNdXRhdGlvbk9ic2VydmVyXHJcbiAgICAgICMgcmV0dXJuIGlmICFvYnNlcnZlcj9cclxuXHJcbiAgICAgICMgcHJvcGVydHlPYnNlcnZlciA9IG5ldyBvYnNlcnZlciAobXV0YXRpb25zKSAtPlxyXG4gICAgICAjICAgJC5lYWNoIG11dGF0aW9ucywgX3N5bmNcclxuXHJcbiAgICAgICMgcHJvcGVydHlPYnNlcnZlci5vYnNlcnZlIEBzb3VyY2UuZ2V0KDApLCBhdHRyaWJ1dGVzOiBmYWxzZSwgY2hpbGRMaXN0OiB0cnVlLCBzdWJ0cmVlOiB0cnVlXHJcblxyXG4gICAgYmluZEV2ZW50TGlzdGVuZXJzOiAtPlxyXG5cclxuICAgICAgIyBhY2Nlc3NvcnMgZm9yIGhhbmRsZXIgZnVuY3Rpb25zXHJcbiAgICAgIG11bHRpICAgICAgICAgICAgID0gQG11bHRpXHJcbiAgICAgIHNlbGVjdHJDb250YWluZXIgID0gQHNlbGVjdHJDb250YWluZXJcclxuICAgICAgc291cmNlICAgICAgICAgICAgPSBAc291cmNlXHJcbiAgICAgIHNlbGVjdCAgICAgICAgICAgID0gQHNlbGVjdE9wdGlvblxyXG4gICAgICBkZXNlbGVjdCAgICAgICAgICA9IEBkZXNlbGVjdE9wdGlvblxyXG4gICAgICB0cmlnZ2VyQ2hhbmdlICAgICA9IEB0cmlnZ2VyQ2hhbmdlXHJcbiAgICAgIHVwZGF0ZUZvb3RlciAgICAgID0gQHVwZGF0ZUZvb3RlclxyXG5cclxuICAgICAgbGlzdEl0ZW1IYW5kbGVyID0gKGUpIC0+XHJcbiAgICAgICAgZS5zdG9wUHJvcGFnYXRpb24oKVxyXG5cclxuICAgICAgICAjIGRlYm91bmNlIGRvdWJsZS1jbGlja3NcclxuICAgICAgICByZXR1cm4gaWYgZS5vcmlnaW5hbEV2ZW50Py5kZXRhaWwgPT0gMlxyXG5cclxuICAgICAgICBtb2RpZnlDdXJyZW50U2VsZWN0aW9uID0gKGUuY3RybEtleSB8fCBlLm1ldGFLZXkpICYmIG11bHRpXHJcblxyXG4gICAgICAgIGlmICQoQCkuaGFzQ2xhc3MoJ3NlbGVjdGVkJykgJiYgKG1vZGlmeUN1cnJlbnRTZWxlY3Rpb24gfHwgJChAKS5zaWJsaW5ncygnLnNlbGVjdGVkJykubGVuZ3RoID09IDApICYmIG11bHRpXHJcbiAgICAgICAgICBkZXNlbGVjdCBAXHJcblxyXG4gICAgICAgIGVsc2VcclxuICAgICAgICAgIHNlbGVjdCBtb2RpZnlDdXJyZW50U2VsZWN0aW9uLCBAXHJcblxyXG4gICAgICBhZGRSZW1vdmVIYW5kbGVyID0gKGUpIC0+XHJcbiAgICAgICAgZS5zdG9wUHJvcGFnYXRpb24oKVxyXG5cclxuICAgICAgICByZXR1cm4gaWYgZS5vcmlnaW5hbEV2ZW50LmRldGFpbCAmJiBlLm9yaWdpbmFsRXZlbnQuZGV0YWlsID09IDJcclxuXHJcbiAgICAgICAgb3B0ID0gJChlLnRhcmdldCkucGFyZW50cygnLmxpc3QtZ3JvdXAtaXRlbScpXHJcblxyXG4gICAgICAgIGlmIG9wdC5oYXNDbGFzcyAnc2VsZWN0ZWQnXHJcbiAgICAgICAgICBkZXNlbGVjdCBvcHRcclxuXHJcbiAgICAgICAgZWxzZVxyXG4gICAgICAgICAgc2VsZWN0IHRydWUsIG9wdFxyXG5cclxuICAgICAgc2VhcmNoSGFuZGxlciA9IChlKSAtPlxyXG4gICAgICAgIGUuc3RvcFByb3BhZ2F0aW9uKClcclxuXHJcbiAgICAgICAgZXNjYXBlZFNlYXJjaFRlcm0gPSBuZXcgUmVnRXhwICQoQCkudmFsKCkucmVwbGFjZSgvW1xcLVxcW1xcXVxcL1xce1xcfVxcKFxcKVxcKlxcK1xcP1xcLlxcXFxcXF5cXCRcXHxdL2csIFwiXFxcXCQmXCIpLCAnaSdcclxuICAgICAgICBub01hdGNoaW5nT3B0aW9ucyA9IHRydWVcclxuXHJcbiAgICAgICAgIyBzaG93L2hpZGUgb3B0aW9uc1xyXG4gICAgICAgICQoJy5saXN0LWdyb3VwLWl0ZW0nLCBzZWxlY3RyQ29udGFpbmVyKS5lYWNoIChpbmRleCwgb3B0aW9uKSAtPlxyXG5cclxuICAgICAgICAgIHVubGVzcyAkKG9wdGlvbikudGV4dCgpLm1hdGNoKGVzY2FwZWRTZWFyY2hUZXJtKVxyXG4gICAgICAgICAgICAkKG9wdGlvbikuYWRkQ2xhc3MgJ2hpZGRlbidcclxuXHJcbiAgICAgICAgICBlbHNlXHJcbiAgICAgICAgICAgICQob3B0aW9uKS5yZW1vdmVDbGFzcyAnaGlkZGVuJ1xyXG4gICAgICAgICAgICBub01hdGNoaW5nT3B0aW9ucyA9IGZhbHNlXHJcblxyXG4gICAgICAgICAgcmV0dXJuICMgb2hoIGNvZmZlZXNjcmlwdC4uLlxyXG5cclxuICAgICAgICAjIHNob3cvaGlkZSBjbGVhciBzZWFyY2ggJ1gnXHJcbiAgICAgICAgJGNsZWFyU2VhcmNoWCA9ICQoJy5jbGVhci1zZWFyY2gnLCBzZWxlY3RyQ29udGFpbmVyKVxyXG5cclxuICAgICAgICBpZiAkKEApLnZhbCgpLmxlbmd0aCA+IDBcclxuICAgICAgICAgICRjbGVhclNlYXJjaFgucmVtb3ZlQ2xhc3MgJ2hpZGRlbidcclxuXHJcbiAgICAgICAgZWxzZVxyXG4gICAgICAgICAgJGNsZWFyU2VhcmNoWC5hZGRDbGFzcyAnaGlkZGVuJ1xyXG5cclxuICAgICAgICAjIHNob3cvaGlkZSAnTm8gb3B0aW9ucyBmb3VuZCcgbWVzc2FnZVxyXG4gICAgICAgICRub09wdGlvbnNGb3VuZE1lc3NhZ2UgPSAkKCcubm8tbWF0Y2hpbmctb3B0aW9ucycsIHNlbGVjdHJDb250YWluZXIpXHJcblxyXG4gICAgICAgIGlmIG5vTWF0Y2hpbmdPcHRpb25zXHJcbiAgICAgICAgICAkbm9PcHRpb25zRm91bmRNZXNzYWdlLnJlbW92ZUNsYXNzICdoaWRkZW4nXHJcblxyXG4gICAgICAgIGVsc2VcclxuICAgICAgICAgICRub09wdGlvbnNGb3VuZE1lc3NhZ2UuYWRkQ2xhc3MgJ2hpZGRlbidcclxuXHJcbiAgICAgIGNsZWFyU2VhcmNoSGFuZGxlciA9IChlKSAtPlxyXG4gICAgICAgICQoQCkuc2libGluZ3MoJ2lucHV0JykudmFsKCcnKS50cmlnZ2VyKCdjaGFuZ2UnKVxyXG5cclxuICAgICAgcmVzZXRPcHRzSGFuZGxlciA9IChlKSAtPlxyXG4gICAgICAgICMgZGVzZWxlY3QgYWxsIG9uIHNlbGVjdHIgYW5kIHNvdXJjZVxyXG4gICAgICAgIHNlbGVjdHJDb250YWluZXIuZmluZCgndWwgPiBsaScpLnJlbW92ZUNsYXNzKCdzZWxlY3RlZCcpXHJcbiAgICAgICAgJCgnb3B0aW9uJywgc291cmNlKS5wcm9wKCdzZWxlY3RlZCcsIGZhbHNlKVxyXG5cclxuICAgICAgICB0cmlnZ2VyQ2hhbmdlIHNvdXJjZVxyXG4gICAgICAgIHVwZGF0ZUZvb3RlcigpXHJcblxyXG4gICAgICBjdHJsS2V5RG93bkhhbmRsZXIgPSAoZSkgLT5cclxuICAgICAgICAkKCcubGlzdC1ncm91cCcsIHNlbGVjdHJDb250YWluZXIpLmFkZENsYXNzICdjdHJsLWtleScgaWYgZS5jdHJsS2V5XHJcblxyXG4gICAgICBjdHJsS2V5VXBIYW5kbGVyID0gKGUpIC0+XHJcbiAgICAgICAgJCgnLmxpc3QtZ3JvdXAnLCBzZWxlY3RyQ29udGFpbmVyKS5yZW1vdmVDbGFzcyAnY3RybC1rZXknIGlmIG5vdCBlLmN0cmxLZXlcclxuXHJcbiAgICAgICQoc2VsZWN0ckNvbnRhaW5lcikub24gJ2NsaWNrJywgICAgICAgICAgICAgICAnLmxpc3QtZ3JvdXAtaXRlbScsIGxpc3RJdGVtSGFuZGxlclxyXG4gICAgICAkKHNlbGVjdHJDb250YWluZXIpLm9uICdjbGljaycsICAgICAgICAgICAgICAgJy5hZGQtcmVtb3ZlJywgICAgICBhZGRSZW1vdmVIYW5kbGVyXHJcbiAgICAgICQoc2VsZWN0ckNvbnRhaW5lcikub24gJ2NsaWNrIGNoYW5nZSBrZXl1cCcsICAnLmZvcm0tY29udHJvbCcsICAgIHNlYXJjaEhhbmRsZXJcclxuICAgICAgJChzZWxlY3RyQ29udGFpbmVyKS5vbiAnY2xpY2snLCAgICAgICAgICAgICAgICcuY2xlYXItc2VhcmNoJywgICAgY2xlYXJTZWFyY2hIYW5kbGVyXHJcbiAgICAgICQoc2VsZWN0ckNvbnRhaW5lcikub24gJ2NsaWNrJywgICAgICAgICAgICAgICAnLnJlc2V0JywgICAgICAgICAgIHJlc2V0T3B0c0hhbmRsZXJcclxuICAgICAgJChkb2N1bWVudCkub24gICAgICAgICAna2V5ZG93bicsICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY3RybEtleURvd25IYW5kbGVyXHJcbiAgICAgICQoZG9jdW1lbnQpLm9uICAgICAgICAgJ2tleXVwJywgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGN0cmxLZXlVcEhhbmRsZXJcclxuXHJcbiAgICB0cmlnZ2VyQ2hhbmdlOiA9PlxyXG4gICAgICBAc291cmNlLnRyaWdnZXIgJ2NoYW5nZScsIFsnc2VsZWN0ckluaXRpYXRlZCddXHJcblxyXG4gICAgc2VsZWN0T3B0aW9uOiAobW9kaWZ5Q3VycmVudFNlbGVjdGlvbiwgb3B0KSA9PlxyXG4gICAgICAjIHByZXZlbnQgPm1heFNlbGVjdGlvblxyXG4gICAgICByZXR1cm4gaWYgQGFyZ3MubWF4U2VsZWN0aW9uIDw9ICQob3B0KS5zaWJsaW5ncygnLnNlbGVjdGVkJykubGVuZ3RoICYmIG1vZGlmeUN1cnJlbnRTZWxlY3Rpb25cclxuXHJcbiAgICAgICMgY2xlYXIgY3VycmVudCBzZWxlY3Rpb24gdW5sZXNzIENUUkwga2V5IHByZXNzZWRcclxuICAgICAgaWYgIW1vZGlmeUN1cnJlbnRTZWxlY3Rpb25cclxuXHJcbiAgICAgICAgJCgnb3B0aW9uJywgQHNvdXJjZSkucHJvcCgnc2VsZWN0ZWQnLCBmYWxzZSlcclxuXHJcbiAgICAgICAgZm9yIHNpYmxpbmcgaW4gJChvcHQpLnNpYmxpbmdzKClcclxuICAgICAgICAgICQoc2libGluZykucmVtb3ZlQ2xhc3MoJ3NlbGVjdGVkJylcclxuXHJcbiAgICAgICMgc2VsZWN0IHNlbGVjdHIgb3B0aW9uXHJcbiAgICAgICQob3B0KS5hZGRDbGFzcygnc2VsZWN0ZWQnKVxyXG5cclxuICAgICAgIyBzZWxlY3Qgc291cmNlIG9wdGlvblxyXG4gICAgICAkKFwib3B0aW9uW3ZhbHVlPScjeyQob3B0KS5kYXRhKCd2YWwnKX0nXVwiLCBAc291cmNlKS5wcm9wICdzZWxlY3RlZCcsIHRydWVcclxuXHJcbiAgICAgIEB1cGRhdGVGb290ZXIoKVxyXG4gICAgICBAdHJpZ2dlckNoYW5nZSgpXHJcblxyXG4gICAgZGVzZWxlY3RPcHRpb246IChvcHQpID0+XHJcbiAgICAgIEBzZWxlY3RyQ29udGFpbmVyLnJlbW92ZUNsYXNzKCdtYXgtc2VsZWN0aW9uLXJlYWNoZWQnKVxyXG5cclxuICAgICAgJChvcHQpLnJlbW92ZUNsYXNzKCdzZWxlY3RlZCcpXHJcbiAgICAgICQoXCJvcHRpb25bdmFsdWU9I3skKG9wdCkuZGF0YSgndmFsJyl9XVwiLCBAc291cmNlKS5wcm9wICdzZWxlY3RlZCcsIGZhbHNlXHJcblxyXG4gICAgICBAdXBkYXRlRm9vdGVyKClcclxuICAgICAgQHRyaWdnZXJDaGFuZ2UoKVxyXG5cclxuICAgIHVwZGF0ZUZvb3RlcjogPT5cclxuICAgICAgcmV0dXJuIGlmICFAbXVsdGlcclxuXHJcbiAgICAgIGNvdW50ID0gJCgnb3B0aW9uOnNlbGVjdGVkJywgQHNvdXJjZSkubGVuZ3RoXHJcbiAgICAgICQoJy5jdXJyZW50LXNlbGVjdGlvbicsIEBzZWxlY3RyQ29udGFpbmVyKS50ZXh0KGlmIGNvdW50ID4gMCB0aGVuIGNvdW50IGVsc2UgJycpXHJcblxyXG4gICAgICBpZiBjb3VudCA9PSBAYXJncy5tYXhTZWxlY3Rpb25cclxuICAgICAgICBAc2VsZWN0ckNvbnRhaW5lci5hZGRDbGFzcygnbWF4LXNlbGVjdGlvbi1yZWFjaGVkJylcclxuICAgICAgZWxzZVxyXG4gICAgICAgIEBzZWxlY3RyQ29udGFpbmVyLnJlbW92ZUNsYXNzKCdtYXgtc2VsZWN0aW9uLXJlYWNoZWQnKVxyXG5cclxuICAgICAgcmV0dXJuIGlmIEBhcmdzLmFsd2F5c1Nob3dGb290ZXJcclxuXHJcbiAgICAgICRmb290ZXIgPSAkKCcucGFuZWwtZm9vdGVyJywgQHNlbGVjdHJDb250YWluZXIpXHJcbiAgICAgIGlmIGNvdW50ID09IDBcclxuICAgICAgICAkZm9vdGVyLmFkZENsYXNzKCdoaWRkZW4nKVxyXG4gICAgICBlbHNlXHJcbiAgICAgICAgJGZvb3Rlci5yZW1vdmVDbGFzcygnaGlkZGVuJylcclxuXHJcbiAgJC5mbi5leHRlbmQgc2VsZWN0cjogKGFyZ3MpIC0+XHJcbiAgICBAZWFjaCAtPlxyXG4gICAgICAkZWwgPSAkIEBcclxuXHJcbiAgICAgIHJldHVybiBpZiAkZWwuZGF0YSAnc2VsZWN0ci1pbml0aWFsaXplZCdcclxuXHJcbiAgICAgIG5ldyBTZWxlY3RyICRlbCwgYXJnc1xyXG4gICAgICAkZWwuZGF0YSAnc2VsZWN0ci1pbml0aWFsaXplZCcsIHRydWVcblxuXG4vKiogV0VCUEFDSyBGT09URVIgKipcbiAqKiAuL3NyYy9zZWxlY3RyLmNvZmZlZVxuICoqLyJdLCJzb3VyY2VSb290IjoiIn0=");
+	var jQuery,
+	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+	
+	jQuery = __webpack_require__(1);
+	
+	if (!window.NO_STYLES) {
+	  __webpack_require__(2);
+	  if (window.POLYFILL_BOOTSTRAP_STYLES) {
+	    __webpack_require__(6);
+	  }
+	}
+	
+	(function($, window) {
+	  var Selectr;
+	  Selectr = (function() {
+	    Selectr.prototype.defaults = {
+	      title: 'Select Options',
+	      noMatchingOptionsText: 'No options found',
+	      placeholder: 'Search',
+	      resetText: 'Clear All',
+	      width: '300px',
+	      maxListHeight: '250px',
+	      tooltipBreakpoint: 25,
+	      maxSelection: Infinity,
+	      panelStyle: 'default',
+	      alwaysShowFooter: false
+	    };
+	
+	    function Selectr(source1, args1) {
+	      this.source = source1;
+	      this.args = args1;
+	      this.updateFooter = bind(this.updateFooter, this);
+	      this.deselectOption = bind(this.deselectOption, this);
+	      this.selectOption = bind(this.selectOption, this);
+	      this.triggerChange = bind(this.triggerChange, this);
+	      this.args = $.extend({}, this.defaults, this.args, this.source.data('selectr-opts'));
+	      this.multi = this.source.prop('multiple');
+	      this.createSelectr();
+	      this.monitorSource();
+	      this.selectrContainer.insertAfter(this.source);
+	      this.selectrContainer = $(this.source.next());
+	      this.bindEventListeners();
+	      this.source.hide();
+	    }
+	
+	    Selectr.prototype.createSelectr = function() {
+	      this.selectrContainer = this.createContainer();
+	      $('.list-group', this.selectrContainer).append(this.createOpts());
+	      return this.updateFooter();
+	    };
+	
+	    Selectr.prototype.createContainer = function() {
+	      return $(document.createElement('div')).addClass("selectr panel panel-" + this.args.panelStyle + " " + (this.multi ? 'multi' : void 0)).css('width', this.args.width).html("<div class='panel-heading " + (this.args.title === '' ? "no-title" : void 0) + "'> <h4 class='panel-title'> " + this.args.title + " </h4> </div> <div class='panel-body'> <input class='form-control' placeholder='" + this.args.placeholder + "'> <span class='clear-search hidden'>&times;</span> </div> <ul class='list-group' style='max-height: " + this.args.maxListHeight + "'> </ul> <div class='no-matching-options hidden'> <strong>" + this.args.noMatchingOptionsText + "</strong> </div> <div class='panel-footer " + (!this.multi && !this.args.alwaysShowFooter ? 'hidden' : void 0) + "'> <button class='reset btn btn-sm btn-default' type='button'> " + this.args.resetText + " </button> " + (this.multi ? "<span class='current-selection badge'></span>" : '') + " </div>");
+	    };
+	
+	    Selectr.prototype.createOpts = function() {
+	      var i, len, opt, ref, results;
+	      ref = $('option', this.source);
+	      results = [];
+	      for (i = 0, len = ref.length; i < len; i++) {
+	        opt = ref[i];
+	        results.push($(document.createElement('li')).addClass("list-group-item " + ($(opt).is(':selected') ? 'selected' : void 0)).data('val', $(opt).val()).append($(document.createElement('div')).addClass("color-code " + (!$(opt).data('selectr-color') ? 'no-color' : void 0)).css('background-color', $(opt).data('selectr-color'))).append($(document.createElement('div')).text($(opt).text()).addClass('option-name').attr({
+	          title: $(opt).text().length > this.args.tooltipBreakpoint ? $(opt).text() : ''
+	        })).append($(document.createElement('div')).html('&times').addClass("add-remove " + (!this.multi ? 'hidden' : void 0))));
+	      }
+	      return results;
+	    };
+	
+	    Selectr.prototype.monitorSource = function() {
+	      var _sync;
+	      _sync = (function(_this) {
+	        return function() {
+	          var updatedList;
+	          updatedList = $(document.createElement('ul')).addClass('list-group').css('max-height', _this.args.maxListHeight).append(_this.createOpts());
+	          $('.list-group', _this.selectrContainer).replaceWith(updatedList);
+	          return _this.updateFooter();
+	        };
+	      })(this);
+	
+	      /*
+	      Update selectr on source element 'change' event
+	      
+	      Ideally, this should handle added/removed opts, as well
+	      as a programatic changes to the selection, but many
+	      popular data-binding frameworks do not fire change events,
+	      so in that case, you will have to do so manually.
+	       */
+	      return this.source.on('change', function(e, selectrInitiated) {
+	        if (selectrInitiated !== 'selectrInitiated') {
+	          return _sync();
+	        }
+	      });
+	    };
+	
+	    Selectr.prototype.bindEventListeners = function() {
+	      var addRemoveHandler, clearSearchHandler, ctrlKeyDownHandler, ctrlKeyUpHandler, deselect, listItemHandler, multi, resetOptsHandler, searchHandler, select, selectrContainer, source, triggerChange, updateFooter;
+	      multi = this.multi;
+	      selectrContainer = this.selectrContainer;
+	      source = this.source;
+	      select = this.selectOption;
+	      deselect = this.deselectOption;
+	      triggerChange = this.triggerChange;
+	      updateFooter = this.updateFooter;
+	      listItemHandler = function(e) {
+	        var modifyCurrentSelection, ref;
+	        e.stopPropagation();
+	        if (((ref = e.originalEvent) != null ? ref.detail : void 0) === 2) {
+	          return;
+	        }
+	        modifyCurrentSelection = (e.ctrlKey || e.metaKey) && multi;
+	        if ($(this).hasClass('selected') && (modifyCurrentSelection || $(this).siblings('.selected').length === 0) && multi) {
+	          return deselect(this);
+	        } else {
+	          return select(modifyCurrentSelection, this);
+	        }
+	      };
+	      addRemoveHandler = function(e) {
+	        var opt;
+	        e.stopPropagation();
+	        if (e.originalEvent.detail && e.originalEvent.detail === 2) {
+	          return;
+	        }
+	        opt = $(e.target).parents('.list-group-item');
+	        if (opt.hasClass('selected')) {
+	          return deselect(opt);
+	        } else {
+	          return select(true, opt);
+	        }
+	      };
+	      searchHandler = function(e) {
+	        var $clearSearchX, $noOptionsFoundMessage, escapedSearchTerm, noMatchingOptions;
+	        e.stopPropagation();
+	        escapedSearchTerm = new RegExp($(this).val().replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i');
+	        noMatchingOptions = true;
+	        $('.list-group-item', selectrContainer).each(function(index, option) {
+	          if (!$(option).text().match(escapedSearchTerm)) {
+	            $(option).addClass('hidden');
+	          } else {
+	            $(option).removeClass('hidden');
+	            noMatchingOptions = false;
+	          }
+	        });
+	        $clearSearchX = $('.clear-search', selectrContainer);
+	        if ($(this).val().length > 0) {
+	          $clearSearchX.removeClass('hidden');
+	        } else {
+	          $clearSearchX.addClass('hidden');
+	        }
+	        $noOptionsFoundMessage = $('.no-matching-options', selectrContainer);
+	        if (noMatchingOptions) {
+	          return $noOptionsFoundMessage.removeClass('hidden');
+	        } else {
+	          return $noOptionsFoundMessage.addClass('hidden');
+	        }
+	      };
+	      clearSearchHandler = function(e) {
+	        return $(this).siblings('input').val('').trigger('change');
+	      };
+	      resetOptsHandler = function(e) {
+	        selectrContainer.find('ul > li').removeClass('selected');
+	        $('option', source).prop('selected', false);
+	        triggerChange(source);
+	        return updateFooter();
+	      };
+	      ctrlKeyDownHandler = function(e) {
+	        if (e.ctrlKey) {
+	          return $('.list-group', selectrContainer).addClass('ctrl-key');
+	        }
+	      };
+	      ctrlKeyUpHandler = function(e) {
+	        if (!e.ctrlKey) {
+	          return $('.list-group', selectrContainer).removeClass('ctrl-key');
+	        }
+	      };
+	      $(selectrContainer).on('click', '.list-group-item', listItemHandler);
+	      $(selectrContainer).on('click', '.add-remove', addRemoveHandler);
+	      $(selectrContainer).on('click change keyup', '.form-control', searchHandler);
+	      $(selectrContainer).on('click', '.clear-search', clearSearchHandler);
+	      $(selectrContainer).on('click', '.reset', resetOptsHandler);
+	      $(document).on('keydown', ctrlKeyDownHandler);
+	      return $(document).on('keyup', ctrlKeyUpHandler);
+	    };
+	
+	    Selectr.prototype.triggerChange = function() {
+	      return this.source.trigger('change', ['selectrInitiated']);
+	    };
+	
+	    Selectr.prototype.selectOption = function(modifyCurrentSelection, opt) {
+	      var i, len, ref, sibling;
+	      if (this.args.maxSelection <= $(opt).siblings('.selected').length && modifyCurrentSelection) {
+	        return;
+	      }
+	      if (!modifyCurrentSelection) {
+	        $('option', this.source).prop('selected', false);
+	        ref = $(opt).siblings();
+	        for (i = 0, len = ref.length; i < len; i++) {
+	          sibling = ref[i];
+	          $(sibling).removeClass('selected');
+	        }
+	      }
+	      $(opt).addClass('selected');
+	      $("option[value='" + ($(opt).data('val')) + "']", this.source).prop('selected', true);
+	      this.updateFooter();
+	      return this.triggerChange();
+	    };
+	
+	    Selectr.prototype.deselectOption = function(opt) {
+	      this.selectrContainer.removeClass('max-selection-reached');
+	      $(opt).removeClass('selected');
+	      $("option[value=" + ($(opt).data('val')) + "]", this.source).prop('selected', false);
+	      this.updateFooter();
+	      return this.triggerChange();
+	    };
+	
+	    Selectr.prototype.updateFooter = function() {
+	      var $footer, count;
+	      if (!this.multi) {
+	        return;
+	      }
+	      count = $('option:selected', this.source).length;
+	      $('.current-selection', this.selectrContainer).text(count > 0 ? count : '');
+	      if (count === this.args.maxSelection) {
+	        this.selectrContainer.addClass('max-selection-reached');
+	      } else {
+	        this.selectrContainer.removeClass('max-selection-reached');
+	      }
+	      if (this.args.alwaysShowFooter) {
+	        return;
+	      }
+	      $footer = $('.panel-footer', this.selectrContainer);
+	      if (count === 0) {
+	        return $footer.addClass('hidden');
+	      } else {
+	        return $footer.removeClass('hidden');
+	      }
+	    };
+	
+	    return Selectr;
+	
+	  })();
+	  return $.fn.extend({
+	    selectr: function(args) {
+	      return this.each(function() {
+	        var $el;
+	        $el = $(this);
+	        if ($el.data('selectr-initialized')) {
+	          return;
+	        }
+	        new Selectr($el, args);
+	        return $el.data('selectr-initialized', true);
+	      });
+	    }
+	  });
+	})(jQuery, this);
+
 
 /***/ },
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	eval("module.exports = __WEBPACK_EXTERNAL_MODULE_1__;//@ sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vZXh0ZXJuYWwge1wicm9vdFwiOlwiJFwiLFwiYW1kXCI6XCJqcXVlcnlcIixcImNvbW1vbmpzXCI6XCJqcXVlcnlcIixcImNvbW1vbmpzMlwiOlwianF1ZXJ5XCJ9PzU0NTIiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEiLCJmaWxlIjoiMS5qcyIsInNvdXJjZXNDb250ZW50IjpbIm1vZHVsZS5leHBvcnRzID0gX19XRUJQQUNLX0VYVEVSTkFMX01PRFVMRV8xX187XG5cblxuLyoqKioqKioqKioqKioqKioqXG4gKiogV0VCUEFDSyBGT09URVJcbiAqKiBleHRlcm5hbCB7XCJyb290XCI6XCIkXCIsXCJhbWRcIjpcImpxdWVyeVwiLFwiY29tbW9uanNcIjpcImpxdWVyeVwiLFwiY29tbW9uanMyXCI6XCJqcXVlcnlcIn1cbiAqKiBtb2R1bGUgaWQgPSAxXG4gKiogbW9kdWxlIGNodW5rcyA9IDBcbiAqKi8iXSwic291cmNlUm9vdCI6IiJ9");
+	module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
 
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("// style-loader: Adds some css to the DOM by adding a <style> tag\n\n// load the styles\nvar content = __webpack_require__(3);\nif(typeof content === 'string') content = [[module.id, content, '']];\n// add the styles to the DOM\nvar update = __webpack_require__(4)(content, {});\n// Hot Module Replacement\nif(false) {\n\t// When the styles change, update the <style> tags\n\tmodule.hot.accept(\"!!C:\\\\Users\\\\Casey Webb\\\\Documents\\\\GitHub\\\\selectr\\\\node_modules\\\\css-loader\\\\index.js!C:\\\\Users\\\\Casey Webb\\\\Documents\\\\GitHub\\\\selectr\\\\node_modules\\\\autoprefixer-loader\\\\index.js!C:\\\\Users\\\\Casey Webb\\\\Documents\\\\GitHub\\\\selectr\\\\node_modules\\\\sass-loader\\\\index.js?outputStyle=compressed!C:\\\\Users\\\\Casey Webb\\\\Documents\\\\GitHub\\\\selectr\\\\src\\\\selectr.scss\", function() {\n\t\tvar newContent = require(\"!!C:\\\\Users\\\\Casey Webb\\\\Documents\\\\GitHub\\\\selectr\\\\node_modules\\\\css-loader\\\\index.js!C:\\\\Users\\\\Casey Webb\\\\Documents\\\\GitHub\\\\selectr\\\\node_modules\\\\autoprefixer-loader\\\\index.js!C:\\\\Users\\\\Casey Webb\\\\Documents\\\\GitHub\\\\selectr\\\\node_modules\\\\sass-loader\\\\index.js?outputStyle=compressed!C:\\\\Users\\\\Casey Webb\\\\Documents\\\\GitHub\\\\selectr\\\\src\\\\selectr.scss\");\n\t\tif(typeof newContent === 'string') newContent = [[module.id, newContent, '']];\n\t\tupdate(newContent);\n\t});\n\t// When the module is disposed, remove the <style> tags\n\tmodule.hot.dispose(function() { update(); });\n}//@ sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9zcmMvc2VsZWN0ci5zY3NzP2UxOWUiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQSwrQ0FBZ0k7QUFDaEk7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxFQUFFO0FBQ0Y7QUFDQSxnQ0FBZ0MsVUFBVSxFQUFFO0FBQzVDIiwiZmlsZSI6IjIuanMiLCJzb3VyY2VzQ29udGVudCI6WyIvLyBzdHlsZS1sb2FkZXI6IEFkZHMgc29tZSBjc3MgdG8gdGhlIERPTSBieSBhZGRpbmcgYSA8c3R5bGU+IHRhZ1xuXG4vLyBsb2FkIHRoZSBzdHlsZXNcbnZhciBjb250ZW50ID0gcmVxdWlyZShcIiEhQzpcXFxcVXNlcnNcXFxcQ2FzZXkgV2ViYlxcXFxEb2N1bWVudHNcXFxcR2l0SHViXFxcXHNlbGVjdHJcXFxcbm9kZV9tb2R1bGVzXFxcXGNzcy1sb2FkZXJcXFxcaW5kZXguanMhQzpcXFxcVXNlcnNcXFxcQ2FzZXkgV2ViYlxcXFxEb2N1bWVudHNcXFxcR2l0SHViXFxcXHNlbGVjdHJcXFxcbm9kZV9tb2R1bGVzXFxcXGF1dG9wcmVmaXhlci1sb2FkZXJcXFxcaW5kZXguanMhQzpcXFxcVXNlcnNcXFxcQ2FzZXkgV2ViYlxcXFxEb2N1bWVudHNcXFxcR2l0SHViXFxcXHNlbGVjdHJcXFxcbm9kZV9tb2R1bGVzXFxcXHNhc3MtbG9hZGVyXFxcXGluZGV4LmpzP291dHB1dFN0eWxlPWNvbXByZXNzZWQhQzpcXFxcVXNlcnNcXFxcQ2FzZXkgV2ViYlxcXFxEb2N1bWVudHNcXFxcR2l0SHViXFxcXHNlbGVjdHJcXFxcc3JjXFxcXHNlbGVjdHIuc2Nzc1wiKTtcbmlmKHR5cGVvZiBjb250ZW50ID09PSAnc3RyaW5nJykgY29udGVudCA9IFtbbW9kdWxlLmlkLCBjb250ZW50LCAnJ11dO1xuLy8gYWRkIHRoZSBzdHlsZXMgdG8gdGhlIERPTVxudmFyIHVwZGF0ZSA9IHJlcXVpcmUoXCIhQzpcXFxcVXNlcnNcXFxcQ2FzZXkgV2ViYlxcXFxEb2N1bWVudHNcXFxcR2l0SHViXFxcXHNlbGVjdHJcXFxcbm9kZV9tb2R1bGVzXFxcXHN0eWxlLWxvYWRlclxcXFxhZGRTdHlsZXMuanNcIikoY29udGVudCwge30pO1xuLy8gSG90IE1vZHVsZSBSZXBsYWNlbWVudFxuaWYobW9kdWxlLmhvdCkge1xuXHQvLyBXaGVuIHRoZSBzdHlsZXMgY2hhbmdlLCB1cGRhdGUgdGhlIDxzdHlsZT4gdGFnc1xuXHRtb2R1bGUuaG90LmFjY2VwdChcIiEhQzpcXFxcVXNlcnNcXFxcQ2FzZXkgV2ViYlxcXFxEb2N1bWVudHNcXFxcR2l0SHViXFxcXHNlbGVjdHJcXFxcbm9kZV9tb2R1bGVzXFxcXGNzcy1sb2FkZXJcXFxcaW5kZXguanMhQzpcXFxcVXNlcnNcXFxcQ2FzZXkgV2ViYlxcXFxEb2N1bWVudHNcXFxcR2l0SHViXFxcXHNlbGVjdHJcXFxcbm9kZV9tb2R1bGVzXFxcXGF1dG9wcmVmaXhlci1sb2FkZXJcXFxcaW5kZXguanMhQzpcXFxcVXNlcnNcXFxcQ2FzZXkgV2ViYlxcXFxEb2N1bWVudHNcXFxcR2l0SHViXFxcXHNlbGVjdHJcXFxcbm9kZV9tb2R1bGVzXFxcXHNhc3MtbG9hZGVyXFxcXGluZGV4LmpzP291dHB1dFN0eWxlPWNvbXByZXNzZWQhQzpcXFxcVXNlcnNcXFxcQ2FzZXkgV2ViYlxcXFxEb2N1bWVudHNcXFxcR2l0SHViXFxcXHNlbGVjdHJcXFxcc3JjXFxcXHNlbGVjdHIuc2Nzc1wiLCBmdW5jdGlvbigpIHtcblx0XHR2YXIgbmV3Q29udGVudCA9IHJlcXVpcmUoXCIhIUM6XFxcXFVzZXJzXFxcXENhc2V5IFdlYmJcXFxcRG9jdW1lbnRzXFxcXEdpdEh1YlxcXFxzZWxlY3RyXFxcXG5vZGVfbW9kdWxlc1xcXFxjc3MtbG9hZGVyXFxcXGluZGV4LmpzIUM6XFxcXFVzZXJzXFxcXENhc2V5IFdlYmJcXFxcRG9jdW1lbnRzXFxcXEdpdEh1YlxcXFxzZWxlY3RyXFxcXG5vZGVfbW9kdWxlc1xcXFxhdXRvcHJlZml4ZXItbG9hZGVyXFxcXGluZGV4LmpzIUM6XFxcXFVzZXJzXFxcXENhc2V5IFdlYmJcXFxcRG9jdW1lbnRzXFxcXEdpdEh1YlxcXFxzZWxlY3RyXFxcXG5vZGVfbW9kdWxlc1xcXFxzYXNzLWxvYWRlclxcXFxpbmRleC5qcz9vdXRwdXRTdHlsZT1jb21wcmVzc2VkIUM6XFxcXFVzZXJzXFxcXENhc2V5IFdlYmJcXFxcRG9jdW1lbnRzXFxcXEdpdEh1YlxcXFxzZWxlY3RyXFxcXHNyY1xcXFxzZWxlY3RyLnNjc3NcIik7XG5cdFx0aWYodHlwZW9mIG5ld0NvbnRlbnQgPT09ICdzdHJpbmcnKSBuZXdDb250ZW50ID0gW1ttb2R1bGUuaWQsIG5ld0NvbnRlbnQsICcnXV07XG5cdFx0dXBkYXRlKG5ld0NvbnRlbnQpO1xuXHR9KTtcblx0Ly8gV2hlbiB0aGUgbW9kdWxlIGlzIGRpc3Bvc2VkLCByZW1vdmUgdGhlIDxzdHlsZT4gdGFnc1xuXHRtb2R1bGUuaG90LmRpc3Bvc2UoZnVuY3Rpb24oKSB7IHVwZGF0ZSgpOyB9KTtcbn1cblxuXG4vKioqKioqKioqKioqKioqKipcbiAqKiBXRUJQQUNLIEZPT1RFUlxuICoqIC4vc3JjL3NlbGVjdHIuc2Nzc1xuICoqIG1vZHVsZSBpZCA9IDJcbiAqKiBtb2R1bGUgY2h1bmtzID0gMFxuICoqLyJdLCJzb3VyY2VSb290IjoiIn0=");
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(3);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(5)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./../node_modules/sass-loader/index.js!./selectr.scss", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./../node_modules/sass-loader/index.js!./selectr.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
 
 /***/ },
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("exports = module.exports = __webpack_require__(5)();\nexports.push([module.id, \".selectr{margin:0;display:inline-block;max-width:100%;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.selectr *:not(input){-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.selectr .panel-heading{cursor:default}.selectr .panel-heading.no-title{padding:0;border-bottom:none}.selectr .panel-body{position:relative}.selectr input::-ms-clear{display:none;width:0;height:0}.selectr .clear-search{position:absolute;right:25px;top:12px;font-size:28px;font-weight:bold;color:#333;opacity:0.8;cursor:pointer}.selectr .clear-search:hover{opacity:1}.selectr .list-group{overflow-x:hidden;-ms-overflow-y:auto}.selectr .list-group-item{padding:0 !important;overflow:hidden;cursor:pointer}.selectr .list-group-item.selected{background-color:#4679bd;color:white;font-weight:700}.selectr .list-group-item.selected .add-remove{-webkit-transform:rotate(0deg);-ms-transform:rotate(0deg);transform:rotate(0deg)}.selectr.multi .list-group-item:hover .option-name{margin-right:50px;border-right:1px solid #ddd}.selectr.multi .list-group-item:hover .selected .option-name{border-right:1px solid white}.selectr.multi .list-group-item:hover .add-remove{display:block}.selectr .option-name{height:100%;padding:10px 15px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.selectr .color-code{width:20px;height:20px;margin:10px;margin-right:0;float:left;border-radius:5px}.selectr .color-code.no-color{width:0;height:0;margin:0}.selectr .add-remove{-webkit-transform:rotate(45deg);-ms-transform:rotate(45deg);transform:rotate(45deg);-webkit-transition:-webkit-transform 0.2s linear;transition:transform 0.2s linear;opacity:0.5;display:none;cursor:pointer;font-family:\\\"Helvetica Neue\\\", Helvetica, Arial, sans-serif;font-size:24px;font-weight:900;position:absolute;right:0px;top:0px;width:50px;padding:8px;line-height:24px;text-align:center;vertical-align:middle}.selectr .ctrl-key .add-remove,.selectr .add-remove:hover{opacity:0.8}.selectr .current-selection{float:right;margin-top:5px;cursor:default}.selectr.max-selection-reached li:not(.selected) .option-name{margin-right:0 !important;border-right:none !important}.selectr.max-selection-reached li:not(.selected) .add-remove{display:none !important}.selectr.max-selection-reached .current-selection{background-color:#d9534f}.selectr .no-matching-options{padding:10px;padding-top:0;text-align:center}\", \"\"]);//@ sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9zcmMvc2VsZWN0ci5zY3NzPzdlNDMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7QUFDQSxtQ0FBbUMsU0FBUyxxQkFBcUIsZUFBZSx5QkFBeUIsc0JBQXNCLHFCQUFxQixpQkFBaUIsc0JBQXNCLHlCQUF5QixzQkFBc0IscUJBQXFCLGlCQUFpQix3QkFBd0IsZUFBZSxpQ0FBaUMsVUFBVSxtQkFBbUIscUJBQXFCLGtCQUFrQiwwQkFBMEIsYUFBYSxRQUFRLFNBQVMsdUJBQXVCLGtCQUFrQixXQUFXLFNBQVMsZUFBZSxpQkFBaUIsV0FBVyxZQUFZLGVBQWUsNkJBQTZCLFVBQVUscUJBQXFCLGtCQUFrQixvQkFBb0IsMEJBQTBCLHFCQUFxQixnQkFBZ0IsZUFBZSxtQ0FBbUMseUJBQXlCLFlBQVksZ0JBQWdCLCtDQUErQywrQkFBK0IsMkJBQTJCLHVCQUF1QixtREFBbUQsa0JBQWtCLDRCQUE0Qiw2REFBNkQsNkJBQTZCLGtEQUFrRCxjQUFjLHNCQUFzQixZQUFZLGtCQUFrQix1QkFBdUIsbUJBQW1CLGdCQUFnQixxQkFBcUIsV0FBVyxZQUFZLFlBQVksZUFBZSxXQUFXLGtCQUFrQiw4QkFBOEIsUUFBUSxTQUFTLFNBQVMscUJBQXFCLGdDQUFnQyw0QkFBNEIsd0JBQXdCLGlEQUFpRCxpQ0FBaUMsWUFBWSxhQUFhLGVBQWUsNkRBQTZELGVBQWUsZ0JBQWdCLGtCQUFrQixVQUFVLFFBQVEsV0FBVyxZQUFZLGlCQUFpQixrQkFBa0Isc0JBQXNCLDBEQUEwRCxZQUFZLDRCQUE0QixZQUFZLGVBQWUsZUFBZSw4REFBOEQsMEJBQTBCLDZCQUE2Qiw2REFBNkQsd0JBQXdCLGtEQUFrRCx5QkFBeUIsOEJBQThCLGFBQWEsY0FBYyxrQkFBa0IiLCJmaWxlIjoiMy5qcyIsInNvdXJjZXNDb250ZW50IjpbImV4cG9ydHMgPSBtb2R1bGUuZXhwb3J0cyA9IHJlcXVpcmUoXCJDOlxcXFxVc2Vyc1xcXFxDYXNleSBXZWJiXFxcXERvY3VtZW50c1xcXFxHaXRIdWJcXFxcc2VsZWN0clxcXFxub2RlX21vZHVsZXNcXFxcY3NzLWxvYWRlclxcXFxjc3NUb1N0cmluZy5qc1wiKSgpO1xuZXhwb3J0cy5wdXNoKFttb2R1bGUuaWQsIFwiLnNlbGVjdHJ7bWFyZ2luOjA7ZGlzcGxheTppbmxpbmUtYmxvY2s7bWF4LXdpZHRoOjEwMCU7LXdlYmtpdC11c2VyLXNlbGVjdDpub25lOy1tb3otdXNlci1zZWxlY3Q6bm9uZTstbXMtdXNlci1zZWxlY3Q6bm9uZTt1c2VyLXNlbGVjdDpub25lfS5zZWxlY3RyICo6bm90KGlucHV0KXstd2Via2l0LXVzZXItc2VsZWN0Om5vbmU7LW1vei11c2VyLXNlbGVjdDpub25lOy1tcy11c2VyLXNlbGVjdDpub25lO3VzZXItc2VsZWN0Om5vbmV9LnNlbGVjdHIgLnBhbmVsLWhlYWRpbmd7Y3Vyc29yOmRlZmF1bHR9LnNlbGVjdHIgLnBhbmVsLWhlYWRpbmcubm8tdGl0bGV7cGFkZGluZzowO2JvcmRlci1ib3R0b206bm9uZX0uc2VsZWN0ciAucGFuZWwtYm9keXtwb3NpdGlvbjpyZWxhdGl2ZX0uc2VsZWN0ciBpbnB1dDo6LW1zLWNsZWFye2Rpc3BsYXk6bm9uZTt3aWR0aDowO2hlaWdodDowfS5zZWxlY3RyIC5jbGVhci1zZWFyY2h7cG9zaXRpb246YWJzb2x1dGU7cmlnaHQ6MjVweDt0b3A6MTJweDtmb250LXNpemU6MjhweDtmb250LXdlaWdodDpib2xkO2NvbG9yOiMzMzM7b3BhY2l0eTowLjg7Y3Vyc29yOnBvaW50ZXJ9LnNlbGVjdHIgLmNsZWFyLXNlYXJjaDpob3ZlcntvcGFjaXR5OjF9LnNlbGVjdHIgLmxpc3QtZ3JvdXB7b3ZlcmZsb3cteDpoaWRkZW47LW1zLW92ZXJmbG93LXk6YXV0b30uc2VsZWN0ciAubGlzdC1ncm91cC1pdGVte3BhZGRpbmc6MCAhaW1wb3J0YW50O292ZXJmbG93OmhpZGRlbjtjdXJzb3I6cG9pbnRlcn0uc2VsZWN0ciAubGlzdC1ncm91cC1pdGVtLnNlbGVjdGVke2JhY2tncm91bmQtY29sb3I6IzQ2NzliZDtjb2xvcjp3aGl0ZTtmb250LXdlaWdodDo3MDB9LnNlbGVjdHIgLmxpc3QtZ3JvdXAtaXRlbS5zZWxlY3RlZCAuYWRkLXJlbW92ZXstd2Via2l0LXRyYW5zZm9ybTpyb3RhdGUoMGRlZyk7LW1zLXRyYW5zZm9ybTpyb3RhdGUoMGRlZyk7dHJhbnNmb3JtOnJvdGF0ZSgwZGVnKX0uc2VsZWN0ci5tdWx0aSAubGlzdC1ncm91cC1pdGVtOmhvdmVyIC5vcHRpb24tbmFtZXttYXJnaW4tcmlnaHQ6NTBweDtib3JkZXItcmlnaHQ6MXB4IHNvbGlkICNkZGR9LnNlbGVjdHIubXVsdGkgLmxpc3QtZ3JvdXAtaXRlbTpob3ZlciAuc2VsZWN0ZWQgLm9wdGlvbi1uYW1le2JvcmRlci1yaWdodDoxcHggc29saWQgd2hpdGV9LnNlbGVjdHIubXVsdGkgLmxpc3QtZ3JvdXAtaXRlbTpob3ZlciAuYWRkLXJlbW92ZXtkaXNwbGF5OmJsb2NrfS5zZWxlY3RyIC5vcHRpb24tbmFtZXtoZWlnaHQ6MTAwJTtwYWRkaW5nOjEwcHggMTVweDt0ZXh0LW92ZXJmbG93OmVsbGlwc2lzO3doaXRlLXNwYWNlOm5vd3JhcDtvdmVyZmxvdzpoaWRkZW59LnNlbGVjdHIgLmNvbG9yLWNvZGV7d2lkdGg6MjBweDtoZWlnaHQ6MjBweDttYXJnaW46MTBweDttYXJnaW4tcmlnaHQ6MDtmbG9hdDpsZWZ0O2JvcmRlci1yYWRpdXM6NXB4fS5zZWxlY3RyIC5jb2xvci1jb2RlLm5vLWNvbG9ye3dpZHRoOjA7aGVpZ2h0OjA7bWFyZ2luOjB9LnNlbGVjdHIgLmFkZC1yZW1vdmV7LXdlYmtpdC10cmFuc2Zvcm06cm90YXRlKDQ1ZGVnKTstbXMtdHJhbnNmb3JtOnJvdGF0ZSg0NWRlZyk7dHJhbnNmb3JtOnJvdGF0ZSg0NWRlZyk7LXdlYmtpdC10cmFuc2l0aW9uOi13ZWJraXQtdHJhbnNmb3JtIDAuMnMgbGluZWFyO3RyYW5zaXRpb246dHJhbnNmb3JtIDAuMnMgbGluZWFyO29wYWNpdHk6MC41O2Rpc3BsYXk6bm9uZTtjdXJzb3I6cG9pbnRlcjtmb250LWZhbWlseTpcXFwiSGVsdmV0aWNhIE5ldWVcXFwiLCBIZWx2ZXRpY2EsIEFyaWFsLCBzYW5zLXNlcmlmO2ZvbnQtc2l6ZToyNHB4O2ZvbnQtd2VpZ2h0OjkwMDtwb3NpdGlvbjphYnNvbHV0ZTtyaWdodDowcHg7dG9wOjBweDt3aWR0aDo1MHB4O3BhZGRpbmc6OHB4O2xpbmUtaGVpZ2h0OjI0cHg7dGV4dC1hbGlnbjpjZW50ZXI7dmVydGljYWwtYWxpZ246bWlkZGxlfS5zZWxlY3RyIC5jdHJsLWtleSAuYWRkLXJlbW92ZSwuc2VsZWN0ciAuYWRkLXJlbW92ZTpob3ZlcntvcGFjaXR5OjAuOH0uc2VsZWN0ciAuY3VycmVudC1zZWxlY3Rpb257ZmxvYXQ6cmlnaHQ7bWFyZ2luLXRvcDo1cHg7Y3Vyc29yOmRlZmF1bHR9LnNlbGVjdHIubWF4LXNlbGVjdGlvbi1yZWFjaGVkIGxpOm5vdCguc2VsZWN0ZWQpIC5vcHRpb24tbmFtZXttYXJnaW4tcmlnaHQ6MCAhaW1wb3J0YW50O2JvcmRlci1yaWdodDpub25lICFpbXBvcnRhbnR9LnNlbGVjdHIubWF4LXNlbGVjdGlvbi1yZWFjaGVkIGxpOm5vdCguc2VsZWN0ZWQpIC5hZGQtcmVtb3Zle2Rpc3BsYXk6bm9uZSAhaW1wb3J0YW50fS5zZWxlY3RyLm1heC1zZWxlY3Rpb24tcmVhY2hlZCAuY3VycmVudC1zZWxlY3Rpb257YmFja2dyb3VuZC1jb2xvcjojZDk1MzRmfS5zZWxlY3RyIC5uby1tYXRjaGluZy1vcHRpb25ze3BhZGRpbmc6MTBweDtwYWRkaW5nLXRvcDowO3RleHQtYWxpZ246Y2VudGVyfVwiLCBcIlwiXSk7XG5cblxuLyoqKioqKioqKioqKioqKioqXG4gKiogV0VCUEFDSyBGT09URVJcbiAqKiAuL34vY3NzLWxvYWRlciEuL34vYXV0b3ByZWZpeGVyLWxvYWRlciEuL34vc2Fzcy1sb2FkZXI/b3V0cHV0U3R5bGU9Y29tcHJlc3NlZCEuL3NyYy9zZWxlY3RyLnNjc3NcbiAqKiBtb2R1bGUgaWQgPSAzXG4gKiogbW9kdWxlIGNodW5rcyA9IDBcbiAqKi8iXSwic291cmNlUm9vdCI6IiJ9");
+	exports = module.exports = __webpack_require__(4)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, ".selectr {\n  margin: 0;\n  display: inline-block;\n  max-width: 100%;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none; }\n  .selectr *:not(input) {\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none; }\n  .selectr .panel-heading {\n    cursor: default; }\n    .selectr .panel-heading.no-title {\n      padding: 0;\n      border-bottom: none; }\n  .selectr .panel-body {\n    position: relative; }\n  .selectr input::-ms-clear {\n    display: none;\n    width: 0;\n    height: 0; }\n  .selectr .clear-search {\n    position: absolute;\n    right: 25px;\n    top: 12px;\n    font-size: 28px;\n    font-weight: bold;\n    color: #333;\n    opacity: 0.8;\n    cursor: pointer; }\n    .selectr .clear-search:hover {\n      opacity: 1; }\n  .selectr .list-group {\n    overflow-x: hidden;\n    -ms-overflow-y: auto; }\n  .selectr .list-group-item {\n    padding: 0 !important;\n    overflow: hidden;\n    cursor: pointer; }\n    .selectr .list-group-item.selected {\n      background-color: #4679bd;\n      color: white;\n      font-weight: 700; }\n      .selectr .list-group-item.selected .add-remove {\n        -webkit-transform: rotate(0deg);\n                transform: rotate(0deg); }\n  .selectr.multi .list-group-item:hover .option-name {\n    margin-right: 50px;\n    border-right: 1px solid #ddd; }\n  .selectr.multi .list-group-item:hover .selected .option-name {\n    border-right: 1px solid white; }\n  .selectr.multi .list-group-item:hover .add-remove {\n    display: block; }\n  .selectr .option-name {\n    height: 100%;\n    padding: 10px 15px;\n    text-overflow: ellipsis;\n    white-space: nowrap;\n    overflow: hidden; }\n  .selectr .color-code {\n    width: 20px;\n    height: 20px;\n    margin: 10px;\n    margin-right: 0;\n    float: left;\n    border-radius: 5px; }\n    .selectr .color-code.no-color {\n      width: 0;\n      height: 0;\n      margin: 0; }\n  .selectr .add-remove {\n    -webkit-transform: rotate(45deg);\n            transform: rotate(45deg);\n    -webkit-transition: -webkit-transform 0.2s linear;\n    transition: -webkit-transform 0.2s linear;\n    transition: transform 0.2s linear;\n    transition: transform 0.2s linear, -webkit-transform 0.2s linear;\n    opacity: 0.5;\n    display: none;\n    cursor: pointer;\n    font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n    font-size: 24px;\n    font-weight: 900;\n    position: absolute;\n    right: 0px;\n    top: 0px;\n    width: 50px;\n    padding: 8px;\n    line-height: 24px;\n    text-align: center;\n    vertical-align: middle; }\n  .selectr .ctrl-key .add-remove, .selectr .add-remove:hover {\n    opacity: 0.8; }\n  .selectr .current-selection {\n    float: right;\n    margin-top: 5px;\n    cursor: default; }\n  .selectr.max-selection-reached li:not(.selected) .option-name {\n    margin-right: 0 !important;\n    border-right: none !important; }\n  .selectr.max-selection-reached li:not(.selected) .add-remove {\n    display: none !important; }\n  .selectr.max-selection-reached .current-selection {\n    background-color: #d9534f; }\n  .selectr .no-matching-options {\n    padding: 10px;\n    padding-top: 0;\n    text-align: center; }\n", ""]);
+	
+	// exports
+
 
 /***/ },
 /* 4 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	eval("/*\r\n\tMIT License http://www.opensource.org/licenses/mit-license.php\r\n\tAuthor Tobias Koppers @sokra\r\n*/\r\nvar stylesInDom = {},\r\n\tmemoize = function(fn) {\r\n\t\tvar memo;\r\n\t\treturn function () {\r\n\t\t\tif (typeof memo === \"undefined\") memo = fn.apply(this, arguments);\r\n\t\t\treturn memo;\r\n\t\t};\r\n\t},\r\n\tisIE9 = memoize(function() {\r\n\t\treturn /msie 9\\b/.test(window.navigator.userAgent.toLowerCase());\r\n\t}),\r\n\tgetHeadElement = memoize(function () {\r\n\t\treturn document.head || document.getElementsByTagName(\"head\")[0];\r\n\t}),\r\n\tsingletonElement = null,\r\n\tsingletonCounter = 0;\r\n\r\nmodule.exports = function(list, options) {\r\n\tif(true) {\r\n\t\tif(typeof document !== \"object\") throw new Error(\"The style-loader cannot be used in a non-browser environment\");\r\n\t}\r\n\r\n\toptions = options || {};\r\n\t// Force single-tag solution on IE9, which has a hard limit on the # of <style>\r\n\t// tags it will allow on a page\r\n\tif (typeof options.singleton === \"undefined\") options.singleton = isIE9();\r\n\r\n\tvar styles = listToStyles(list);\r\n\taddStylesToDom(styles, options);\r\n\r\n\treturn function update(newList) {\r\n\t\tvar mayRemove = [];\r\n\t\tfor(var i = 0; i < styles.length; i++) {\r\n\t\t\tvar item = styles[i];\r\n\t\t\tvar domStyle = stylesInDom[item.id];\r\n\t\t\tdomStyle.refs--;\r\n\t\t\tmayRemove.push(domStyle);\r\n\t\t}\r\n\t\tif(newList) {\r\n\t\t\tvar newStyles = listToStyles(newList);\r\n\t\t\taddStylesToDom(newStyles, options);\r\n\t\t}\r\n\t\tfor(var i = 0; i < mayRemove.length; i++) {\r\n\t\t\tvar domStyle = mayRemove[i];\r\n\t\t\tif(domStyle.refs === 0) {\r\n\t\t\t\tfor(var j = 0; j < domStyle.parts.length; j++)\r\n\t\t\t\t\tdomStyle.parts[j]();\r\n\t\t\t\tdelete stylesInDom[domStyle.id];\r\n\t\t\t}\r\n\t\t}\r\n\t};\r\n}\r\n\r\nfunction addStylesToDom(styles, options) {\r\n\tfor(var i = 0; i < styles.length; i++) {\r\n\t\tvar item = styles[i];\r\n\t\tvar domStyle = stylesInDom[item.id];\r\n\t\tif(domStyle) {\r\n\t\t\tdomStyle.refs++;\r\n\t\t\tfor(var j = 0; j < domStyle.parts.length; j++) {\r\n\t\t\t\tdomStyle.parts[j](item.parts[j]);\r\n\t\t\t}\r\n\t\t\tfor(; j < item.parts.length; j++) {\r\n\t\t\t\tdomStyle.parts.push(addStyle(item.parts[j], options));\r\n\t\t\t}\r\n\t\t} else {\r\n\t\t\tvar parts = [];\r\n\t\t\tfor(var j = 0; j < item.parts.length; j++) {\r\n\t\t\t\tparts.push(addStyle(item.parts[j], options));\r\n\t\t\t}\r\n\t\t\tstylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};\r\n\t\t}\r\n\t}\r\n}\r\n\r\nfunction listToStyles(list) {\r\n\tvar styles = [];\r\n\tvar newStyles = {};\r\n\tfor(var i = 0; i < list.length; i++) {\r\n\t\tvar item = list[i];\r\n\t\tvar id = item[0];\r\n\t\tvar css = item[1];\r\n\t\tvar media = item[2];\r\n\t\tvar sourceMap = item[3];\r\n\t\tvar part = {css: css, media: media, sourceMap: sourceMap};\r\n\t\tif(!newStyles[id])\r\n\t\t\tstyles.push(newStyles[id] = {id: id, parts: [part]});\r\n\t\telse\r\n\t\t\tnewStyles[id].parts.push(part);\r\n\t}\r\n\treturn styles;\r\n}\r\n\r\nfunction createStyleElement() {\r\n\tvar styleElement = document.createElement(\"style\");\r\n\tvar head = getHeadElement();\r\n\tstyleElement.type = \"text/css\";\r\n\thead.appendChild(styleElement);\r\n\treturn styleElement;\r\n}\r\n\r\nfunction addStyle(obj, options) {\r\n\tvar styleElement, update, remove;\r\n\r\n\tif (options.singleton) {\r\n\t\tvar styleIndex = singletonCounter++;\r\n\t\tstyleElement = singletonElement || (singletonElement = createStyleElement());\r\n\t\tupdate = applyToSingletonTag.bind(null, styleElement, styleIndex, false);\r\n\t\tremove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);\r\n\t} else {\r\n\t\tstyleElement = createStyleElement();\r\n\t\tupdate = applyToTag.bind(null, styleElement);\r\n\t\tremove = function () {\r\n\t\t\tstyleElement.parentNode.removeChild(styleElement);\r\n\t\t};\r\n\t}\r\n\r\n\tupdate(obj);\r\n\r\n\treturn function updateStyle(newObj) {\r\n\t\tif(newObj) {\r\n\t\t\tif(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)\r\n\t\t\t\treturn;\r\n\t\t\tupdate(obj = newObj);\r\n\t\t} else {\r\n\t\t\tremove();\r\n\t\t}\r\n\t};\r\n}\r\n\r\nfunction replaceText(source, id, replacement) {\r\n\tvar boundaries = [\"/** >>\" + id + \" **/\", \"/** \" + id + \"<< **/\"];\r\n\tvar start = source.lastIndexOf(boundaries[0]);\r\n\tvar wrappedReplacement = replacement\r\n\t\t? (boundaries[0] + replacement + boundaries[1])\r\n\t\t: \"\";\r\n\tif (source.lastIndexOf(boundaries[0]) >= 0) {\r\n\t\tvar end = source.lastIndexOf(boundaries[1]) + boundaries[1].length;\r\n\t\treturn source.slice(0, start) + wrappedReplacement + source.slice(end);\r\n\t} else {\r\n\t\treturn source + wrappedReplacement;\r\n\t}\r\n}\r\n\r\nfunction applyToSingletonTag(styleElement, index, remove, obj) {\r\n\tvar css = remove ? \"\" : obj.css;\r\n\r\n\tif(styleElement.styleSheet) {\r\n\t\tstyleElement.styleSheet.cssText = replaceText(styleElement.styleSheet.cssText, index, css);\r\n\t} else {\r\n\t\tvar cssNode = document.createTextNode(css);\r\n\t\tvar childNodes = styleElement.childNodes;\r\n\t\tif (childNodes[index]) styleElement.removeChild(childNodes[index]);\r\n\t\tif (childNodes.length) {\r\n\t\t\tstyleElement.insertBefore(cssNode, childNodes[index]);\r\n\t\t} else {\r\n\t\t\tstyleElement.appendChild(cssNode);\r\n\t\t}\r\n\t}\r\n}\r\n\r\nfunction applyToTag(styleElement, obj) {\r\n\tvar css = obj.css;\r\n\tvar media = obj.media;\r\n\tvar sourceMap = obj.sourceMap;\r\n\r\n\tif(sourceMap && typeof btoa === \"function\") {\r\n\t\ttry {\r\n\t\t\tcss += \"\\n/*# sourceMappingURL=data:application/json;base64,\" + btoa(JSON.stringify(sourceMap)) + \" */\";\r\n\t\t\tcss = \"@import url(\\\"data:text/css;base64,\" + btoa(css) + \"\\\")\";\r\n\t\t} catch(e) {}\r\n\t}\r\n\r\n\tif(media) {\r\n\t\tstyleElement.setAttribute(\"media\", media)\r\n\t}\r\n\r\n\tif(styleElement.styleSheet) {\r\n\t\tstyleElement.styleSheet.cssText = css;\r\n\t} else {\r\n\t\twhile(styleElement.firstChild) {\r\n\t\t\tstyleElement.removeChild(styleElement.firstChild);\r\n\t\t}\r\n\t\tstyleElement.appendChild(document.createTextNode(css));\r\n\t}\r\n}\r\n//@ sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9+L3N0eWxlLWxvYWRlci9hZGRTdHlsZXMuanM/Yjk4MCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLG9CQUFvQjtBQUNwQjtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxFQUFFO0FBQ0Y7QUFDQTtBQUNBLEVBQUU7QUFDRjtBQUNBO0FBQ0EsRUFBRTtBQUNGO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTs7QUFFQTtBQUNBO0FBQ0EsZ0JBQWdCLG1CQUFtQjtBQUNuQztBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxnQkFBZ0Isc0JBQXNCO0FBQ3RDO0FBQ0E7QUFDQSxrQkFBa0IsMkJBQTJCO0FBQzdDO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBLGVBQWUsbUJBQW1CO0FBQ2xDO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsaUJBQWlCLDJCQUEyQjtBQUM1QztBQUNBO0FBQ0EsUUFBUSx1QkFBdUI7QUFDL0I7QUFDQTtBQUNBLEdBQUc7QUFDSDtBQUNBLGlCQUFpQix1QkFBdUI7QUFDeEM7QUFDQTtBQUNBLDJCQUEyQjtBQUMzQjtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0EsZUFBZSxpQkFBaUI7QUFDaEM7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLGNBQWM7QUFDZDtBQUNBLGdDQUFnQyxzQkFBc0I7QUFDdEQ7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxFQUFFO0FBQ0Y7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBOztBQUVBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxHQUFHO0FBQ0g7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsRUFBRTtBQUNGO0FBQ0E7QUFDQTs7QUFFQTtBQUNBOztBQUVBO0FBQ0E7QUFDQSxFQUFFO0FBQ0Y7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLEdBQUc7QUFDSDtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0Esd0RBQXdEO0FBQ3hELHNDQUFzQztBQUN0QyxHQUFHO0FBQ0g7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQSxFQUFFO0FBQ0Y7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBIiwiZmlsZSI6IjQuanMiLCJzb3VyY2VzQ29udGVudCI6WyIvKlxyXG5cdE1JVCBMaWNlbnNlIGh0dHA6Ly93d3cub3BlbnNvdXJjZS5vcmcvbGljZW5zZXMvbWl0LWxpY2Vuc2UucGhwXHJcblx0QXV0aG9yIFRvYmlhcyBLb3BwZXJzIEBzb2tyYVxyXG4qL1xyXG52YXIgc3R5bGVzSW5Eb20gPSB7fSxcclxuXHRtZW1vaXplID0gZnVuY3Rpb24oZm4pIHtcclxuXHRcdHZhciBtZW1vO1xyXG5cdFx0cmV0dXJuIGZ1bmN0aW9uICgpIHtcclxuXHRcdFx0aWYgKHR5cGVvZiBtZW1vID09PSBcInVuZGVmaW5lZFwiKSBtZW1vID0gZm4uYXBwbHkodGhpcywgYXJndW1lbnRzKTtcclxuXHRcdFx0cmV0dXJuIG1lbW87XHJcblx0XHR9O1xyXG5cdH0sXHJcblx0aXNJRTkgPSBtZW1vaXplKGZ1bmN0aW9uKCkge1xyXG5cdFx0cmV0dXJuIC9tc2llIDlcXGIvLnRlc3Qod2luZG93Lm5hdmlnYXRvci51c2VyQWdlbnQudG9Mb3dlckNhc2UoKSk7XHJcblx0fSksXHJcblx0Z2V0SGVhZEVsZW1lbnQgPSBtZW1vaXplKGZ1bmN0aW9uICgpIHtcclxuXHRcdHJldHVybiBkb2N1bWVudC5oZWFkIHx8IGRvY3VtZW50LmdldEVsZW1lbnRzQnlUYWdOYW1lKFwiaGVhZFwiKVswXTtcclxuXHR9KSxcclxuXHRzaW5nbGV0b25FbGVtZW50ID0gbnVsbCxcclxuXHRzaW5nbGV0b25Db3VudGVyID0gMDtcclxuXHJcbm1vZHVsZS5leHBvcnRzID0gZnVuY3Rpb24obGlzdCwgb3B0aW9ucykge1xyXG5cdGlmKHR5cGVvZiBERUJVRyAhPT0gXCJ1bmRlZmluZWRcIiAmJiBERUJVRykge1xyXG5cdFx0aWYodHlwZW9mIGRvY3VtZW50ICE9PSBcIm9iamVjdFwiKSB0aHJvdyBuZXcgRXJyb3IoXCJUaGUgc3R5bGUtbG9hZGVyIGNhbm5vdCBiZSB1c2VkIGluIGEgbm9uLWJyb3dzZXIgZW52aXJvbm1lbnRcIik7XHJcblx0fVxyXG5cclxuXHRvcHRpb25zID0gb3B0aW9ucyB8fCB7fTtcclxuXHQvLyBGb3JjZSBzaW5nbGUtdGFnIHNvbHV0aW9uIG9uIElFOSwgd2hpY2ggaGFzIGEgaGFyZCBsaW1pdCBvbiB0aGUgIyBvZiA8c3R5bGU+XHJcblx0Ly8gdGFncyBpdCB3aWxsIGFsbG93IG9uIGEgcGFnZVxyXG5cdGlmICh0eXBlb2Ygb3B0aW9ucy5zaW5nbGV0b24gPT09IFwidW5kZWZpbmVkXCIpIG9wdGlvbnMuc2luZ2xldG9uID0gaXNJRTkoKTtcclxuXHJcblx0dmFyIHN0eWxlcyA9IGxpc3RUb1N0eWxlcyhsaXN0KTtcclxuXHRhZGRTdHlsZXNUb0RvbShzdHlsZXMsIG9wdGlvbnMpO1xyXG5cclxuXHRyZXR1cm4gZnVuY3Rpb24gdXBkYXRlKG5ld0xpc3QpIHtcclxuXHRcdHZhciBtYXlSZW1vdmUgPSBbXTtcclxuXHRcdGZvcih2YXIgaSA9IDA7IGkgPCBzdHlsZXMubGVuZ3RoOyBpKyspIHtcclxuXHRcdFx0dmFyIGl0ZW0gPSBzdHlsZXNbaV07XHJcblx0XHRcdHZhciBkb21TdHlsZSA9IHN0eWxlc0luRG9tW2l0ZW0uaWRdO1xyXG5cdFx0XHRkb21TdHlsZS5yZWZzLS07XHJcblx0XHRcdG1heVJlbW92ZS5wdXNoKGRvbVN0eWxlKTtcclxuXHRcdH1cclxuXHRcdGlmKG5ld0xpc3QpIHtcclxuXHRcdFx0dmFyIG5ld1N0eWxlcyA9IGxpc3RUb1N0eWxlcyhuZXdMaXN0KTtcclxuXHRcdFx0YWRkU3R5bGVzVG9Eb20obmV3U3R5bGVzLCBvcHRpb25zKTtcclxuXHRcdH1cclxuXHRcdGZvcih2YXIgaSA9IDA7IGkgPCBtYXlSZW1vdmUubGVuZ3RoOyBpKyspIHtcclxuXHRcdFx0dmFyIGRvbVN0eWxlID0gbWF5UmVtb3ZlW2ldO1xyXG5cdFx0XHRpZihkb21TdHlsZS5yZWZzID09PSAwKSB7XHJcblx0XHRcdFx0Zm9yKHZhciBqID0gMDsgaiA8IGRvbVN0eWxlLnBhcnRzLmxlbmd0aDsgaisrKVxyXG5cdFx0XHRcdFx0ZG9tU3R5bGUucGFydHNbal0oKTtcclxuXHRcdFx0XHRkZWxldGUgc3R5bGVzSW5Eb21bZG9tU3R5bGUuaWRdO1xyXG5cdFx0XHR9XHJcblx0XHR9XHJcblx0fTtcclxufVxyXG5cclxuZnVuY3Rpb24gYWRkU3R5bGVzVG9Eb20oc3R5bGVzLCBvcHRpb25zKSB7XHJcblx0Zm9yKHZhciBpID0gMDsgaSA8IHN0eWxlcy5sZW5ndGg7IGkrKykge1xyXG5cdFx0dmFyIGl0ZW0gPSBzdHlsZXNbaV07XHJcblx0XHR2YXIgZG9tU3R5bGUgPSBzdHlsZXNJbkRvbVtpdGVtLmlkXTtcclxuXHRcdGlmKGRvbVN0eWxlKSB7XHJcblx0XHRcdGRvbVN0eWxlLnJlZnMrKztcclxuXHRcdFx0Zm9yKHZhciBqID0gMDsgaiA8IGRvbVN0eWxlLnBhcnRzLmxlbmd0aDsgaisrKSB7XHJcblx0XHRcdFx0ZG9tU3R5bGUucGFydHNbal0oaXRlbS5wYXJ0c1tqXSk7XHJcblx0XHRcdH1cclxuXHRcdFx0Zm9yKDsgaiA8IGl0ZW0ucGFydHMubGVuZ3RoOyBqKyspIHtcclxuXHRcdFx0XHRkb21TdHlsZS5wYXJ0cy5wdXNoKGFkZFN0eWxlKGl0ZW0ucGFydHNbal0sIG9wdGlvbnMpKTtcclxuXHRcdFx0fVxyXG5cdFx0fSBlbHNlIHtcclxuXHRcdFx0dmFyIHBhcnRzID0gW107XHJcblx0XHRcdGZvcih2YXIgaiA9IDA7IGogPCBpdGVtLnBhcnRzLmxlbmd0aDsgaisrKSB7XHJcblx0XHRcdFx0cGFydHMucHVzaChhZGRTdHlsZShpdGVtLnBhcnRzW2pdLCBvcHRpb25zKSk7XHJcblx0XHRcdH1cclxuXHRcdFx0c3R5bGVzSW5Eb21baXRlbS5pZF0gPSB7aWQ6IGl0ZW0uaWQsIHJlZnM6IDEsIHBhcnRzOiBwYXJ0c307XHJcblx0XHR9XHJcblx0fVxyXG59XHJcblxyXG5mdW5jdGlvbiBsaXN0VG9TdHlsZXMobGlzdCkge1xyXG5cdHZhciBzdHlsZXMgPSBbXTtcclxuXHR2YXIgbmV3U3R5bGVzID0ge307XHJcblx0Zm9yKHZhciBpID0gMDsgaSA8IGxpc3QubGVuZ3RoOyBpKyspIHtcclxuXHRcdHZhciBpdGVtID0gbGlzdFtpXTtcclxuXHRcdHZhciBpZCA9IGl0ZW1bMF07XHJcblx0XHR2YXIgY3NzID0gaXRlbVsxXTtcclxuXHRcdHZhciBtZWRpYSA9IGl0ZW1bMl07XHJcblx0XHR2YXIgc291cmNlTWFwID0gaXRlbVszXTtcclxuXHRcdHZhciBwYXJ0ID0ge2NzczogY3NzLCBtZWRpYTogbWVkaWEsIHNvdXJjZU1hcDogc291cmNlTWFwfTtcclxuXHRcdGlmKCFuZXdTdHlsZXNbaWRdKVxyXG5cdFx0XHRzdHlsZXMucHVzaChuZXdTdHlsZXNbaWRdID0ge2lkOiBpZCwgcGFydHM6IFtwYXJ0XX0pO1xyXG5cdFx0ZWxzZVxyXG5cdFx0XHRuZXdTdHlsZXNbaWRdLnBhcnRzLnB1c2gocGFydCk7XHJcblx0fVxyXG5cdHJldHVybiBzdHlsZXM7XHJcbn1cclxuXHJcbmZ1bmN0aW9uIGNyZWF0ZVN0eWxlRWxlbWVudCgpIHtcclxuXHR2YXIgc3R5bGVFbGVtZW50ID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcInN0eWxlXCIpO1xyXG5cdHZhciBoZWFkID0gZ2V0SGVhZEVsZW1lbnQoKTtcclxuXHRzdHlsZUVsZW1lbnQudHlwZSA9IFwidGV4dC9jc3NcIjtcclxuXHRoZWFkLmFwcGVuZENoaWxkKHN0eWxlRWxlbWVudCk7XHJcblx0cmV0dXJuIHN0eWxlRWxlbWVudDtcclxufVxyXG5cclxuZnVuY3Rpb24gYWRkU3R5bGUob2JqLCBvcHRpb25zKSB7XHJcblx0dmFyIHN0eWxlRWxlbWVudCwgdXBkYXRlLCByZW1vdmU7XHJcblxyXG5cdGlmIChvcHRpb25zLnNpbmdsZXRvbikge1xyXG5cdFx0dmFyIHN0eWxlSW5kZXggPSBzaW5nbGV0b25Db3VudGVyKys7XHJcblx0XHRzdHlsZUVsZW1lbnQgPSBzaW5nbGV0b25FbGVtZW50IHx8IChzaW5nbGV0b25FbGVtZW50ID0gY3JlYXRlU3R5bGVFbGVtZW50KCkpO1xyXG5cdFx0dXBkYXRlID0gYXBwbHlUb1NpbmdsZXRvblRhZy5iaW5kKG51bGwsIHN0eWxlRWxlbWVudCwgc3R5bGVJbmRleCwgZmFsc2UpO1xyXG5cdFx0cmVtb3ZlID0gYXBwbHlUb1NpbmdsZXRvblRhZy5iaW5kKG51bGwsIHN0eWxlRWxlbWVudCwgc3R5bGVJbmRleCwgdHJ1ZSk7XHJcblx0fSBlbHNlIHtcclxuXHRcdHN0eWxlRWxlbWVudCA9IGNyZWF0ZVN0eWxlRWxlbWVudCgpO1xyXG5cdFx0dXBkYXRlID0gYXBwbHlUb1RhZy5iaW5kKG51bGwsIHN0eWxlRWxlbWVudCk7XHJcblx0XHRyZW1vdmUgPSBmdW5jdGlvbiAoKSB7XHJcblx0XHRcdHN0eWxlRWxlbWVudC5wYXJlbnROb2RlLnJlbW92ZUNoaWxkKHN0eWxlRWxlbWVudCk7XHJcblx0XHR9O1xyXG5cdH1cclxuXHJcblx0dXBkYXRlKG9iaik7XHJcblxyXG5cdHJldHVybiBmdW5jdGlvbiB1cGRhdGVTdHlsZShuZXdPYmopIHtcclxuXHRcdGlmKG5ld09iaikge1xyXG5cdFx0XHRpZihuZXdPYmouY3NzID09PSBvYmouY3NzICYmIG5ld09iai5tZWRpYSA9PT0gb2JqLm1lZGlhICYmIG5ld09iai5zb3VyY2VNYXAgPT09IG9iai5zb3VyY2VNYXApXHJcblx0XHRcdFx0cmV0dXJuO1xyXG5cdFx0XHR1cGRhdGUob2JqID0gbmV3T2JqKTtcclxuXHRcdH0gZWxzZSB7XHJcblx0XHRcdHJlbW92ZSgpO1xyXG5cdFx0fVxyXG5cdH07XHJcbn1cclxuXHJcbmZ1bmN0aW9uIHJlcGxhY2VUZXh0KHNvdXJjZSwgaWQsIHJlcGxhY2VtZW50KSB7XHJcblx0dmFyIGJvdW5kYXJpZXMgPSBbXCIvKiogPj5cIiArIGlkICsgXCIgKiovXCIsIFwiLyoqIFwiICsgaWQgKyBcIjw8ICoqL1wiXTtcclxuXHR2YXIgc3RhcnQgPSBzb3VyY2UubGFzdEluZGV4T2YoYm91bmRhcmllc1swXSk7XHJcblx0dmFyIHdyYXBwZWRSZXBsYWNlbWVudCA9IHJlcGxhY2VtZW50XHJcblx0XHQ/IChib3VuZGFyaWVzWzBdICsgcmVwbGFjZW1lbnQgKyBib3VuZGFyaWVzWzFdKVxyXG5cdFx0OiBcIlwiO1xyXG5cdGlmIChzb3VyY2UubGFzdEluZGV4T2YoYm91bmRhcmllc1swXSkgPj0gMCkge1xyXG5cdFx0dmFyIGVuZCA9IHNvdXJjZS5sYXN0SW5kZXhPZihib3VuZGFyaWVzWzFdKSArIGJvdW5kYXJpZXNbMV0ubGVuZ3RoO1xyXG5cdFx0cmV0dXJuIHNvdXJjZS5zbGljZSgwLCBzdGFydCkgKyB3cmFwcGVkUmVwbGFjZW1lbnQgKyBzb3VyY2Uuc2xpY2UoZW5kKTtcclxuXHR9IGVsc2Uge1xyXG5cdFx0cmV0dXJuIHNvdXJjZSArIHdyYXBwZWRSZXBsYWNlbWVudDtcclxuXHR9XHJcbn1cclxuXHJcbmZ1bmN0aW9uIGFwcGx5VG9TaW5nbGV0b25UYWcoc3R5bGVFbGVtZW50LCBpbmRleCwgcmVtb3ZlLCBvYmopIHtcclxuXHR2YXIgY3NzID0gcmVtb3ZlID8gXCJcIiA6IG9iai5jc3M7XHJcblxyXG5cdGlmKHN0eWxlRWxlbWVudC5zdHlsZVNoZWV0KSB7XHJcblx0XHRzdHlsZUVsZW1lbnQuc3R5bGVTaGVldC5jc3NUZXh0ID0gcmVwbGFjZVRleHQoc3R5bGVFbGVtZW50LnN0eWxlU2hlZXQuY3NzVGV4dCwgaW5kZXgsIGNzcyk7XHJcblx0fSBlbHNlIHtcclxuXHRcdHZhciBjc3NOb2RlID0gZG9jdW1lbnQuY3JlYXRlVGV4dE5vZGUoY3NzKTtcclxuXHRcdHZhciBjaGlsZE5vZGVzID0gc3R5bGVFbGVtZW50LmNoaWxkTm9kZXM7XHJcblx0XHRpZiAoY2hpbGROb2Rlc1tpbmRleF0pIHN0eWxlRWxlbWVudC5yZW1vdmVDaGlsZChjaGlsZE5vZGVzW2luZGV4XSk7XHJcblx0XHRpZiAoY2hpbGROb2Rlcy5sZW5ndGgpIHtcclxuXHRcdFx0c3R5bGVFbGVtZW50Lmluc2VydEJlZm9yZShjc3NOb2RlLCBjaGlsZE5vZGVzW2luZGV4XSk7XHJcblx0XHR9IGVsc2Uge1xyXG5cdFx0XHRzdHlsZUVsZW1lbnQuYXBwZW5kQ2hpbGQoY3NzTm9kZSk7XHJcblx0XHR9XHJcblx0fVxyXG59XHJcblxyXG5mdW5jdGlvbiBhcHBseVRvVGFnKHN0eWxlRWxlbWVudCwgb2JqKSB7XHJcblx0dmFyIGNzcyA9IG9iai5jc3M7XHJcblx0dmFyIG1lZGlhID0gb2JqLm1lZGlhO1xyXG5cdHZhciBzb3VyY2VNYXAgPSBvYmouc291cmNlTWFwO1xyXG5cclxuXHRpZihzb3VyY2VNYXAgJiYgdHlwZW9mIGJ0b2EgPT09IFwiZnVuY3Rpb25cIikge1xyXG5cdFx0dHJ5IHtcclxuXHRcdFx0Y3NzICs9IFwiXFxuLyojIHNvdXJjZU1hcHBpbmdVUkw9ZGF0YTphcHBsaWNhdGlvbi9qc29uO2Jhc2U2NCxcIiArIGJ0b2EoSlNPTi5zdHJpbmdpZnkoc291cmNlTWFwKSkgKyBcIiAqL1wiO1xyXG5cdFx0XHRjc3MgPSBcIkBpbXBvcnQgdXJsKFxcXCJkYXRhOnRleHQvY3NzO2Jhc2U2NCxcIiArIGJ0b2EoY3NzKSArIFwiXFxcIilcIjtcclxuXHRcdH0gY2F0Y2goZSkge31cclxuXHR9XHJcblxyXG5cdGlmKG1lZGlhKSB7XHJcblx0XHRzdHlsZUVsZW1lbnQuc2V0QXR0cmlidXRlKFwibWVkaWFcIiwgbWVkaWEpXHJcblx0fVxyXG5cclxuXHRpZihzdHlsZUVsZW1lbnQuc3R5bGVTaGVldCkge1xyXG5cdFx0c3R5bGVFbGVtZW50LnN0eWxlU2hlZXQuY3NzVGV4dCA9IGNzcztcclxuXHR9IGVsc2Uge1xyXG5cdFx0d2hpbGUoc3R5bGVFbGVtZW50LmZpcnN0Q2hpbGQpIHtcclxuXHRcdFx0c3R5bGVFbGVtZW50LnJlbW92ZUNoaWxkKHN0eWxlRWxlbWVudC5maXJzdENoaWxkKTtcclxuXHRcdH1cclxuXHRcdHN0eWxlRWxlbWVudC5hcHBlbmRDaGlsZChkb2N1bWVudC5jcmVhdGVUZXh0Tm9kZShjc3MpKTtcclxuXHR9XHJcbn1cclxuXG5cblxuLyoqKioqKioqKioqKioqKioqXG4gKiogV0VCUEFDSyBGT09URVJcbiAqKiAuL34vc3R5bGUtbG9hZGVyL2FkZFN0eWxlcy5qc1xuICoqIG1vZHVsZSBpZCA9IDRcbiAqKiBtb2R1bGUgY2h1bmtzID0gMFxuICoqLyJdLCJzb3VyY2VSb290IjoiIn0=");
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	// css base code, injected by the css-loader
+	module.exports = function() {
+		var list = [];
+	
+		// return the list of modules as css string
+		list.toString = function toString() {
+			var result = [];
+			for(var i = 0; i < this.length; i++) {
+				var item = this[i];
+				if(item[2]) {
+					result.push("@media " + item[2] + "{" + item[1] + "}");
+				} else {
+					result.push(item[1]);
+				}
+			}
+			return result.join("");
+		};
+	
+		// import a list of modules into the list
+		list.i = function(modules, mediaQuery) {
+			if(typeof modules === "string")
+				modules = [[null, modules, ""]];
+			var alreadyImportedModules = {};
+			for(var i = 0; i < this.length; i++) {
+				var id = this[i][0];
+				if(typeof id === "number")
+					alreadyImportedModules[id] = true;
+			}
+			for(i = 0; i < modules.length; i++) {
+				var item = modules[i];
+				// skip already imported module
+				// this implementation is not 100% perfect for weird media query combinations
+				//  when a module is imported multiple times with different media queries.
+				//  I hope this will never occur (Hey this way we have smaller bundles)
+				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+					if(mediaQuery && !item[2]) {
+						item[2] = mediaQuery;
+					} else if(mediaQuery) {
+						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+					}
+					list.push(item);
+				}
+			}
+		};
+		return list;
+	};
+
 
 /***/ },
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("module.exports = function() {\r\n\tvar list = [];\r\n\tlist.toString = function toString() {\r\n\t\tvar result = [];\r\n\t\tfor(var i = 0; i < this.length; i++) {\r\n\t\t\tvar item = this[i];\r\n\t\t\tif(item[2]) {\r\n\t\t\t\tresult.push(\"@media \" + item[2] + \"{\" + item[1] + \"}\");\r\n\t\t\t} else {\r\n\t\t\t\tresult.push(item[1]);\r\n\t\t\t}\r\n\t\t}\r\n\t\treturn result.join(\"\");\r\n\t};\r\n\treturn list;\r\n}//@ sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9+L2Nzcy1sb2FkZXIvY3NzVG9TdHJpbmcuanM/ZDA0YSJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLGdCQUFnQixpQkFBaUI7QUFDakM7QUFDQTtBQUNBLHdDQUF3QyxnQkFBZ0I7QUFDeEQsSUFBSTtBQUNKO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBIiwiZmlsZSI6IjUuanMiLCJzb3VyY2VzQ29udGVudCI6WyJtb2R1bGUuZXhwb3J0cyA9IGZ1bmN0aW9uKCkge1xyXG5cdHZhciBsaXN0ID0gW107XHJcblx0bGlzdC50b1N0cmluZyA9IGZ1bmN0aW9uIHRvU3RyaW5nKCkge1xyXG5cdFx0dmFyIHJlc3VsdCA9IFtdO1xyXG5cdFx0Zm9yKHZhciBpID0gMDsgaSA8IHRoaXMubGVuZ3RoOyBpKyspIHtcclxuXHRcdFx0dmFyIGl0ZW0gPSB0aGlzW2ldO1xyXG5cdFx0XHRpZihpdGVtWzJdKSB7XHJcblx0XHRcdFx0cmVzdWx0LnB1c2goXCJAbWVkaWEgXCIgKyBpdGVtWzJdICsgXCJ7XCIgKyBpdGVtWzFdICsgXCJ9XCIpO1xyXG5cdFx0XHR9IGVsc2Uge1xyXG5cdFx0XHRcdHJlc3VsdC5wdXNoKGl0ZW1bMV0pO1xyXG5cdFx0XHR9XHJcblx0XHR9XHJcblx0XHRyZXR1cm4gcmVzdWx0LmpvaW4oXCJcIik7XHJcblx0fTtcclxuXHRyZXR1cm4gbGlzdDtcclxufVxuXG5cbi8qKioqKioqKioqKioqKioqKlxuICoqIFdFQlBBQ0sgRk9PVEVSXG4gKiogLi9+L2Nzcy1sb2FkZXIvY3NzVG9TdHJpbmcuanNcbiAqKiBtb2R1bGUgaWQgPSA1XG4gKiogbW9kdWxlIGNodW5rcyA9IDBcbiAqKi8iXSwic291cmNlUm9vdCI6IiJ9");
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	var stylesInDom = {},
+		memoize = function(fn) {
+			var memo;
+			return function () {
+				if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+				return memo;
+			};
+		},
+		isOldIE = memoize(function() {
+			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+		}),
+		getHeadElement = memoize(function () {
+			return document.head || document.getElementsByTagName("head")[0];
+		}),
+		singletonElement = null,
+		singletonCounter = 0,
+		styleElementsInsertedAtTop = [];
+	
+	module.exports = function(list, options) {
+		if(true) {
+			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+		}
+	
+		options = options || {};
+		// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+		// tags it will allow on a page
+		if (typeof options.singleton === "undefined") options.singleton = isOldIE();
+	
+		// By default, add <style> tags to the bottom of <head>.
+		if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
+	
+		var styles = listToStyles(list);
+		addStylesToDom(styles, options);
+	
+		return function update(newList) {
+			var mayRemove = [];
+			for(var i = 0; i < styles.length; i++) {
+				var item = styles[i];
+				var domStyle = stylesInDom[item.id];
+				domStyle.refs--;
+				mayRemove.push(domStyle);
+			}
+			if(newList) {
+				var newStyles = listToStyles(newList);
+				addStylesToDom(newStyles, options);
+			}
+			for(var i = 0; i < mayRemove.length; i++) {
+				var domStyle = mayRemove[i];
+				if(domStyle.refs === 0) {
+					for(var j = 0; j < domStyle.parts.length; j++)
+						domStyle.parts[j]();
+					delete stylesInDom[domStyle.id];
+				}
+			}
+		};
+	}
+	
+	function addStylesToDom(styles, options) {
+		for(var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+			if(domStyle) {
+				domStyle.refs++;
+				for(var j = 0; j < domStyle.parts.length; j++) {
+					domStyle.parts[j](item.parts[j]);
+				}
+				for(; j < item.parts.length; j++) {
+					domStyle.parts.push(addStyle(item.parts[j], options));
+				}
+			} else {
+				var parts = [];
+				for(var j = 0; j < item.parts.length; j++) {
+					parts.push(addStyle(item.parts[j], options));
+				}
+				stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+			}
+		}
+	}
+	
+	function listToStyles(list) {
+		var styles = [];
+		var newStyles = {};
+		for(var i = 0; i < list.length; i++) {
+			var item = list[i];
+			var id = item[0];
+			var css = item[1];
+			var media = item[2];
+			var sourceMap = item[3];
+			var part = {css: css, media: media, sourceMap: sourceMap};
+			if(!newStyles[id])
+				styles.push(newStyles[id] = {id: id, parts: [part]});
+			else
+				newStyles[id].parts.push(part);
+		}
+		return styles;
+	}
+	
+	function insertStyleElement(options, styleElement) {
+		var head = getHeadElement();
+		var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
+		if (options.insertAt === "top") {
+			if(!lastStyleElementInsertedAtTop) {
+				head.insertBefore(styleElement, head.firstChild);
+			} else if(lastStyleElementInsertedAtTop.nextSibling) {
+				head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
+			} else {
+				head.appendChild(styleElement);
+			}
+			styleElementsInsertedAtTop.push(styleElement);
+		} else if (options.insertAt === "bottom") {
+			head.appendChild(styleElement);
+		} else {
+			throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
+		}
+	}
+	
+	function removeStyleElement(styleElement) {
+		styleElement.parentNode.removeChild(styleElement);
+		var idx = styleElementsInsertedAtTop.indexOf(styleElement);
+		if(idx >= 0) {
+			styleElementsInsertedAtTop.splice(idx, 1);
+		}
+	}
+	
+	function createStyleElement(options) {
+		var styleElement = document.createElement("style");
+		styleElement.type = "text/css";
+		insertStyleElement(options, styleElement);
+		return styleElement;
+	}
+	
+	function createLinkElement(options) {
+		var linkElement = document.createElement("link");
+		linkElement.rel = "stylesheet";
+		insertStyleElement(options, linkElement);
+		return linkElement;
+	}
+	
+	function addStyle(obj, options) {
+		var styleElement, update, remove;
+	
+		if (options.singleton) {
+			var styleIndex = singletonCounter++;
+			styleElement = singletonElement || (singletonElement = createStyleElement(options));
+			update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
+			remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
+		} else if(obj.sourceMap &&
+			typeof URL === "function" &&
+			typeof URL.createObjectURL === "function" &&
+			typeof URL.revokeObjectURL === "function" &&
+			typeof Blob === "function" &&
+			typeof btoa === "function") {
+			styleElement = createLinkElement(options);
+			update = updateLink.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+				if(styleElement.href)
+					URL.revokeObjectURL(styleElement.href);
+			};
+		} else {
+			styleElement = createStyleElement(options);
+			update = applyToTag.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+			};
+		}
+	
+		update(obj);
+	
+		return function updateStyle(newObj) {
+			if(newObj) {
+				if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
+					return;
+				update(obj = newObj);
+			} else {
+				remove();
+			}
+		};
+	}
+	
+	var replaceText = (function () {
+		var textStore = [];
+	
+		return function (index, replacement) {
+			textStore[index] = replacement;
+			return textStore.filter(Boolean).join('\n');
+		};
+	})();
+	
+	function applyToSingletonTag(styleElement, index, remove, obj) {
+		var css = remove ? "" : obj.css;
+	
+		if (styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = replaceText(index, css);
+		} else {
+			var cssNode = document.createTextNode(css);
+			var childNodes = styleElement.childNodes;
+			if (childNodes[index]) styleElement.removeChild(childNodes[index]);
+			if (childNodes.length) {
+				styleElement.insertBefore(cssNode, childNodes[index]);
+			} else {
+				styleElement.appendChild(cssNode);
+			}
+		}
+	}
+	
+	function applyToTag(styleElement, obj) {
+		var css = obj.css;
+		var media = obj.media;
+	
+		if(media) {
+			styleElement.setAttribute("media", media)
+		}
+	
+		if(styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = css;
+		} else {
+			while(styleElement.firstChild) {
+				styleElement.removeChild(styleElement.firstChild);
+			}
+			styleElement.appendChild(document.createTextNode(css));
+		}
+	}
+	
+	function updateLink(linkElement, obj) {
+		var css = obj.css;
+		var sourceMap = obj.sourceMap;
+	
+		if(sourceMap) {
+			// http://stackoverflow.com/a/26603875
+			css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+		}
+	
+		var blob = new Blob([css], { type: "text/css" });
+	
+		var oldSrc = linkElement.href;
+	
+		linkElement.href = URL.createObjectURL(blob);
+	
+		if(oldSrc)
+			URL.revokeObjectURL(oldSrc);
+	}
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(7);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(5)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./../node_modules/sass-loader/index.js!./bs-polyfill.scss", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./../node_modules/sass-loader/index.js!./bs-polyfill.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(4)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, ".selectr {\n  margin-bottom: 20px;\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-radius: 4px;\n  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05); }\n  .selectr * {\n    box-sizing: border-box; }\n  .selectr .hidden {\n    display: none !important; }\n  .selectr .panel-heading {\n    color: #333;\n    background-color: #f5f5f5;\n    border-color: #ddd;\n    padding: 10px 15px;\n    border-bottom: 1px solid transparent;\n    border-top-right-radius: 3px;\n    border-top-left-radius: 3px; }\n  .selectr .panel-title {\n    margin-top: 0;\n    margin-bottom: 0;\n    font-size: 16px;\n    color: inherit; }\n  .selectr .panel-body {\n    padding: 15px; }\n  .selectr .form-control {\n    display: block;\n    width: 100%;\n    height: 34px;\n    padding: 6px 12px;\n    font-size: 14px;\n    line-height: 1.42857143;\n    color: #555;\n    background-color: #fff;\n    background-image: none;\n    border: 1px solid #ccc;\n    border-radius: 4px;\n    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);\n    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;\n    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s; }\n  .selectr .list-group {\n    margin: 0;\n    padding: 0; }\n  .selectr .list-group-item {\n    border-width: 1px 0;\n    border-radius: 0;\n    position: relative;\n    display: block;\n    padding: 10px 15px;\n    margin-bottom: -1px;\n    background-color: #fff;\n    border: 1px solid #ddd; }\n  .selectr .panel-footer {\n    padding: 10px 15px;\n    background-color: #f5f5f5;\n    border-top: 1px solid #ddd;\n    border-bottom-right-radius: 3px;\n    border-bottom-left-radius: 3px; }\n  .selectr .btn {\n    display: inline-block;\n    margin-bottom: 0;\n    font-weight: 400;\n    text-align: center;\n    vertical-align: middle;\n    cursor: pointer;\n    background-image: none;\n    border: 1px solid transparent;\n    white-space: nowrap;\n    padding: 6px 12px;\n    font-size: 14px;\n    line-height: 1.42857143;\n    border-radius: 4px;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    color: #333;\n    background-color: #fff;\n    border-color: #ccc; }\n  .selectr .badge {\n    display: inline-block;\n    min-width: 10px;\n    padding: 3px 7px;\n    font-size: 12px;\n    font-weight: 700;\n    color: #fff;\n    line-height: 1;\n    vertical-align: baseline;\n    white-space: nowrap;\n    text-align: center;\n    background-color: #999;\n    border-radius: 10px; }\n", ""]);
+	
+	// exports
+
 
 /***/ }
 /******/ ])
 });
 ;
+//# sourceMappingURL=selectr.debug.js.map

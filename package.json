@@ -1,25 +1,24 @@
 {
   "name": "selectr",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "scripts": {
-    "build-native": "webpack -p --config ./webpack.config.js",
-    "build-debug": "webpack --config ./webpack.config.debug.js",
-    "build-polyfilled": "webpack -p --config ./webpack.config.polyfill.js",
-    "build-no-styles": "webpack -p --config ./webpack.config.no-styles.js",
-    "build": "npm run build-native && npm run build-debug && npm run build-polyfilled && npm run build-no-styles",
-    "prepublish": "npm run build"
+    "build": "webpack",
+    "prepublish": "webpack"
   },
   "devDependencies": {
-    "autoprefixer-loader": "=1.1.0",
+    "autoprefixer": "^6.3.7",
     "coffee-loader": "^0.7.2",
-    "css-loader": "^0.9.1",
-    "lodash": "^3.3.1",
-    "sass-loader": "^0.4.0",
-    "style-loader": "^0.8.3",
-    "webpack": "^1.6.0"
+    "css-loader": "^0.23.1",
+    "lodash": "^4.0.0",
+    "node-sass": "^3.8.0",
+    "postcss-loader": "^0.9.1",
+    "precss": "^1.4.0",
+    "sass-loader": "^4.0.0",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.1"
   },
-  "dependencies": {
-    "jquery": "^2.1.3"
+  "peerDependencies": {
+    "jquery": "2.x.x || 3.x.x"
   },
   "description": "Selectr is a jQuery plugin that aims to accomplish a seemingly simple task: make a select box that doesn't suck.",
   "main": "./dist/selectr.js",
