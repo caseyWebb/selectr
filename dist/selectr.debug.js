@@ -52,7 +52,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var jQuery,
 	  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
@@ -77,7 +77,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      width: '300px',
 	      maxListHeight: '250px',
 	      tooltipBreakpoint: 25,
-	      maxSelection: Infinity,
+	      maxSelection: 2e308,
 	      panelStyle: 'default',
 	      alwaysShowFooter: false
 	    };
@@ -116,7 +116,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      for (i = 0, len = ref.length; i < len; i++) {
 	        opt = ref[i];
 	        results.push($(document.createElement('li')).addClass("list-group-item " + ($(opt).is(':selected') ? 'selected' : void 0)).data('val', $(opt).val()).append($(document.createElement('div')).addClass("color-code " + (!$(opt).data('selectr-color') ? 'no-color' : void 0)).css('background-color', $(opt).data('selectr-color'))).append($(document.createElement('div')).text($(opt).text()).addClass('option-name').attr({
-	          title: $(opt).text().length > this.args.tooltipBreakpoint ? $(opt).text() : ''
+	          title: $(opt).text()
 	        })).append($(document.createElement('div')).html('&times').addClass("add-remove " + (!this.multi ? 'hidden' : void 0))));
 	      }
 	      return results;
@@ -310,15 +310,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(jQuery, this);
 
 
-/***/ },
+/***/ }),
 /* 1 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
 
-/***/ },
+/***/ }),
 /* 2 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
@@ -332,8 +332,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./../node_modules/sass-loader/index.js!./selectr.scss", function() {
-				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./../node_modules/sass-loader/index.js!./selectr.scss");
+			module.hot.accept("!!../node_modules/css-loader/index.js!../node_modules/postcss-loader/index.js!../node_modules/sass-loader/index.js!./selectr.scss", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js!../node_modules/postcss-loader/index.js!../node_modules/sass-loader/index.js!./selectr.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -342,23 +342,23 @@ return /******/ (function(modules) { // webpackBootstrap
 		module.hot.dispose(function() { update(); });
 	}
 
-/***/ },
+/***/ }),
 /* 3 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(4)();
 	// imports
 	
 	
 	// module
-	exports.push([module.id, ".selectr {\n  margin: 0;\n  display: inline-block;\n  max-width: 100%;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none; }\n  .selectr *:not(input) {\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none; }\n  .selectr .panel-heading {\n    cursor: default; }\n    .selectr .panel-heading.no-title {\n      padding: 0;\n      border-bottom: none; }\n  .selectr .panel-body {\n    position: relative; }\n  .selectr input::-ms-clear {\n    display: none;\n    width: 0;\n    height: 0; }\n  .selectr .clear-search {\n    position: absolute;\n    right: 25px;\n    top: 12px;\n    font-size: 28px;\n    font-weight: bold;\n    color: #333;\n    opacity: 0.8;\n    cursor: pointer; }\n    .selectr .clear-search:hover {\n      opacity: 1; }\n  .selectr .list-group {\n    overflow-x: hidden;\n    -ms-overflow-y: auto; }\n  .selectr .list-group-item {\n    padding: 0 !important;\n    overflow: hidden;\n    cursor: pointer; }\n    .selectr .list-group-item.selected {\n      background-color: #4679bd;\n      color: white;\n      font-weight: 700; }\n      .selectr .list-group-item.selected .add-remove {\n        -webkit-transform: rotate(0deg);\n                transform: rotate(0deg); }\n  .selectr.multi .list-group-item:hover .option-name {\n    margin-right: 50px;\n    border-right: 1px solid #ddd; }\n  .selectr.multi .list-group-item:hover .selected .option-name {\n    border-right: 1px solid white; }\n  .selectr.multi .list-group-item:hover .add-remove {\n    display: block; }\n  .selectr .option-name {\n    height: 100%;\n    padding: 10px 15px;\n    text-overflow: ellipsis;\n    white-space: nowrap;\n    overflow: hidden; }\n  .selectr .color-code {\n    width: 20px;\n    height: 20px;\n    margin: 10px;\n    margin-right: 0;\n    float: left;\n    border-radius: 5px; }\n    .selectr .color-code.no-color {\n      width: 0;\n      height: 0;\n      margin: 0; }\n  .selectr .add-remove {\n    -webkit-transform: rotate(45deg);\n            transform: rotate(45deg);\n    -webkit-transition: -webkit-transform 0.2s linear;\n    transition: -webkit-transform 0.2s linear;\n    transition: transform 0.2s linear;\n    transition: transform 0.2s linear, -webkit-transform 0.2s linear;\n    opacity: 0.5;\n    display: none;\n    cursor: pointer;\n    font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n    font-size: 24px;\n    font-weight: 900;\n    position: absolute;\n    right: 0px;\n    top: 0px;\n    width: 50px;\n    padding: 8px;\n    line-height: 24px;\n    text-align: center;\n    vertical-align: middle; }\n  .selectr .ctrl-key .add-remove, .selectr .add-remove:hover {\n    opacity: 0.8; }\n  .selectr .current-selection {\n    float: right;\n    margin-top: 5px;\n    cursor: default; }\n  .selectr.max-selection-reached li:not(.selected) .option-name {\n    margin-right: 0 !important;\n    border-right: none !important; }\n  .selectr.max-selection-reached li:not(.selected) .add-remove {\n    display: none !important; }\n  .selectr.max-selection-reached .current-selection {\n    background-color: #d9534f; }\n  .selectr .no-matching-options {\n    padding: 10px;\n    padding-top: 0;\n    text-align: center; }\n", ""]);
+	exports.push([module.id, ".selectr {\n  margin: 0;\n  display: inline-block;\n  max-width: 100%;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none; }\n  .selectr *:not(input) {\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none; }\n  .selectr .panel-heading {\n    cursor: default; }\n    .selectr .panel-heading.no-title {\n      padding: 0;\n      border-bottom: none; }\n  .selectr .panel-body {\n    position: relative; }\n  .selectr input::-ms-clear {\n    display: none;\n    width: 0;\n    height: 0; }\n  .selectr .clear-search {\n    position: absolute;\n    right: 25px;\n    top: 12px;\n    font-size: 28px;\n    font-weight: bold;\n    color: #333;\n    opacity: 0.8;\n    cursor: pointer; }\n    .selectr .clear-search:hover {\n      opacity: 1; }\n  .selectr .list-group {\n    overflow-x: hidden;\n    -ms-overflow-y: auto; }\n  .selectr .list-group-item {\n    padding: 0 !important;\n    overflow: hidden;\n    cursor: pointer; }\n    .selectr .list-group-item.selected {\n      background-color: #4679bd;\n      color: white;\n      font-weight: 700; }\n      .selectr .list-group-item.selected .add-remove {\n        -webkit-transform: rotate(0deg);\n                transform: rotate(0deg); }\n  .selectr.multi .list-group-item:hover .option-name {\n    margin-right: 50px;\n    border-right: 1px solid #ddd; }\n  .selectr.multi .list-group-item:hover .selected .option-name {\n    border-right: 1px solid white; }\n  .selectr.multi .list-group-item:hover .add-remove {\n    display: block; }\n  .selectr .option-name {\n    height: 100%;\n    padding: 10px 15px;\n    text-overflow: ellipsis;\n    white-space: nowrap;\n    overflow: hidden; }\n  .selectr .color-code {\n    width: 20px;\n    height: 20px;\n    margin: 10px;\n    margin-right: 0;\n    float: left;\n    border-radius: 5px; }\n    .selectr .color-code.no-color {\n      width: 0;\n      height: 0;\n      margin: 0; }\n  .selectr .add-remove {\n    -webkit-transform: rotate(45deg);\n            transform: rotate(45deg);\n    transition: -webkit-transform 0.2s linear;\n    transition: transform 0.2s linear;\n    transition: transform 0.2s linear, -webkit-transform 0.2s linear;\n    opacity: 0.5;\n    display: none;\n    cursor: pointer;\n    font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n    font-size: 24px;\n    font-weight: 900;\n    position: absolute;\n    right: 0px;\n    top: 0px;\n    width: 50px;\n    padding: 8px;\n    line-height: 24px;\n    text-align: center;\n    vertical-align: middle; }\n  .selectr .ctrl-key .add-remove, .selectr .add-remove:hover {\n    opacity: 0.8; }\n  .selectr .current-selection {\n    float: right;\n    margin-top: 5px;\n    cursor: default; }\n  .selectr.max-selection-reached li:not(.selected) .option-name {\n    margin-right: 0 !important;\n    border-right: none !important; }\n  .selectr.max-selection-reached li:not(.selected) .add-remove {\n    display: none !important; }\n  .selectr.max-selection-reached .current-selection {\n    background-color: #d9534f; }\n  .selectr .no-matching-options {\n    padding: 10px;\n    padding-top: 0;\n    text-align: center; }\n", ""]);
 	
 	// exports
 
 
-/***/ },
+/***/ }),
 /* 4 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	/*
 		MIT License http://www.opensource.org/licenses/mit-license.php
@@ -412,9 +412,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 
-/***/ },
+/***/ }),
 /* 5 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	/*
 		MIT License http://www.opensource.org/licenses/mit-license.php
@@ -429,7 +429,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			};
 		},
 		isOldIE = memoize(function() {
-			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+			return /msie [6-9]\b/.test(self.navigator.userAgent.toLowerCase());
 		}),
 		getHeadElement = memoize(function () {
 			return document.head || document.getElementsByTagName("head")[0];
@@ -664,9 +664,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 
-/***/ },
+/***/ }),
 /* 6 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
@@ -680,8 +680,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./../node_modules/sass-loader/index.js!./bs-polyfill.scss", function() {
-				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./../node_modules/sass-loader/index.js!./bs-polyfill.scss");
+			module.hot.accept("!!../node_modules/css-loader/index.js!../node_modules/postcss-loader/index.js!../node_modules/sass-loader/index.js!./bs-polyfill.scss", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js!../node_modules/postcss-loader/index.js!../node_modules/sass-loader/index.js!./bs-polyfill.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -690,21 +690,21 @@ return /******/ (function(modules) { // webpackBootstrap
 		module.hot.dispose(function() { update(); });
 	}
 
-/***/ },
+/***/ }),
 /* 7 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(4)();
 	// imports
 	
 	
 	// module
-	exports.push([module.id, ".selectr {\n  margin-bottom: 20px;\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-radius: 4px;\n  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05); }\n  .selectr * {\n    box-sizing: border-box; }\n  .selectr .hidden {\n    display: none !important; }\n  .selectr .panel-heading {\n    color: #333;\n    background-color: #f5f5f5;\n    border-color: #ddd;\n    padding: 10px 15px;\n    border-bottom: 1px solid transparent;\n    border-top-right-radius: 3px;\n    border-top-left-radius: 3px; }\n  .selectr .panel-title {\n    margin-top: 0;\n    margin-bottom: 0;\n    font-size: 16px;\n    color: inherit; }\n  .selectr .panel-body {\n    padding: 15px; }\n  .selectr .form-control {\n    display: block;\n    width: 100%;\n    height: 34px;\n    padding: 6px 12px;\n    font-size: 14px;\n    line-height: 1.42857143;\n    color: #555;\n    background-color: #fff;\n    background-image: none;\n    border: 1px solid #ccc;\n    border-radius: 4px;\n    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);\n    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;\n    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s; }\n  .selectr .list-group {\n    margin: 0;\n    padding: 0; }\n  .selectr .list-group-item {\n    border-width: 1px 0;\n    border-radius: 0;\n    position: relative;\n    display: block;\n    padding: 10px 15px;\n    margin-bottom: -1px;\n    background-color: #fff;\n    border: 1px solid #ddd; }\n  .selectr .panel-footer {\n    padding: 10px 15px;\n    background-color: #f5f5f5;\n    border-top: 1px solid #ddd;\n    border-bottom-right-radius: 3px;\n    border-bottom-left-radius: 3px; }\n  .selectr .btn {\n    display: inline-block;\n    margin-bottom: 0;\n    font-weight: 400;\n    text-align: center;\n    vertical-align: middle;\n    cursor: pointer;\n    background-image: none;\n    border: 1px solid transparent;\n    white-space: nowrap;\n    padding: 6px 12px;\n    font-size: 14px;\n    line-height: 1.42857143;\n    border-radius: 4px;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    color: #333;\n    background-color: #fff;\n    border-color: #ccc; }\n  .selectr .badge {\n    display: inline-block;\n    min-width: 10px;\n    padding: 3px 7px;\n    font-size: 12px;\n    font-weight: 700;\n    color: #fff;\n    line-height: 1;\n    vertical-align: baseline;\n    white-space: nowrap;\n    text-align: center;\n    background-color: #999;\n    border-radius: 10px; }\n", ""]);
+	exports.push([module.id, ".selectr {\n  margin-bottom: 20px;\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-radius: 4px;\n  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05); }\n  .selectr * {\n    box-sizing: border-box; }\n  .selectr .hidden {\n    display: none !important; }\n  .selectr .panel-heading {\n    color: #333;\n    background-color: #f5f5f5;\n    border-color: #ddd;\n    padding: 10px 15px;\n    border-bottom: 1px solid transparent;\n    border-top-right-radius: 3px;\n    border-top-left-radius: 3px; }\n  .selectr .panel-title {\n    margin-top: 0;\n    margin-bottom: 0;\n    font-size: 16px;\n    color: inherit; }\n  .selectr .panel-body {\n    padding: 15px; }\n  .selectr .form-control {\n    display: block;\n    width: 100%;\n    height: 34px;\n    padding: 6px 12px;\n    font-size: 14px;\n    line-height: 1.42857143;\n    color: #555;\n    background-color: #fff;\n    background-image: none;\n    border: 1px solid #ccc;\n    border-radius: 4px;\n    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);\n    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s; }\n  .selectr .list-group {\n    margin: 0;\n    padding: 0; }\n  .selectr .list-group-item {\n    border-width: 1px 0;\n    border-radius: 0;\n    position: relative;\n    display: block;\n    padding: 10px 15px;\n    margin-bottom: -1px;\n    background-color: #fff;\n    border: 1px solid #ddd; }\n  .selectr .panel-footer {\n    padding: 10px 15px;\n    background-color: #f5f5f5;\n    border-top: 1px solid #ddd;\n    border-bottom-right-radius: 3px;\n    border-bottom-left-radius: 3px; }\n  .selectr .btn {\n    display: inline-block;\n    margin-bottom: 0;\n    font-weight: 400;\n    text-align: center;\n    vertical-align: middle;\n    cursor: pointer;\n    background-image: none;\n    border: 1px solid transparent;\n    white-space: nowrap;\n    padding: 6px 12px;\n    font-size: 14px;\n    line-height: 1.42857143;\n    border-radius: 4px;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    color: #333;\n    background-color: #fff;\n    border-color: #ccc; }\n  .selectr .badge {\n    display: inline-block;\n    min-width: 10px;\n    padding: 3px 7px;\n    font-size: 12px;\n    font-weight: 700;\n    color: #fff;\n    line-height: 1;\n    vertical-align: baseline;\n    white-space: nowrap;\n    text-align: center;\n    background-color: #999;\n    border-radius: 10px; }\n", ""]);
 	
 	// exports
 
 
-/***/ }
+/***/ })
 /******/ ])
 });
 ;
