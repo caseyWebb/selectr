@@ -85,9 +85,9 @@ do ($ = jQuery, window = @) ->
           # insert name
           .append(
             $(document.createElement 'div')
-              .text     $(opt).text()
+              .html     $(opt).text().split(@args.separator).map((elm) -> "<span>#{elm}</span>").join(@args.separator || '')
               .addClass 'option-name'
-              .attr     title: if $(opt).text().length > @args.tooltipBreakpoint then $(opt).text() else ''
+              .attr     title: $(opt).text()
           )
 
           # insert add/remove
